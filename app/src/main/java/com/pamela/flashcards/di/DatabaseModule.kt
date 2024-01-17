@@ -1,9 +1,10 @@
-package com.pamela.flashcards.repository
+package com.pamela.flashcards.di
 
 import android.content.Context
 import androidx.room.Room
-import com.pamela.flashcards.repository.flashcards.FlashCardsDao
-import com.pamela.flashcards.repository.flashcardsets.FlashCardSetsDao
+import com.pamela.flashcards.database.FlashCardsDatabase
+import com.pamela.flashcards.database.flashcards.FlashCardsDao
+import com.pamela.flashcards.database.flashcardsets.FlashCardSetsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.pamela.flashcards.repository.flashcardsets
+package com.pamela.flashcards.database.flashcardsets
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

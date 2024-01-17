@@ -1,6 +1,6 @@
 package com.pamela.flashcards.model
 
-import com.pamela.flashcards.repository.flashcardsets.FlashCardSetEntity
+import com.pamela.flashcards.database.flashcardsets.FlashCardSetEntity
 import java.time.Instant
 import java.util.UUID
 

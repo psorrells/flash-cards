@@ -1,10 +1,9 @@
-package com.pamela.flashcards.repository.flashcardsets
+package com.pamela.flashcards.database.flashcardsets
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import java.time.Instant
 
 @Dao
 interface FlashCardSetsDao {

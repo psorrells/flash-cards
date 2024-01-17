@@ -3,7 +3,7 @@ package com.pamela.flashcards.features.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.model.FlashCardSetDomain
-import com.pamela.flashcards.repository.flashcardsets.FlashCardSetsRepository
+import com.pamela.flashcards.database.flashcardsets.FlashCardSetsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

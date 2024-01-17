@@ -1,4 +1,4 @@
-package com.pamela.flashcards.repository.flashcardsets
+package com.pamela.flashcards.database.flashcardsets
 
 import com.pamela.flashcards.model.FlashCardSetDomain
 import java.time.Instant
