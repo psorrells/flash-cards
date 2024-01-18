@@ -1,4 +1,4 @@
-package com.pamela.flashcards.features.navigation
+package com.pamela.flashcards.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.pamela.flashcards.features.main.OverviewScreen
+import com.pamela.flashcards.features.overview.OverviewScreen
 import com.pamela.flashcards.features.practice.PracticeScreen
 
 @Composable

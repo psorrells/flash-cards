@@ -1,7 +1,7 @@
 package com.pamela.flashcards.di
 
-import com.pamela.flashcards.features.navigation.Navigator
-import com.pamela.flashcards.features.navigation.NavigatorImpl
+import com.pamela.flashcards.navigation.Navigator
+import com.pamela.flashcards.navigation.NavigatorImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

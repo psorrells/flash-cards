@@ -1,11 +1,12 @@
-package com.pamela.flashcards.features.main
+package com.pamela.flashcards.features.overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pamela.flashcards.domain.DeleteFlashCardSetUseCase
 import com.pamela.flashcards.domain.GetAllFlashCardSetsUseCase
 import com.pamela.flashcards.domain.InsertFlashCardSetUseCase
-import com.pamela.flashcards.features.navigation.Navigator
-import com.pamela.flashcards.features.navigation.PracticeDestination
+import com.pamela.flashcards.navigation.Navigator
+import com.pamela.flashcards.navigation.PracticeDestination
 import com.pamela.flashcards.model.FlashCardSetDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class OverviewScreenViewModel @Inject constructor(
     private val getAllFlashCardSets: GetAllFlashCardSetsUseCase,
     private val insertFlashCardSet: InsertFlashCardSetUseCase,
+    private val deleteFlashCardSet: DeleteFlashCardSetUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -39,6 +41,12 @@ class OverviewScreenViewModel @Inject constructor(
     fun onClickAddSet(name: String = "Butter Scotch Recipes") {
         viewModelScope.launch {
             insertFlashCardSet(FlashCardSetDomain(name = name))
+        }
+    }
+
+    fun deleteSet(set: FlashCardSetDomain) {
+        viewModelScope.launch {
+            deleteFlashCardSet(set)
         }
     }
 }

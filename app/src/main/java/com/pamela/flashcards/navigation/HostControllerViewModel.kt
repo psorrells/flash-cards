@@ -1,4 +1,4 @@
-package com.pamela.flashcards.features.navigation
+package com.pamela.flashcards.navigation
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

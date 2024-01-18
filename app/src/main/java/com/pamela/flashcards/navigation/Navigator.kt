@@ -1,4 +1,4 @@
-package com.pamela.flashcards.features.navigation
+package com.pamela.flashcards.navigation
 
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package com.pamela.flashcards.features.main
+package com.pamela.flashcards.features.overview
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +27,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
@@ -87,7 +89,7 @@ fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel()) {
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             items(cardSetList) { cardSet ->
-                StudySetCard(cardSet, viewModel::navigateToPracticeScreen)
+                StudySetCard(cardSet, viewModel::navigateToPracticeScreen, viewModel::deleteSet)
             }
         }
     }

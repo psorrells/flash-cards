@@ -1,4 +1,4 @@
-package com.pamela.flashcards.features.navigation
+package com.pamela.flashcards.navigation
 
 interface FlashCardsDestination {
     val route: String
