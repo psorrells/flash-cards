@@ -8,7 +8,7 @@ import javax.inject.Singleton
 abstract class FlashCardSetsRepository {
     abstract suspend fun getAllSets(): List<FlashCardSetDomain>
 
-    abstract suspend fun insertSet(set: FlashCardSetDomain)
+    abstract suspend fun upsertSet(set: FlashCardSetDomain)
 
     abstract suspend fun deleteSet(set: FlashCardSetDomain)
 }
@@ -27,8 +27,8 @@ class FlashCardSetsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertSet(set: FlashCardSetDomain) {
-        flashCardSetsDao.insert(set.toEntity())
+    override suspend fun upsertSet(set: FlashCardSetDomain) {
+        flashCardSetsDao.upsert(set.toEntity())
     }
 
     override suspend fun deleteSet(set: FlashCardSetDomain) {

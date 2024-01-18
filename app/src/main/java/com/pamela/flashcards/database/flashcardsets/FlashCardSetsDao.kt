@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 
 @Dao
 interface FlashCardSetsDao {
@@ -19,8 +20,8 @@ interface FlashCardSetsDao {
     @Query("SELECT 1 from cards where set_id = (:setId) order by last_studied_at desc")
     suspend fun getLastStudiedAtForSet(setId: String): Long
 
-    @Insert
-    suspend fun insert(card: FlashCardSetEntity)
+    @Upsert
+    suspend fun upsert(card: FlashCardSetEntity)
 
     @Query("DELETE from cards where set_id = (:setId)")
     suspend fun deleteAllCardsInSet(setId: String)

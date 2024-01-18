@@ -3,12 +3,11 @@ package com.pamela.flashcards.navigation
 interface FlashCardsDestination {
     val route: String
     val routeWithArgs: String
+        get() = route
 }
 
 object OverviewDestination: FlashCardsDestination {
     override val route = "overview"
-    override val routeWithArgs: String
-        get() = route
 }
 
 object PracticeDestination: FlashCardsDestination {
@@ -22,8 +21,10 @@ object PracticeDestination: FlashCardsDestination {
     }
 }
 
+object AddSetDestination: FlashCardsDestination {
+    override val route = "add-set"
+}
+
 object PreviousDestination: FlashCardsDestination {
     override val route = "previous"
-    override val routeWithArgs: String
-        get() = route
 }

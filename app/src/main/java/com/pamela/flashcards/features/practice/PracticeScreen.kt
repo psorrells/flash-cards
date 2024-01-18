@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pamela.flashcards.ui.component.TopBarHeader
+import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
 @Composable
@@ -36,23 +38,8 @@ fun PracticeScreen(viewModel: PracticeScreenViewModel = hiltViewModel()) {
     val cardSetName by viewModel.cardSetName.collectAsStateWithLifecycle()
     var isFlipped by remember { mutableStateOf(false) }
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .safeDrawingPadding(),
-        topBar = {
-            Column {
-                Text(
-                    style = MaterialTheme.typography.titleLarge,
-                    text = cardSetName,
-                    modifier = Modifier.padding(14.dp)
-                )
-                Divider(
-                    modifier = Modifier.fillMaxWidth(),
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.tertiaryContainer
-                )
-            }
-        },
+        modifier = Modifier.scaffoldDefaults(),
+        topBar = { TopBarHeader(titleText = cardSetName) },
         bottomBar = {
             Row(
                 modifier = Modifier

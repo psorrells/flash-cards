@@ -4,10 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.domain.DeleteFlashCardSetUseCase
 import com.pamela.flashcards.domain.GetAllFlashCardSetsUseCase
-import com.pamela.flashcards.domain.InsertFlashCardSetUseCase
+import com.pamela.flashcards.domain.UpsertFlashCardSetUseCase
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.navigation.PracticeDestination
 import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.navigation.AddSetDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OverviewScreenViewModel @Inject constructor(
     private val getAllFlashCardSets: GetAllFlashCardSetsUseCase,
-    private val insertFlashCardSet: InsertFlashCardSetUseCase,
+    private val insertFlashCardSet: UpsertFlashCardSetUseCase,
     private val deleteFlashCardSet: DeleteFlashCardSetUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -34,10 +35,8 @@ class OverviewScreenViewModel @Inject constructor(
         navigator.navigateTo(PracticeDestination.populateRouteWithArgs(cardSet.id.toString()))
     }
 
-    fun onClickAddSet(name: String = "Butter Scotch Recipes") {
-        viewModelScope.launch {
-            insertFlashCardSet(FlashCardSetDomain(name = name))
-        }
+    fun navigateToAddSetScreen() {
+        navigator.navigateTo(AddSetDestination.route)
     }
 
     fun deleteSet(set: FlashCardSetDomain) {
