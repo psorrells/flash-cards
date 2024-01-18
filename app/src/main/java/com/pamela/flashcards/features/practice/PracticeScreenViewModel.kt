@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.database.flashcards.FlashCardsRepository
+import com.pamela.flashcards.features.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PracticeScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val flashCardsRepository: FlashCardsRepository
+    private val flashCardsRepository: FlashCardsRepository,
+    private val navigator: Navigator
 ): ViewModel() {
 
     private val _currentCard: MutableStateFlow<FlashCardDomain> = MutableStateFlow(FlashCardDomain(front = "What is this"))
@@ -38,5 +40,9 @@ class PracticeScreenViewModel @Inject constructor(
                 _currentCard.update { list.first() }
             }
         }
+    }
+
+    fun onClickBack() {
+        navigator.popBackStack()
     }
 }

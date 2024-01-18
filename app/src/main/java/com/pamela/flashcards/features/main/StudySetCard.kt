@@ -29,7 +29,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 @Composable
-fun StudySetCard(cardGroup: FlashCardSetDomain, onClickSet: () -> Unit) {
+fun StudySetCard(cardSet: FlashCardSetDomain, onClickSet: (FlashCardSetDomain) -> Unit) {
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -38,7 +38,7 @@ fun StudySetCard(cardGroup: FlashCardSetDomain, onClickSet: () -> Unit) {
         elevation = CardDefaults.elevatedCardElevation(
             defaultElevation = 8.dp
         ),
-        modifier = Modifier.clickable { onClickSet() }
+        modifier = Modifier.clickable { onClickSet(cardSet) }
     ) {
         var expanded by remember { mutableStateOf(false) }
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -58,20 +58,20 @@ fun StudySetCard(cardGroup: FlashCardSetDomain, onClickSet: () -> Unit) {
             ) {
                 Text(
                     style = MaterialTheme.typography.labelLarge,
-                    text = cardGroup.name
+                    text = cardSet.name
                 )
                 if (expanded) {
                     Spacer(modifier = Modifier.height(14.dp))
                     Text(
                         style = MaterialTheme.typography.bodyMedium,
-                        text = "${cardGroup.totalDue}/${cardGroup.size} cards due"
+                        text = "${cardSet.totalDue}/${cardSet.size} cards due"
                     )
                     Text(
                         style = MaterialTheme.typography.bodyMedium,
                         text = "Last studied at: ${
-                            if (cardGroup.lastStudiedAt != null)
+                            if (cardSet.lastStudiedAt != null)
                                 LocalDateTime.ofInstant(
-                                    cardGroup.lastStudiedAt,
+                                    cardSet.lastStudiedAt,
                                     ZoneId.systemDefault()
                                 )
                             else "Never :("

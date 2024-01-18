@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.model.FlashCardSetDomain
 import com.pamela.flashcards.database.flashcardsets.FlashCardSetsRepository
+import com.pamela.flashcards.features.navigation.Navigator
+import com.pamela.flashcards.features.navigation.PracticeDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,13 +14,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OverviewScreenViewModel @Inject constructor(private val flashCardSetsRepository: FlashCardSetsRepository): ViewModel() {
+class OverviewScreenViewModel @Inject constructor(
+    private val flashCardSetsRepository: FlashCardSetsRepository,
+    private val navigator: Navigator
+) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<List<FlashCardSetDomain>> = MutableStateFlow(listOf(
-        FlashCardSetDomain(name = "Northeastern Flowers"),
-        FlashCardSetDomain(name = "Temperate Trees"),
-        FlashCardSetDomain(name = "True Prairie Grasses")
-    ))
+    private val _uiState: MutableStateFlow<List<FlashCardSetDomain>> = MutableStateFlow(
+        listOf(
+            FlashCardSetDomain(name = "Northeastern Flowers"),
+            FlashCardSetDomain(name = "Temperate Trees"),
+            FlashCardSetDomain(name = "True Prairie Grasses")
+        )
+    )
 
     val uiState: StateFlow<List<FlashCardSetDomain>> = _uiState
 
@@ -32,12 +39,16 @@ class OverviewScreenViewModel @Inject constructor(private val flashCardSetsRepos
         }
     }
 
+    fun onClickCardSet(cardSet: FlashCardSetDomain) {
+        navigator.navigateTo(PracticeDestination.populateRouteWithArgs(cardSet.id.toString()))
+    }
+
     fun onClickAddSet(name: String = "Butter Scotch Recipes") {
         viewModelScope.launch {
             flashCardSetsRepository.insertSet(
                 FlashCardSetDomain(
-                name = name
-            )
+                    name = name
+                )
             )
         }
     }

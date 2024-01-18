@@ -25,12 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
 @Composable
-fun PracticeScreen(viewModel: PracticeScreenViewModel) {
+fun PracticeScreen(viewModel: PracticeScreenViewModel = hiltViewModel()) {
     val card by viewModel.currentCard.collectAsStateWithLifecycle()
     val cardSetName by viewModel.cardSetName.collectAsStateWithLifecycle()
     var isFlipped by remember { mutableStateOf(false) }
@@ -53,7 +54,12 @@ fun PracticeScreen(viewModel: PracticeScreenViewModel) {
             }
         },
         bottomBar = {
-            Row(modifier = Modifier.padding(14.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)) {
+            Row(
+                modifier = Modifier
+                    .padding(14.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
+            ) {
                 if (isFlipped.not()) {
                     Button(
                         onClick = { isFlipped = true },
@@ -71,7 +77,7 @@ fun PracticeScreen(viewModel: PracticeScreenViewModel) {
                     }
                 } else {
                     Button(
-                        onClick = {  },
+                        onClick = { },
                         shape = RoundedCornerShape(4.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
@@ -85,7 +91,7 @@ fun PracticeScreen(viewModel: PracticeScreenViewModel) {
                         )
                     }
                     Button(
-                        onClick = {  },
+                        onClick = { },
                         shape = RoundedCornerShape(4.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.secondary
@@ -99,7 +105,7 @@ fun PracticeScreen(viewModel: PracticeScreenViewModel) {
                         )
                     }
                     Button(
-                        onClick = {  },
+                        onClick = { },
                         shape = RoundedCornerShape(4.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.tertiary
@@ -113,7 +119,7 @@ fun PracticeScreen(viewModel: PracticeScreenViewModel) {
                         )
                     }
                     Button(
-                        onClick = {  },
+                        onClick = { },
                         shape = RoundedCornerShape(4.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error

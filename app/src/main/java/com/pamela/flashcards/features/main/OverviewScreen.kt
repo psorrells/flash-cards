@@ -29,12 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
 @Composable
-fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel(), onClickSet: (String) -> Unit) {
-    val cardGroupsList by viewModel.uiState.collectAsStateWithLifecycle()
+fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel()) {
+    val cardSetList by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit, block = { viewModel.initializeState() })
     Scaffold(
@@ -58,7 +57,7 @@ fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel(), onClick
         bottomBar = {
             Box(modifier = Modifier.padding(14.dp)) {
                 Button(
-                    onClick = { viewModel.onClickAddSet() },
+                    onClick = viewModel::onClickAddSet,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(4.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -87,8 +86,8 @@ fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel(), onClick
                 .padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            items(cardGroupsList) { cardGroup ->
-                StudySetCard(cardGroup) { onClickSet(cardGroup.id.toString()) }
+            items(cardSetList) { cardSet ->
+                StudySetCard(cardSet, viewModel::onClickCardSet)
             }
         }
     }
@@ -98,6 +97,6 @@ fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel(), onClick
 @Composable
 fun OverviewScreenPreview() {
     FlashCardsTheme {
-        OverviewScreen(viewModel(), {})
+        OverviewScreen()
     }
 }
