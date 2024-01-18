@@ -87,7 +87,7 @@ fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel()) {
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             items(cardSetList) { cardSet ->
-                StudySetCard(cardSet, viewModel::onClickCardSet)
+                StudySetCard(cardSet, viewModel::navigateToPracticeScreen)
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.database.flashcards.FlashCardsRepository
+import com.pamela.flashcards.domain.GetFlashCardsBySetIdUseCase
 import com.pamela.flashcards.features.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PracticeScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val flashCardsRepository: FlashCardsRepository,
+    private val getFlashCardsBySetId: GetFlashCardsBySetIdUseCase,
     private val navigator: Navigator
 ): ViewModel() {
 
@@ -34,11 +35,9 @@ class PracticeScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val list = flashCardsRepository.getAllCardsBySetId(UUID.fromString(cardSetId))
+            val list = getFlashCardsBySetId(UUID.fromString(cardSetId)).getOrNull()
 
-            if (list.isNotEmpty()) {
-                _currentCard.update { list.first() }
-            }
+            if (list?.isNotEmpty() == true) _currentCard.update { list.first() }
         }
     }
 
