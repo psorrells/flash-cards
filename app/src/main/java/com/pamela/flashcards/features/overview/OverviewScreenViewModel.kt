@@ -27,11 +27,7 @@ class OverviewScreenViewModel @Inject constructor(
     val uiState: StateFlow<List<FlashCardSetDomain>> = _uiState
 
     fun initializeState() {
-        viewModelScope.launch {
-            val sets = getAllFlashCardSets().getOrNull()
-
-            if (sets?.isNotEmpty() == true) _uiState.update { sets }
-        }
+        updateSets()
     }
 
     fun navigateToPracticeScreen(cardSet: FlashCardSetDomain) {
@@ -47,6 +43,16 @@ class OverviewScreenViewModel @Inject constructor(
     fun deleteSet(set: FlashCardSetDomain) {
         viewModelScope.launch {
             deleteFlashCardSet(set)
+        }
+        updateSets()
+    }
+
+    private fun updateSets() {
+        viewModelScope.launch {
+            val sets = getAllFlashCardSets().getOrNull()
+
+            if (sets?.isNotEmpty() == true) _uiState.update { sets }
+            else _uiState.update { listOf() }
         }
     }
 }
