@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 
@@ -35,27 +36,18 @@ fun AddSetScreen(viewModel: AddSetViewModel = hiltViewModel()) {
         modifier = Modifier.scaffoldDefaults(),
         topBar = { TopBarHeader(titleText = viewModel.getPageTitle()) },
         bottomBar = {
-            Box(modifier = Modifier.padding(14.dp)) {
-                Button(
-                    onClick = viewModel::saveSet,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Check,
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        style = MaterialTheme.typography.titleMedium,
-                        text = "Save",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+            BottomBarButtonFullWidth(onClick = viewModel::saveSet) {
+                Icon(
+                    imageVector = Icons.Outlined.Check,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    style = MaterialTheme.typography.titleMedium,
+                    text = "Save",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     ) { paddingValues ->

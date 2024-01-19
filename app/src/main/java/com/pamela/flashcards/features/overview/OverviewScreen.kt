@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
@@ -39,27 +40,18 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
         modifier = Modifier.scaffoldDefaults(),
         topBar = { TopBarHeader(titleText = "Study Sets") },
         bottomBar = {
-            Box(modifier = Modifier.padding(14.dp)) {
-                Button(
-                    onClick = viewModel::navigateToAddSetScreen,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Add,
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        style = MaterialTheme.typography.titleMedium,
-                        text = "Add a new set",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+            BottomBarButtonFullWidth(onClick = viewModel::navigateToAddSetScreen) {
+                Icon(
+                    imageVector = Icons.Outlined.Add,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    style = MaterialTheme.typography.titleMedium,
+                    text = "Add a new set",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     ) { paddingValues ->

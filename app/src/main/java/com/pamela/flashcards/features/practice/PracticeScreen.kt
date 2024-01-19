@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
@@ -38,28 +39,24 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
         modifier = Modifier.scaffoldDefaults(),
         topBar = { TopBarHeader(titleText = cardSetName) },
         bottomBar = {
-            Row(
-                modifier = Modifier
-                    .padding(14.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
-            ) {
-                if (isFlipped.not()) {
-                    Button(
-                        onClick = { isFlipped = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        ),
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            text = "Flip",
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                } else {
+            if (isFlipped.not()) {
+                BottomBarButtonFullWidth(onClick = { isFlipped = true }) {
+                    Text(
+                        style = MaterialTheme.typography.titleMedium,
+                        text = "Flip",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .padding(14.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        16.dp,
+                        Alignment.CenterHorizontally
+                    )
+                ) {
                     Button(
                         onClick = { },
                         shape = RoundedCornerShape(4.dp),
