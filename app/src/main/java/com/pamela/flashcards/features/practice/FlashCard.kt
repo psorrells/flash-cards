@@ -35,16 +35,17 @@ fun FlashCard(
     setIsFlipped: (Boolean) -> Unit,
     card: FlashCardDomain
 ) {
-    var rotationValue by remember{ mutableFloatStateOf(0.0F)}
+    var rotationValue by remember { mutableFloatStateOf(0.0F) }
     val rotation by animateFloatAsState(
         targetValue = rotationValue,
         animationSpec = tween(1000, easing = FastOutSlowInEasing),
-        label = "flashCardRotate")
-
+        label = "flashCardRotate"
+    )
     val size by animateFloatAsState(
-        targetValue = abs(sin(((rotation) * Math.PI/180.0) + Math.PI/2.0).toFloat()),
+        targetValue = abs(sin(((rotation) * Math.PI / 180.0) + Math.PI / 2.0).toFloat()),
         animationSpec = tween(50),
-        label = "flashCardSize")
+        label = "flashCardSize"
+    )
 
     LaunchedEffect(key1 = isFlipped, block = {
         rotationValue = if (isFlipped) {
@@ -53,13 +54,14 @@ fun FlashCard(
             0.0F
         }
     })
+
     if (rotation > 90.0F) {
         ElevatedCard(
             modifier = Modifier
-                .fillMaxHeight(size/2.0F + 0.5F)
+                .fillMaxHeight(size / 2.0F + 0.5F)
                 .fillMaxWidth(size)
                 .clickable { setIsFlipped(false) }
-                .rotate(-rotation)
+                .rotate(-rotation + 180.0F)
         ) {
             if (rotation >= 170.0F) {
                 Box(
@@ -81,7 +83,7 @@ fun FlashCard(
     if (rotation <= 90.0F) {
         ElevatedCard(
             modifier = Modifier
-                .fillMaxHeight(size/2.0F + 0.5F)
+                .fillMaxHeight(size / 2.0F + 0.5F)
                 .fillMaxWidth(size)
                 .clickable { setIsFlipped(true) }
                 .rotate(-rotation),

@@ -53,16 +53,18 @@ fun StudySetCard(
     onClickAddCard: (FlashCardSetDomain) -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
+
     var widthValue by remember { mutableFloatStateOf(0.0F) }
     val widthAnimation by animateFloatAsState(
         targetValue = widthValue,
         animationSpec = tween(1000, easing = EaseOutBounce),
         label = "widthAnimation"
     )
+    LaunchedEffect(key1 = Unit) { widthValue = 1.0F }
+
+    var expanded by remember { mutableStateOf(false) }
     val showContent by remember { derivedStateOf { widthAnimation > 0.75F } }
-    LaunchedEffect(key1 = Unit) {
-        widthValue = 1.0F
-    }
+    LaunchedEffect(key1 = cardSet, block = { expanded = false })
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -75,7 +77,6 @@ fun StudySetCard(
             .fillMaxWidth(widthAnimation)
             .clickable { onClickSet(cardSet) }
     ) {
-        var expanded by remember { mutableStateOf(false) }
         Box(modifier = Modifier.fillMaxWidth()) {
             if (showContent) {
                 IconButton(
