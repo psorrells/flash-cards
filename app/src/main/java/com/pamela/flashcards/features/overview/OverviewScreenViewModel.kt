@@ -19,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class OverviewScreenViewModel @Inject constructor(
     private val getAllFlashCardSets: GetAllFlashCardSetsUseCase,
-    private val insertFlashCardSet: UpsertFlashCardSetUseCase,
     private val deleteFlashCardSet: DeleteFlashCardSetUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -41,9 +40,10 @@ class OverviewScreenViewModel @Inject constructor(
 
     fun deleteSet(set: FlashCardSetDomain) {
         viewModelScope.launch {
-            deleteFlashCardSet(set)
+            deleteFlashCardSet(set).onSuccess {
+                updateSets()
+            }
         }
-        updateSets()
     }
 
     private fun updateSets() {
