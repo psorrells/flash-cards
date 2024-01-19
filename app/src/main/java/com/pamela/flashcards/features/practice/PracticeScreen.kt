@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
@@ -32,12 +33,11 @@ import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
 @Composable
 fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
-    val card by viewModel.currentCard.collectAsStateWithLifecycle()
-    val cardSetName by viewModel.cardSetName.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isFlipped by remember { mutableStateOf(false) }
     Scaffold(
         modifier = Modifier.scaffoldDefaults(),
-        topBar = { TopBarHeader(titleText = cardSetName) },
+        topBar = { TopBarHeader(titleText = uiState.cardSet.name) },
         bottomBar = {
             if (isFlipped.not()) {
                 BottomBarButtonFullWidth(onClick = { isFlipped = true }) {
@@ -124,7 +124,11 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            FlashCard(isFlipped, { isFlipped = it }, card)
+            when (uiState.errorState) {
+                null -> FlashCard(isFlipped, { isFlipped = it }, uiState.currentCard)
+                is EmptyResultError -> EmptyDeckDisplay(viewModel::navigateToAddCard)
+                else -> Text(text = "We encountered an error. Please try again.")
+            }
         }
     }
 }

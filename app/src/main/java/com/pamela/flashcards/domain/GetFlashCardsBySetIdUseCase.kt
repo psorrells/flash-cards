@@ -3,7 +3,6 @@ package com.pamela.flashcards.domain
 import com.pamela.flashcards.database.flashcards.FlashCardsRepository
 import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.model.FlashCardDomain
-import com.pamela.flashcards.model.FlashCardSetDomain
 import java.util.UUID
 import javax.inject.Inject
 
