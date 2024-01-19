@@ -45,7 +45,8 @@ class PracticeViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             cardSet = cardSetResult.await().getOrThrow(),
-                            currentCard = listResult.await().getOrThrow().first()
+                            currentCard = listResult.await().getOrThrow().first(),
+                            errorState = null
                         )
                     }
                 } catch (e: Exception) {

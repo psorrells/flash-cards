@@ -23,8 +23,8 @@ class OverviewViewModel @Inject constructor(
     private val navigator: Navigator
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<List<FlashCardSetDomain>> = MutableStateFlow(listOf())
-    val uiState: StateFlow<List<FlashCardSetDomain>> = _uiState
+    private val _uiState: MutableStateFlow<OverviewUiState> = MutableStateFlow(OverviewUiState())
+    val uiState: StateFlow<OverviewUiState> = _uiState
 
     fun initializeState() {
         updateSets()
@@ -52,10 +52,23 @@ class OverviewViewModel @Inject constructor(
 
     private fun updateSets() {
         viewModelScope.launch {
-            val sets = getAllFlashCardSets().getOrNull()
-
-            if (sets?.isNotEmpty() == true) _uiState.update { sets }
-            else _uiState.update { listOf() }
+            try {
+                _uiState.update {
+                    it.copy(
+                        sets = getAllFlashCardSets().getOrThrow(),
+                        errorState = null
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(errorState = e)
+                }
+            }
         }
     }
 }
+
+data class OverviewUiState(
+    val sets: List<FlashCardSetDomain> = emptyList(),
+    val errorState: Throwable? = null
+)

@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
@@ -33,7 +34,7 @@ import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
 @Composable
 fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
-    val cardSetList by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit, block = { viewModel.initializeState() })
     Scaffold(
@@ -55,22 +56,28 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
             }
         }
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            items(cardSetList) { cardSet ->
-                StudySetCard(
-                    cardSet,
-                    viewModel::navigateToPracticeScreen,
-                    viewModel::deleteSet,
-                    viewModel::navigateToAddSetScreen,
-                    viewModel::navigateToAddCardScreen
-                )
+        when (uiState.errorState) {
+            null -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    items(uiState.sets) { cardSet ->
+                        StudySetCard(
+                            cardSet,
+                            viewModel::navigateToPracticeScreen,
+                            viewModel::deleteSet,
+                            viewModel::navigateToAddSetScreen,
+                            viewModel::navigateToAddCardScreen
+                        )
+                    }
+                }
             }
+            is EmptyResultError -> EmptySetListDisplay()
+            else -> Text("whoops! Try again.")
         }
     }
 }
