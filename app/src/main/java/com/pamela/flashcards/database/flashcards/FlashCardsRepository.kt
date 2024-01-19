@@ -8,7 +8,9 @@ import javax.inject.Singleton
 abstract class FlashCardsRepository {
     abstract suspend fun getAllCardsBySetId(setId: UUID): List<FlashCardDomain>
 
-    abstract suspend fun insertCardToSet(card: FlashCardDomain, setId: UUID)
+    abstract suspend fun getCardById(id: UUID): FlashCardDomain
+
+    abstract suspend fun upsertCardToSet(card: FlashCardDomain, setId: UUID)
 
     abstract suspend fun deleteCardFromSet(card: FlashCardDomain, setId: UUID)
 }
@@ -21,8 +23,12 @@ class FlashCardsRepositoryImpl @Inject constructor(
         return flashCardsDao.getAllCardsBySetId(setId.toString()).map { it.toDomain() }
     }
 
-    override suspend fun insertCardToSet(card: FlashCardDomain, setId: UUID) {
-        flashCardsDao.insert(card.toEntity(setId))
+    override suspend fun getCardById(id: UUID): FlashCardDomain {
+        return flashCardsDao.getCardById(id.toString()).toDomain()
+    }
+
+    override suspend fun upsertCardToSet(card: FlashCardDomain, setId: UUID) {
+        flashCardsDao.upsert(card.toEntity(setId))
     }
 
     override suspend fun deleteCardFromSet(card: FlashCardDomain, setId: UUID) {

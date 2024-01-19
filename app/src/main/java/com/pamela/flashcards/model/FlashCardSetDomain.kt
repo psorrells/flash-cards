@@ -21,3 +21,8 @@ data class FlashCardSetDomain(
     }
 }
 
+data class FlashCardSetNameIdDomain(
+    val id: UUID = UUID.randomUUID(),
+    val name: String = ""
+)
+

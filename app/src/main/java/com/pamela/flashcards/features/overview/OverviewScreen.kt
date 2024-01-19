@@ -75,7 +75,8 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                     cardSet,
                     viewModel::navigateToPracticeScreen,
                     viewModel::deleteSet,
-                    viewModel::navigateToAddSetScreen
+                    viewModel::navigateToAddSetScreen,
+                    viewModel::navigateToAddCardScreen
                 )
             }
         }

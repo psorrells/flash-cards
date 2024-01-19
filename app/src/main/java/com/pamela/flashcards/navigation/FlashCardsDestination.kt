@@ -25,10 +25,22 @@ object AddSetDestination : FlashCardsDestination {
     override val route = "add-set"
     const val cardSetId = "cardSetId"
     override val routeWithArgs: String
-        get() = "${route}/{${cardSetId}}"
+        get() = "$route/{$cardSetId}"
 
     fun populateRouteWithArgs(cardSetId: String? = null): String {
-        return "${route}/$cardSetId"
+        return "$route/$cardSetId"
+    }
+}
+
+object AddCardDestination : FlashCardsDestination {
+    override val route = "add-card"
+    const val cardSetId = "cardSetId"
+    const val cardId = "cardId"
+    override val routeWithArgs: String
+        get() = "$route/{$cardSetId}/{$cardId}"
+
+    fun populateRouteWithArgs(cardSetId: String? = null, cardId: String? = null): String {
+        return "$route/$cardSetId/$cardId"
     }
 }
 

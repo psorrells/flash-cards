@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.domain.DeleteFlashCardSetUseCase
 import com.pamela.flashcards.domain.GetAllFlashCardSetsUseCase
 import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.navigation.AddCardDestination
 import com.pamela.flashcards.navigation.AddSetDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.navigation.PracticeDestination
@@ -35,6 +36,10 @@ class OverviewViewModel @Inject constructor(
 
     fun navigateToAddSetScreen(cardSet: FlashCardSetDomain? = null) {
         navigator.navigateTo(AddSetDestination.populateRouteWithArgs(cardSet?.id.toString()))
+    }
+
+    fun navigateToAddCardScreen(cardSet: FlashCardSetDomain? = null) {
+        navigator.navigateTo(AddCardDestination.populateRouteWithArgs(cardSetId = cardSet?.id.toString()))
     }
 
     fun deleteSet(set: FlashCardSetDomain) {

@@ -42,13 +42,15 @@ import com.pamela.flashcards.model.FlashCardSetDomain
 import com.pamela.flashcards.ui.styles.getButtonStyles
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun StudySetCard(
     cardSet: FlashCardSetDomain,
     onClickSet: (FlashCardSetDomain) -> Unit,
     onClickDelete: (FlashCardSetDomain) -> Unit,
-    onClickEdit: (FlashCardSetDomain) -> Unit
+    onClickEdit: (FlashCardSetDomain) -> Unit,
+    onClickAddCard: (FlashCardSetDomain) -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     var widthValue by remember { mutableFloatStateOf(0.0F) }
@@ -108,7 +110,7 @@ fun StudySetCard(
                                     LocalDateTime.ofInstant(
                                         cardSet.lastStudiedAt,
                                         ZoneId.systemDefault()
-                                    )
+                                    ).format(DateTimeFormatter.ofPattern("dd/mm/yy at hh:mma"))
                                 else "Never :("
                             }"
                         )
@@ -116,6 +118,11 @@ fun StudySetCard(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
+                            Button(
+                                onClick = { onClickAddCard(cardSet) }
+                            ) {
+                                Text(text = "Add Card")
+                            }
                             TextButton(
                                 onClick = { onClickEdit(cardSet) }
                             ) {

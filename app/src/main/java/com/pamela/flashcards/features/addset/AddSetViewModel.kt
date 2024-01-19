@@ -42,6 +42,10 @@ class AddSetViewModel @Inject constructor(
         }
     }
 
+    fun getPageTitle(): String {
+        return if (cardSetId != null) "Edit Set" else "Add Set"
+    }
+
     fun updateName(name: String) {
         _uiState.update {
             val newSet = it.flashCardSet.copy(name = name)

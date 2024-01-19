@@ -1,6 +1,7 @@
 package com.pamela.flashcards.database.flashcardsets
 
 import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.model.FlashCardSetNameIdDomain
 import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
@@ -8,6 +9,8 @@ import javax.inject.Singleton
 
 abstract class FlashCardSetsRepository {
     abstract suspend fun getAllSets(): List<FlashCardSetDomain>
+
+    abstract suspend fun getAllSetsNameIds(): List<FlashCardSetNameIdDomain>
 
     abstract suspend fun getSetById(setId: UUID): FlashCardSetDomain
 
@@ -22,6 +25,10 @@ class FlashCardSetsRepositoryImpl @Inject constructor(
 ) : FlashCardSetsRepository() {
     override suspend fun getAllSets(): List<FlashCardSetDomain> {
         return flashCardSetsDao.getAllSets().map { it.toDomain() }
+    }
+
+    override suspend fun getAllSetsNameIds(): List<FlashCardSetNameIdDomain> {
+        return flashCardSetsDao.getAllSets().map { it.toNameIdDomain() }
     }
 
     override suspend fun getSetById(setId: UUID): FlashCardSetDomain {

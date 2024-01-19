@@ -33,7 +33,7 @@ fun AddSetScreen(viewModel: AddSetViewModel = hiltViewModel()) {
 
     Scaffold(
         modifier = Modifier.scaffoldDefaults(),
-        topBar = { TopBarHeader(titleText = "Study Sets") },
+        topBar = { TopBarHeader(titleText = viewModel.getPageTitle()) },
         bottomBar = {
             Box(modifier = Modifier.padding(14.dp)) {
                 Button(
@@ -67,7 +67,11 @@ fun AddSetScreen(viewModel: AddSetViewModel = hiltViewModel()) {
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Text(text = "Set Name", style = MaterialTheme.typography.labelSmall)
-            TextField(value = uiState.flashCardSet.name, onValueChange = viewModel::updateName)
+            TextField(
+                value = uiState.flashCardSet.name,
+                onValueChange = viewModel::updateName,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

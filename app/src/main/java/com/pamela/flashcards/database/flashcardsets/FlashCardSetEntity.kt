@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.model.FlashCardSetNameIdDomain
 import java.time.Instant
 import java.util.UUID
 
@@ -21,6 +22,13 @@ data class FlashCardSetEntity(
             totalDue = totalDue,
             createdAt = Instant.ofEpochMilli(createdAt),
             lastStudiedAt = lastStudiedAt?.let { Instant.ofEpochMilli(it) }
+        )
+    }
+
+    fun toNameIdDomain(): FlashCardSetNameIdDomain {
+        return FlashCardSetNameIdDomain(
+            id = UUID.fromString(id),
+            name = name
         )
     }
 }

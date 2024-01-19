@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pamela.flashcards.features.addcard.AddCardScreen
 import com.pamela.flashcards.features.addset.AddSetScreen
 import com.pamela.flashcards.features.overview.OverviewScreen
 import com.pamela.flashcards.features.practice.PracticeScreen
@@ -40,6 +41,9 @@ fun FlashCardsHostController(
         }
         composable(route = AddSetDestination.routeWithArgs) {
             AddSetScreen()
+        }
+        composable(route = AddCardDestination.routeWithArgs) {
+            AddCardScreen()
         }
     }
 }
