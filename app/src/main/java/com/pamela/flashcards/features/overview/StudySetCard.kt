@@ -1,5 +1,9 @@
 package com.pamela.flashcards.features.overview
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.EaseOutBounce
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +26,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,6 +51,16 @@ fun StudySetCard(
     onClickEdit: (FlashCardSetDomain) -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var widthValue by remember { mutableFloatStateOf(0.0F) }
+    val widthAnimation by animateFloatAsState(
+        targetValue = widthValue,
+        animationSpec = tween(1000, easing = EaseOutBounce),
+        label = "widthAnimation"
+    )
+    val showContent by remember { derivedStateOf { widthAnimation > 0.75F } }
+    LaunchedEffect(key1 = Unit) {
+        widthValue = 1.0F
+    }
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -52,59 +69,64 @@ fun StudySetCard(
         elevation = CardDefaults.elevatedCardElevation(
             defaultElevation = 8.dp
         ),
-        modifier = Modifier.clickable { onClickSet(cardSet) }
+        modifier = Modifier
+            .fillMaxWidth(widthAnimation)
+            .clickable { onClickSet(cardSet) }
     ) {
         var expanded by remember { mutableStateOf(false) }
         Box(modifier = Modifier.fillMaxWidth()) {
-            IconButton(
-                onClick = { expanded = expanded.not() },
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
-                    contentDescription = "Expand"
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(14.dp)
-            ) {
-                Text(
-                    style = MaterialTheme.typography.labelLarge,
-                    text = cardSet.name
-                )
-                if (expanded) {
-                    Spacer(modifier = Modifier.height(14.dp))
-                    Text(
-                        style = MaterialTheme.typography.bodyMedium,
-                        text = "${cardSet.totalDue}/${cardSet.size} cards due"
+            if (showContent) {
+                IconButton(
+                    onClick = { expanded = expanded.not() },
+                    modifier = Modifier.align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                        contentDescription = "Expand"
                     )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(14.dp)
+                        .animateContentSize()
+                ) {
                     Text(
-                        style = MaterialTheme.typography.bodyMedium,
-                        text = "Last studied at: ${
-                            if (cardSet.lastStudiedAt != null)
-                                LocalDateTime.ofInstant(
-                                    cardSet.lastStudiedAt,
-                                    ZoneId.systemDefault()
-                                )
-                            else "Never :("
-                        }"
+                        style = MaterialTheme.typography.labelLarge,
+                        text = cardSet.name
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        TextButton(
-                            onClick = { onClickEdit(cardSet) }
+                    if (expanded) {
+                        Spacer(modifier = Modifier.height(14.dp))
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = "${cardSet.totalDue}/${cardSet.size} cards due"
+                        )
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = "Last studied at: ${
+                                if (cardSet.lastStudiedAt != null)
+                                    LocalDateTime.ofInstant(
+                                        cardSet.lastStudiedAt,
+                                        ZoneId.systemDefault()
+                                    )
+                                else "Never :("
+                            }"
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Text(text = "Edit")
-                        }
-                        TextButton(
-                            onClick = { showDeleteDialog = true },
-                            colors = getButtonStyles().errorText
-                        ) {
-                            Text(text = "Delete")
+                            TextButton(
+                                onClick = { onClickEdit(cardSet) }
+                            ) {
+                                Text(text = "Edit")
+                            }
+                            TextButton(
+                                onClick = { showDeleteDialog = true },
+                                colors = getButtonStyles().errorText
+                            ) {
+                                Text(text = "Delete")
+                            }
                         }
                     }
                 }
