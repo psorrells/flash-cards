@@ -2,11 +2,14 @@ package com.pamela.flashcards.database.flashcardsets
 
 import com.pamela.flashcards.model.FlashCardSetDomain
 import java.time.Instant
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
 abstract class FlashCardSetsRepository {
     abstract suspend fun getAllSets(): List<FlashCardSetDomain>
+
+    abstract suspend fun getSetById(setId: UUID): FlashCardSetDomain
 
     abstract suspend fun upsertSet(set: FlashCardSetDomain)
 
@@ -18,13 +21,11 @@ class FlashCardSetsRepositoryImpl @Inject constructor(
     private val flashCardSetsDao: FlashCardSetsDao
 ) : FlashCardSetsRepository() {
     override suspend fun getAllSets(): List<FlashCardSetDomain> {
-        return flashCardSetsDao.getAllSets().map {
-            it.toDomain(
-                size = flashCardSetsDao.getTotalCountForSet(it.id),
-                totalDue = flashCardSetsDao.getTotalDueForSetByDueDate(it.id, Instant.now().toEpochMilli()),
-                lastStudiedAt = flashCardSetsDao.getLastStudiedAtForSet(it.id)
-            )
-        }
+        return flashCardSetsDao.getAllSets().map { it.toDomain() }
+    }
+
+    override suspend fun getSetById(setId: UUID): FlashCardSetDomain {
+        return flashCardSetsDao.getSetById(setId.toString()).toDomain()
     }
 
     override suspend fun upsertSet(set: FlashCardSetDomain) {
@@ -35,4 +36,14 @@ class FlashCardSetsRepositoryImpl @Inject constructor(
         flashCardSetsDao.deleteSet(set.toEntity())
     }
 
+    private suspend fun FlashCardSetEntity.toDomain(): FlashCardSetDomain {
+        return this.toDomain(
+            size = flashCardSetsDao.getTotalCountForSet(this.id),
+            totalDue = flashCardSetsDao.getTotalDueForSetByDueDate(
+                this.id,
+                Instant.now().toEpochMilli()
+            ),
+            lastStudiedAt = flashCardSetsDao.getLastStudiedAtForSet(this.id)
+        )
+    }
 }

@@ -2,17 +2,14 @@ package com.pamela.flashcards.features.practice
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,7 +30,7 @@ import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
 @Composable
-fun PracticeScreen(viewModel: PracticeScreenViewModel = hiltViewModel()) {
+fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
     val card by viewModel.currentCard.collectAsStateWithLifecycle()
     val cardSetName by viewModel.cardSetName.collectAsStateWithLifecycle()
     var isFlipped by remember { mutableStateOf(false) }

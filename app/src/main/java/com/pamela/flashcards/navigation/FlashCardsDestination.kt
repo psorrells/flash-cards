@@ -6,11 +6,11 @@ interface FlashCardsDestination {
         get() = route
 }
 
-object OverviewDestination: FlashCardsDestination {
+object OverviewDestination : FlashCardsDestination {
     override val route = "overview"
 }
 
-object PracticeDestination: FlashCardsDestination {
+object PracticeDestination : FlashCardsDestination {
     override val route = "practice"
     const val cardSetId = "cardSetId"
     override val routeWithArgs: String
@@ -21,10 +21,17 @@ object PracticeDestination: FlashCardsDestination {
     }
 }
 
-object AddSetDestination: FlashCardsDestination {
+object AddSetDestination : FlashCardsDestination {
     override val route = "add-set"
+    const val cardSetId = "cardSetId"
+    override val routeWithArgs: String
+        get() = "${route}/{${cardSetId}}"
+
+    fun populateRouteWithArgs(cardSetId: String? = null): String {
+        return "${route}/$cardSetId"
+    }
 }
 
-object PreviousDestination: FlashCardsDestination {
+object PreviousDestination : FlashCardsDestination {
     override val route = "previous"
 }

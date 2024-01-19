@@ -13,14 +13,14 @@ data class FlashCardSetEntity(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "created_at") val createdAt: Long,
 ) {
-    fun toDomain(size: Int, totalDue: Int, lastStudiedAt: Long): FlashCardSetDomain {
+    fun toDomain(size: Int, totalDue: Int, lastStudiedAt: Long?): FlashCardSetDomain {
         return FlashCardSetDomain(
             id = UUID.fromString(id),
             name = name,
             size = size,
             totalDue = totalDue,
             createdAt = Instant.ofEpochMilli(createdAt),
-            lastStudiedAt = Instant.ofEpochMilli(lastStudiedAt)
+            lastStudiedAt = lastStudiedAt?.let { Instant.ofEpochMilli(it) }
         )
     }
 }

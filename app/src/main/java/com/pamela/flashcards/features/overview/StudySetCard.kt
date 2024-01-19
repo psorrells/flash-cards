@@ -40,7 +40,8 @@ import java.time.ZoneId
 fun StudySetCard(
     cardSet: FlashCardSetDomain,
     onClickSet: (FlashCardSetDomain) -> Unit,
-    onClickDelete: (FlashCardSetDomain) -> Unit
+    onClickDelete: (FlashCardSetDomain) -> Unit,
+    onClickEdit: (FlashCardSetDomain) -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     ElevatedCard(
@@ -94,6 +95,11 @@ fun StudySetCard(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
+                        TextButton(
+                            onClick = { onClickEdit(cardSet) }
+                        ) {
+                            Text(text = "Edit")
+                        }
                         TextButton(
                             onClick = { showDeleteDialog = true },
                             colors = getButtonStyles().errorText

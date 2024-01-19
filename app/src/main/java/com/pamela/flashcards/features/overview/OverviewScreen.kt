@@ -31,7 +31,7 @@ import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
 @Composable
-fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel()) {
+fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
     val cardSetList by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit, block = { viewModel.initializeState() })
@@ -71,7 +71,12 @@ fun OverviewScreen(viewModel: OverviewScreenViewModel = hiltViewModel()) {
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             items(cardSetList) { cardSet ->
-                StudySetCard(cardSet, viewModel::navigateToPracticeScreen, viewModel::deleteSet)
+                StudySetCard(
+                    cardSet,
+                    viewModel::navigateToPracticeScreen,
+                    viewModel::deleteSet,
+                    viewModel::navigateToAddSetScreen
+                )
             }
         }
     }

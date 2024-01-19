@@ -38,7 +38,7 @@ fun FlashCardsHostController(
         composable(route = PracticeDestination.routeWithArgs) {
             PracticeScreen()
         }
-        composable(route = AddSetDestination.route) {
+        composable(route = AddSetDestination.routeWithArgs) {
             AddSetScreen()
         }
     }
