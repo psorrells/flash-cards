@@ -33,17 +33,9 @@ fun FlashCardsHostController(
     }
 
     NavHost(navController = navController, startDestination = viewModel.getStartDestination()) {
-        composable(route = OverviewDestination.route) {
-            OverviewScreen()
-        }
-        composable(route = PracticeDestination.routeWithArgs) {
-            PracticeScreen()
-        }
-        composable(route = AddSetDestination.routeWithArgs) {
-            AddSetScreen()
-        }
-        composable(route = AddCardDestination.routeWithArgs) {
-            AddCardScreen()
-        }
+        composable(route = OverviewDestination.route) { OverviewScreen() }
+        composable(route = PracticeDestination.routeWithArgs) { PracticeScreen() }
+        composable(route = AddSetDestination.routeWithArgs) { AddSetScreen() }
+        composable(route = AddCardDestination.routeWithArgs) { AddCardScreen() }
     }
 }
