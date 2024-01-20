@@ -20,11 +20,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pamela.flashcards.R
 import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
@@ -43,7 +45,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                 BottomBarButtonFullWidth(onClick = { isFlipped = true }) {
                     Text(
                         style = MaterialTheme.typography.titleMedium,
-                        text = "Flip",
+                        text = stringResource(id = R.string.flip),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -67,7 +69,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     ) {
                         Text(
                             style = MaterialTheme.typography.titleMedium,
-                            text = "Easy",
+                            text = stringResource(id = R.string.easy),
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
@@ -81,7 +83,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     ) {
                         Text(
                             style = MaterialTheme.typography.titleMedium,
-                            text = "Medium",
+                            text = stringResource(id = R.string.medium),
                             color = MaterialTheme.colorScheme.onSecondary
                         )
                     }
@@ -95,7 +97,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     ) {
                         Text(
                             style = MaterialTheme.typography.titleMedium,
-                            text = "Hard",
+                            text = stringResource(id = R.string.hard),
                             color = MaterialTheme.colorScheme.onTertiary
                         )
                     }
@@ -109,7 +111,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     ) {
                         Text(
                             style = MaterialTheme.typography.titleMedium,
-                            text = "Again",
+                            text = stringResource(id = R.string.again),
                             color = MaterialTheme.colorScheme.onError
                         )
                     }
@@ -127,7 +129,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
             when (uiState.errorState) {
                 null -> FlashCard(isFlipped, { isFlipped = it }, uiState.currentCard)
                 is EmptyResultError -> EmptyDeckDisplay(viewModel::navigateToAddCard)
-                else -> Text(text = "We encountered an error. Please try again.")
+                else -> Text(text = stringResource(id = R.string.default_error_text))
             }
         }
     }

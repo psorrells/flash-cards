@@ -3,8 +3,10 @@ package com.pamela.flashcards.features.addcard
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pamela.flashcards.R
 import com.pamela.flashcards.domain.GetAllFlashCardSetsNameIdUseCase
 import com.pamela.flashcards.domain.GetFlashCardByIdUseCase
+import com.pamela.flashcards.domain.GetStringResourceUseCase
 import com.pamela.flashcards.domain.UpsertFlashCardToSetUseCase
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.model.FlashCardSetNameIdDomain
@@ -26,6 +28,7 @@ class AddCardViewModel @Inject constructor(
     private val getAllFlashCardSetsNameId: GetAllFlashCardSetsNameIdUseCase,
     private val getFlashCardById: GetFlashCardByIdUseCase,
     private val upsertFlashCardToSet: UpsertFlashCardToSetUseCase,
+    private val getStringResource: GetStringResourceUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -56,7 +59,8 @@ class AddCardViewModel @Inject constructor(
     }
 
     fun getPageTitle(): String {
-        return if (cardId != null) "Edit Card" else "Add Card"
+        return if (cardId != null) getStringResource(R.string.edit_card_header)
+        else getStringResource(R.string.add_card_header)
     }
 
     fun getCurrentSelectedSetName(): String {

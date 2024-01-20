@@ -29,10 +29,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pamela.flashcards.R
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
@@ -56,7 +58,7 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     style = MaterialTheme.typography.titleMedium,
-                    text = "Save",
+                    text = stringResource(id = R.string.save),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
@@ -69,11 +71,17 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
                 .padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Text(text = "Set", style = MaterialTheme.typography.labelSmall)
+            Text(
+                text = stringResource(id = R.string.set_label),
+                style = MaterialTheme.typography.labelSmall
+            )
             TextButton(onClick = { showSelectSetDialog = true }) {
                 Text(text = viewModel.getCurrentSelectedSetName())
             }
-            Text(text = "Card Front", style = MaterialTheme.typography.labelSmall)
+            Text(
+                text = stringResource(id = R.string.card_front_label),
+                style = MaterialTheme.typography.labelSmall
+            )
             TextField(
                 value = uiState.currentCard.front,
                 onValueChange = { viewModel.updateFlashCard(front = it) },
@@ -81,7 +89,10 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Card Back", style = MaterialTheme.typography.labelSmall)
+            Text(
+                text = stringResource(id = R.string.card_back_label),
+                style = MaterialTheme.typography.labelSmall
+            )
             TextField(
                 value = uiState.currentCard.back,
                 onValueChange = { viewModel.updateFlashCard(back = it) },
@@ -101,7 +112,10 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = "Select Set", style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            text = stringResource(id = R.string.select_set),
+                            style = MaterialTheme.typography.labelSmall
+                        )
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             items(uiState.allFlashCardSets) {
                                 Divider(modifier = Modifier.fillMaxWidth())

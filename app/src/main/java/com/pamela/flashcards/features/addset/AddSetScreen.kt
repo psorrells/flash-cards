@@ -1,18 +1,14 @@
 package com.pamela.flashcards.features.addset
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -21,9 +17,11 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pamela.flashcards.R
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
@@ -45,7 +43,7 @@ fun AddSetScreen(viewModel: AddSetViewModel = hiltViewModel()) {
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     style = MaterialTheme.typography.titleMedium,
-                    text = "Save",
+                    text = stringResource(id = R.string.save),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
@@ -58,7 +56,10 @@ fun AddSetScreen(viewModel: AddSetViewModel = hiltViewModel()) {
                 .padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Text(text = "Set Name", style = MaterialTheme.typography.labelSmall)
+            Text(
+                text = stringResource(id = R.string.set_name_label),
+                style = MaterialTheme.typography.labelSmall
+            )
             TextField(
                 value = uiState.flashCardSet.name,
                 onValueChange = viewModel::updateName,

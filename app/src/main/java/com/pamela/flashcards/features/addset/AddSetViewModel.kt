@@ -1,15 +1,20 @@
 package com.pamela.flashcards.features.addset
 
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pamela.flashcards.R
 import com.pamela.flashcards.domain.GetFlashCardSetByIdUseCase
+import com.pamela.flashcards.domain.GetStringResourceUseCase
 import com.pamela.flashcards.domain.UpsertFlashCardSetUseCase
 import com.pamela.flashcards.model.FlashCardSetDomain
 import com.pamela.flashcards.navigation.AddSetDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.util.getUuidOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,6 +27,7 @@ class AddSetViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val upsertFlashCardSet: UpsertFlashCardSetUseCase,
     private val getFlashCardSetById: GetFlashCardSetByIdUseCase,
+    private val getStringResource: GetStringResourceUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -43,7 +49,8 @@ class AddSetViewModel @Inject constructor(
     }
 
     fun getPageTitle(): String {
-        return if (cardSetId != null) "Edit Set" else "Add Set"
+        return if (cardSetId != null) getStringResource(R.string.edit_set_header)
+        else getStringResource(R.string.add_set_header)
     }
 
     fun updateName(name: String) {

@@ -22,10 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pamela.flashcards.R
 import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
@@ -39,7 +41,7 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
     LaunchedEffect(key1 = Unit, block = { viewModel.initializeState() })
     Scaffold(
         modifier = Modifier.scaffoldDefaults(),
-        topBar = { TopBarHeader(titleText = "Study Sets") },
+        topBar = { TopBarHeader(titleText = stringResource(id = R.string.overview_header)) },
         bottomBar = {
             BottomBarButtonFullWidth(onClick = viewModel::navigateToAddSetScreen) {
                 Icon(
@@ -50,7 +52,7 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     style = MaterialTheme.typography.titleMedium,
-                    text = "Add a new set",
+                    text = stringResource(id = R.string.add_new_set),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
@@ -76,8 +78,9 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                     }
                 }
             }
+
             is EmptyResultError -> EmptySetListDisplay()
-            else -> Text("whoops! Try again.")
+            else -> Text(stringResource(id = R.string.default_error_text))
         }
     }
 }

@@ -35,14 +35,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.pamela.flashcards.R
 import com.pamela.flashcards.model.FlashCardSetDomain
 import com.pamela.flashcards.ui.styles.getButtonStyles
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import com.pamela.flashcards.util.getFormattedDate
+import com.pamela.flashcards.util.getFormattedTime
 
 @Composable
 fun StudySetCard(
@@ -85,7 +86,9 @@ fun StudySetCard(
                 ) {
                     Icon(
                         if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
-                        contentDescription = "Expand"
+                        contentDescription = stringResource(
+                            id = if (expanded) R.string.show_less else R.string.show_more
+                        )
                     )
                 }
                 Column(
@@ -102,18 +105,24 @@ fun StudySetCard(
                         Spacer(modifier = Modifier.height(14.dp))
                         Text(
                             style = MaterialTheme.typography.bodyMedium,
-                            text = "${cardSet.totalDue}/${cardSet.size} cards due"
+                            text = stringResource(
+                                id = R.string.cards_due,
+                                cardSet.totalDue,
+                                cardSet.size
+                            )
                         )
                         Text(
                             style = MaterialTheme.typography.bodyMedium,
-                            text = "Last studied at: ${
-                                if (cardSet.lastStudiedAt != null)
-                                    LocalDateTime.ofInstant(
-                                        cardSet.lastStudiedAt,
-                                        ZoneId.systemDefault()
-                                    ).format(DateTimeFormatter.ofPattern("dd/mm/yy at hh:mma"))
-                                else "Never :("
-                            }"
+                            text =
+                            if (cardSet.lastStudiedAt != null) {
+                                stringResource(
+                                    id = R.string.last_studied_time,
+                                    cardSet.lastStudiedAt.getFormattedDate(),
+                                    cardSet.lastStudiedAt.getFormattedTime()
+                                )
+                            } else {
+                                stringResource(id = R.string.never)
+                            }
                         )
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -122,18 +131,18 @@ fun StudySetCard(
                             Button(
                                 onClick = { onClickAddCard(cardSet) }
                             ) {
-                                Text(text = "Add Card")
+                                Text(text = stringResource(id = R.string.add_card))
                             }
                             TextButton(
                                 onClick = { onClickEdit(cardSet) }
                             ) {
-                                Text(text = "Edit")
+                                Text(text = stringResource(id = R.string.edit))
                             }
                             TextButton(
                                 onClick = { showDeleteDialog = true },
                                 colors = getButtonStyles().errorText
                             ) {
-                                Text(text = "Delete")
+                                Text(text = stringResource(id = R.string.delete))
                             }
                         }
                     }
@@ -152,10 +161,13 @@ fun StudySetCard(
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Are you sure?", style = MaterialTheme.typography.headlineMedium)
+                    Text(
+                        text = stringResource(id = R.string.delete_set_header),
+                        style = MaterialTheme.typography.headlineMedium
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "This will delete all cards in the set! This CANNOT be undone!",
+                        text = stringResource(id = R.string.delete_set_body),
                         style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -166,10 +178,10 @@ fun StudySetCard(
                         },
                         colors = getButtonStyles().errorDefault
                     ) {
-                        Text(text = "Yes, delete this set")
+                        Text(text = stringResource(id = R.string.confirm_delete_set))
                     }
                     TextButton(onClick = { showDeleteDialog = false }) {
-                        Text(text = "No, don't delete this set")
+                        Text(text = stringResource(id = R.string.cancel_delete_set))
                     }
                 }
             }
