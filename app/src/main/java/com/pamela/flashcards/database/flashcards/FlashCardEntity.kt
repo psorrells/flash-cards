@@ -13,10 +13,9 @@ data class FlashCardEntity(
     @ColumnInfo(name = "set_id") val setId: String,
     @ColumnInfo(name = "front") val front: String,
     @ColumnInfo(name = "back") val back: String,
-    @ColumnInfo(name = "difficulty") val difficulty: Int,
     @ColumnInfo(name = "created_at") val createdAt: Long,
     @ColumnInfo(name = "last_studied_at") val lastStudiedAt: Long?,
-    @ColumnInfo(name = "last_interval_in_millis") val lastIntervalInMillis: Int,
+    @ColumnInfo(name = "last_interval_in_millis") val lastIntervalInMillis: Long,
     @ColumnInfo(name = "next_due_at") val nextDueAt: Long
 ) {
     fun toDomain(): FlashCardDomain {
@@ -24,7 +23,6 @@ data class FlashCardEntity(
             id = UUID.fromString(id),
             front = front,
             back = back,
-            difficulty = difficulty,
             createdAt = Instant.ofEpochMilli(createdAt),
             lastStudiedAt = lastStudiedAt?.let { Instant.ofEpochMilli(it) },
             lastIntervalInMillis = lastIntervalInMillis,
