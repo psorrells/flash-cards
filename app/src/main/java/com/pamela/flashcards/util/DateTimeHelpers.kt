@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter
 const val ONE_MINUTE_IN_MILLIS = 60000L
 const val ONE_HOUR_IN_MILLIS = 3600000L
 const val ONE_DAY_IN_MILLIS = 86400000L
-val defaultDateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/mm/yy")
+val defaultDateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yy")
 val defaultTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mma")
 
 

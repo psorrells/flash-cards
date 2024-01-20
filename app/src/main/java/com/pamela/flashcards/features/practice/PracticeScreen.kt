@@ -27,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pamela.flashcards.R
+import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.TopBarHeader
@@ -50,72 +51,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     )
                 }
             } else {
-                Row(
-                    modifier = Modifier
-                        .padding(14.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        16.dp,
-                        Alignment.CenterHorizontally
-                    )
-                ) {
-                    Button(
-                        onClick = { },
-                        shape = RoundedCornerShape(4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        ),
-                        contentPadding = PaddingValues(horizontal = 16.dp)
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            text = stringResource(id = R.string.easy),
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                    Button(
-                        onClick = { },
-                        shape = RoundedCornerShape(4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary
-                        ),
-                        contentPadding = PaddingValues(horizontal = 16.dp)
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            text = stringResource(id = R.string.medium),
-                            color = MaterialTheme.colorScheme.onSecondary
-                        )
-                    }
-                    Button(
-                        onClick = { },
-                        shape = RoundedCornerShape(4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiary
-                        ),
-                        contentPadding = PaddingValues(horizontal = 16.dp)
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            text = stringResource(id = R.string.hard),
-                            color = MaterialTheme.colorScheme.onTertiary
-                        )
-                    }
-                    Button(
-                        onClick = { },
-                        shape = RoundedCornerShape(4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error
-                        ),
-                        contentPadding = PaddingValues(horizontal = 16.dp)
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            text = stringResource(id = R.string.again),
-                            color = MaterialTheme.colorScheme.onError
-                        )
-                    }
-                }
+                DifficultyButtonsRow(onClickDifficulty = viewModel::updateFlashCardWithDifficulty)
             }
         }
     ) { paddingValues ->

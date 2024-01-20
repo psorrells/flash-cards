@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.domain.GetFlashCardSetByIdUseCase
 import com.pamela.flashcards.domain.GetFlashCardsBySetIdUseCase
+import com.pamela.flashcards.domain.UpdateFlashCardStatsUseCase
+import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.model.FlashCardSetDomain
 import com.pamela.flashcards.navigation.AddCardDestination
@@ -26,6 +28,7 @@ class PracticeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getFlashCardSetById: GetFlashCardSetByIdUseCase,
     private val getFlashCardsBySetId: GetFlashCardsBySetIdUseCase,
+    private val updateFlashCardStats: UpdateFlashCardStatsUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -60,6 +63,16 @@ class PracticeViewModel @Inject constructor(
     fun navigateToAddCard() {
         cardSetId?.let {
             navigator.navigateTo(AddCardDestination.populateRouteWithArgs(cardSetId = it.toString()))
+        }
+    }
+
+    fun updateFlashCardWithDifficulty(difficulty: Difficulty) {
+        viewModelScope.launch {
+            updateFlashCardStats(
+                uiState.value.currentCard,
+                uiState.value.cardSet.id,
+                difficulty
+            )
         }
     }
 }
