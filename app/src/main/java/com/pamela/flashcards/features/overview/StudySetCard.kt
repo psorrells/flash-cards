@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pamela.flashcards.R
 import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.ui.animateFloatOnComposition
 import com.pamela.flashcards.ui.styles.getButtonStyles
 import com.pamela.flashcards.util.getFormattedDate
 import com.pamela.flashcards.util.getFormattedTime

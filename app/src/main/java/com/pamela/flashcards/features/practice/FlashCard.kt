@@ -1,7 +1,5 @@
 package com.pamela.flashcards.features.practice
 
-import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
@@ -17,17 +15,13 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import com.pamela.flashcards.model.FlashCardDomain
-import com.pamela.flashcards.model.GetNewCardException
+import com.pamela.flashcards.ui.getFloatAnimationByBoolean
 import kotlin.math.abs
 import kotlin.math.sin
 
@@ -38,20 +32,12 @@ fun FlashCard(
     setIsFlipped: (Boolean) -> Unit,
     animationListener: (Float) -> Unit
 ) {
-    var rotationValue by remember { mutableFloatStateOf(0.0F) }
-    val rotation by animateFloatAsState(
-        targetValue = rotationValue,
-        animationSpec = tween(1000, easing = EaseOut),
-        label = "flashCardRotate",
-        finishedListener = animationListener
+    val rotation = getFloatAnimationByBoolean(
+        isTrue = isFlipped,
+        trueValue = 180.0F,
+        falseValue = 0.0F,
+        animationListener = animationListener
     )
-    LaunchedEffect(key1 = isFlipped, block = {
-        rotationValue = if (isFlipped) {
-            180.0F
-        } else {
-            0.0F
-        }
-    })
 
     val size by animateFloatAsState(
         targetValue = abs(sin(((rotation) * Math.PI / 180.0) + Math.PI / 2.0).toFloat()),
