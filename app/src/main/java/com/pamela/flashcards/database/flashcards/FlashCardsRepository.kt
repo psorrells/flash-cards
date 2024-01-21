@@ -10,6 +10,8 @@ abstract class FlashCardsRepository {
 
     abstract suspend fun getCardById(id: UUID): FlashCardDomain
 
+    abstract suspend fun getNextDueCardBySetId(setId: UUID): FlashCardDomain?
+
     abstract suspend fun upsertCardToSet(card: FlashCardDomain, setId: UUID)
 
     abstract suspend fun deleteCardFromSet(card: FlashCardDomain, setId: UUID)
@@ -25,6 +27,10 @@ class FlashCardsRepositoryImpl @Inject constructor(
 
     override suspend fun getCardById(id: UUID): FlashCardDomain {
         return flashCardsDao.getCardById(id.toString()).toDomain()
+    }
+
+    override suspend fun getNextDueCardBySetId(setId: UUID): FlashCardDomain? {
+        return flashCardsDao.getNextDueCardBySetIdAndDueDate(setId.toString())?.toDomain()
     }
 
     override suspend fun upsertCardToSet(card: FlashCardDomain, setId: UUID) {

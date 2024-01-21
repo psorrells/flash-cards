@@ -1,5 +1,6 @@
 package com.pamela.flashcards.features.practice
 
+import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -26,27 +27,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import com.pamela.flashcards.model.FlashCardDomain
+import com.pamela.flashcards.model.GetNewCardException
 import kotlin.math.abs
 import kotlin.math.sin
 
 @Composable
 fun FlashCard(
+    card: FlashCardDomain,
     isFlipped: Boolean,
     setIsFlipped: (Boolean) -> Unit,
-    card: FlashCardDomain
+    animationListener: (Float) -> Unit
 ) {
     var rotationValue by remember { mutableFloatStateOf(0.0F) }
     val rotation by animateFloatAsState(
         targetValue = rotationValue,
-        animationSpec = tween(1000, easing = FastOutSlowInEasing),
-        label = "flashCardRotate"
+        animationSpec = tween(1000, easing = EaseOut),
+        label = "flashCardRotate",
+        finishedListener = animationListener
     )
-    val size by animateFloatAsState(
-        targetValue = abs(sin(((rotation) * Math.PI / 180.0) + Math.PI / 2.0).toFloat()),
-        animationSpec = tween(50),
-        label = "flashCardSize"
-    )
-
     LaunchedEffect(key1 = isFlipped, block = {
         rotationValue = if (isFlipped) {
             180.0F
@@ -54,6 +52,12 @@ fun FlashCard(
             0.0F
         }
     })
+
+    val size by animateFloatAsState(
+        targetValue = abs(sin(((rotation) * Math.PI / 180.0) + Math.PI / 2.0).toFloat()),
+        animationSpec = tween(50),
+        label = "flashCardSize"
+    )
 
     if (rotation > 90.0F) {
         ElevatedCard(
