@@ -18,29 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.pamela.flashcards.R
 import com.pamela.flashcards.model.Difficulty
-
-@Composable
-fun DifficultyButton(
-    onClick: () -> Unit,
-    containerColor: Color,
-    textColor: Color,
-    text: String
-) {
-    Button(
-        onClick = onClick,
-        shape = RoundedCornerShape(4.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor
-        ),
-        contentPadding = PaddingValues(horizontal = 16.dp)
-    ) {
-        Text(
-            style = MaterialTheme.typography.titleMedium,
-            text = text,
-            color = textColor
-        )
-    }
-}
+import com.pamela.flashcards.ui.component.StyledButton
 
 @Composable
 fun DifficultyButtonsRow(onClickDifficulty: (Difficulty) -> Unit) {
@@ -53,28 +31,28 @@ fun DifficultyButtonsRow(onClickDifficulty: (Difficulty) -> Unit) {
             Alignment.CenterHorizontally
         )
     ) {
-        DifficultyButton(
+        StyledButton(
             onClick = { onClickDifficulty(Difficulty.EASY) },
             containerColor = MaterialTheme.colorScheme.primary,
-            textColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             text = stringResource(id = R.string.easy)
         )
-        DifficultyButton(
+        StyledButton(
             onClick = { onClickDifficulty(Difficulty.MEDIUM) },
             containerColor = MaterialTheme.colorScheme.secondary,
-            textColor = MaterialTheme.colorScheme.onSecondary,
+            contentColor = MaterialTheme.colorScheme.onSecondary,
             text = stringResource(id = R.string.medium)
         )
-        DifficultyButton(
+        StyledButton(
             onClick = { onClickDifficulty(Difficulty.HARD) },
             containerColor = MaterialTheme.colorScheme.tertiary,
-            textColor = MaterialTheme.colorScheme.onTertiary,
+            contentColor = MaterialTheme.colorScheme.onTertiary,
             text = stringResource(id = R.string.hard)
         )
-        DifficultyButton(
+        StyledButton(
             onClick = { onClickDifficulty(Difficulty.AGAIN) },
             containerColor = MaterialTheme.colorScheme.error,
-            textColor = MaterialTheme.colorScheme.onError,
+            contentColor = MaterialTheme.colorScheme.onError,
             text = stringResource(id = R.string.again)
         )
     }

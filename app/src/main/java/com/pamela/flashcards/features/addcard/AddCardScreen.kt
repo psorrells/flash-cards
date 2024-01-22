@@ -3,39 +3,26 @@ package com.pamela.flashcards.features.addcard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pamela.flashcards.R
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
+import com.pamela.flashcards.ui.component.PopUpFieldWithLabel
+import com.pamela.flashcards.ui.component.TextAreaWithLabel
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 
@@ -49,19 +36,11 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
         modifier = Modifier.scaffoldDefaults(),
         topBar = { TopBarHeader(titleText = viewModel.getPageTitle()) },
         bottomBar = {
-            BottomBarButtonFullWidth(onClick = viewModel::saveCard) {
-                Icon(
-                    imageVector = Icons.Outlined.Check,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    style = MaterialTheme.typography.titleMedium,
-                    text = stringResource(id = R.string.save),
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+            BottomBarButtonFullWidth(
+                onClick = viewModel::saveCard,
+                text = stringResource(id = R.string.save),
+                icon = Icons.Rounded.Check
+            )
         }
     ) { paddingValues ->
         Column(
@@ -69,67 +48,35 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
-                text = stringResource(id = R.string.set_label),
-                style = MaterialTheme.typography.labelSmall
+            PopUpFieldWithLabel(
+                label = stringResource(id = R.string.set_label),
+                value = viewModel.getCurrentSelectedSetName(),
+                onClick = { showSelectSetDialog = true }
             )
-            TextButton(onClick = { showSelectSetDialog = true }) {
-                Text(text = viewModel.getCurrentSelectedSetName())
-            }
-            Text(
-                text = stringResource(id = R.string.card_front_label),
-                style = MaterialTheme.typography.labelSmall
-            )
-            TextField(
+            Spacer(modifier = Modifier.height(8.dp))
+            TextAreaWithLabel(
+                label = stringResource(id = R.string.card_front_label),
                 value = uiState.currentCard.front,
-                onValueChange = { viewModel.updateFlashCard(front = it) },
-                minLines = 4,
-                modifier = Modifier.fillMaxWidth()
+                onChangeValue = { viewModel.updateFlashCard(front = it) }
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = R.string.card_back_label),
-                style = MaterialTheme.typography.labelSmall
-            )
-            TextField(
+            Spacer(modifier = Modifier.height(8.dp))
+            TextAreaWithLabel(
+                label = stringResource(id = R.string.card_back_label),
                 value = uiState.currentCard.back,
-                onValueChange = { viewModel.updateFlashCard(back = it) },
-                minLines = 4,
-                modifier = Modifier.fillMaxWidth()
+                onChangeValue = { viewModel.updateFlashCard(back = it) }
             )
         }
         if (showSelectSetDialog) {
-            Dialog(onDismissRequest = { showSelectSetDialog = false }) {
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    ),
-                    modifier = Modifier.fillMaxHeight(0.5F)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.select_set),
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            items(uiState.allFlashCardSets) {
-                                Divider(modifier = Modifier.fillMaxWidth())
-                                TextButton(onClick = {
-                                    viewModel.updateSelectedSet(it.id)
-                                    showSelectSetDialog = false
-                                }) {
-                                    Text(text = it.name)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            SelectSetDialog(
+                options = uiState.allFlashCardSets,
+                onSelect = {
+                    viewModel.updateSelectedSet(it.id)
+                    showSelectSetDialog = false
+                },
+                onDismiss = { showSelectSetDialog = false }
+            )
         }
     }
 }

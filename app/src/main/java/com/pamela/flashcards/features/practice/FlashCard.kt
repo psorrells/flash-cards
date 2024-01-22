@@ -19,7 +19,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.ui.getFloatAnimationByBoolean
 import kotlin.math.abs
@@ -51,7 +53,11 @@ fun FlashCard(
                 .fillMaxHeight(size / 2.0F + 0.5F)
                 .fillMaxWidth(size)
                 .clickable { setIsFlipped(false) }
-                .rotate(-rotation + 180.0F)
+                .rotate(-rotation + 180.0F),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+            )
         ) {
             if (rotation >= 170.0F) {
                 Box(
@@ -65,7 +71,12 @@ fun FlashCard(
                             width = 2.dp
                         )
                 ) {
-                    Text(text = card.back)
+                    Text(
+                        text = card.back,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
         }
@@ -94,7 +105,12 @@ fun FlashCard(
                             width = 2.dp
                         )
                 ) {
-                    Text(text = card.front)
+                    Text(
+                        text = card.front,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
         }

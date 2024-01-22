@@ -33,7 +33,7 @@
     <string name="cancel_delete_set">No, don\'t delete this set</string>
 
     <!-- Practice Screen -->
-    <string name="no_cards">This set doesn\'t have any flash cards! Click the button below to add one.</string>
+    <string name="no_cards">There are no flash cards due in this set! Click the button below to add one.</string>
 
     <!-- Add Set Screen -->
     <string name="add_set_header">Add Set</string>

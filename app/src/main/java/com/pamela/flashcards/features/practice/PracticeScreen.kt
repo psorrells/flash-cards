@@ -29,6 +29,7 @@ import com.pamela.flashcards.R
 import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.model.GetNewCardException
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
+import com.pamela.flashcards.ui.component.DefaultErrorMessage
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
@@ -38,7 +39,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val displayHeight = LocalConfiguration.current.screenHeightDp.dp
     var yValue by remember { mutableStateOf(0.dp) }
-    val onAnimationFinishHideCard = { float: Float ->
+    val onFinishCardFlipAnimHideCard = { float: Float ->
         if (float <= 10.0F && uiState.errorState is GetNewCardException) {
             yValue = displayHeight
         }
@@ -62,13 +63,11 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
         topBar = { TopBarHeader(titleText = uiState.cardSet.name) },
         bottomBar = {
             if (uiState.isFlipped.not()) {
-                BottomBarButtonFullWidth(onClick = { viewModel.setIsFlipped(true) }) {
-                    Text(
-                        style = MaterialTheme.typography.titleMedium,
-                        text = stringResource(id = R.string.flip),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                BottomBarButtonFullWidth(
+                    onClick = { viewModel.setIsFlipped(true) },
+                    text = stringResource(id = R.string.flip),
+                    enabled = (uiState.errorState == null)
+                )
             } else {
                 DifficultyButtonsRow(onClickDifficulty = viewModel::updateFlashCardWithDifficulty)
             }
@@ -87,10 +86,10 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     card = uiState.currentCard,
                     isFlipped = uiState.isFlipped,
                     setIsFlipped = viewModel::setIsFlipped,
-                    animationListener = onAnimationFinishHideCard
+                    animationListener = onFinishCardFlipAnimHideCard
                 )
                 is EmptyResultError -> EmptyDeckDisplay(viewModel::navigateToAddCard)
-                else -> Text(text = stringResource(id = R.string.default_error_text))
+                else -> DefaultErrorMessage()
             }
         }
     }
