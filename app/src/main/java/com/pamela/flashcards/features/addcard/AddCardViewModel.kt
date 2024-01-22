@@ -15,6 +15,7 @@ import com.pamela.flashcards.navigation.AddCardDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.util.getUuidOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,27 +40,25 @@ class AddCardViewModel @Inject constructor(
     private val deckId: UUID? by lazy { getUuidOrNull(savedStateHandle[AddCardDestination.cardDeckId]) }
     private val cardId: UUID? by lazy { getUuidOrNull(savedStateHandle[AddCardDestination.cardId]) }
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _uiState.update {
+            it.copy(errorState = throwable)
+        }
+    }
+
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             val flashCardDecksResult = async { getAllFlashCardSetsNameId() }
             val flashCardResult = async { cardId?.let { getFlashCardById(it) } }
-            try {
-                val decks = flashCardDecksResult.await().getOrThrow()
-                val card = flashCardResult.await()?.getOrThrow()
-                _uiState.update { state ->
-                    state.copy(
-                        currentCard = card ?: FlashCardDomain(),
-                        selectedDeckId = card?.id ?: deckId,
-                        allFlashCardDecks = decks,
-                        errorState = null
-                    )
-                }
-            } catch (e: Exception) {
-                _uiState.update { state ->
-                    state.copy(
-                        errorState = e
-                    )
-                }
+            val decks = flashCardDecksResult.await().getOrThrow()
+            val card = flashCardResult.await()?.getOrThrow()
+            _uiState.update { state ->
+                state.copy(
+                    currentCard = card ?: FlashCardDomain(),
+                    selectedDeckId = card?.id ?: deckId,
+                    allFlashCardDecks = decks,
+                    errorState = null
+                )
             }
         }
     }
@@ -95,24 +94,16 @@ class AddCardViewModel @Inject constructor(
     }
 
     fun saveCard() {
-        if (uiState.value.currentCard.front.isBlank() or uiState.value.currentCard.back.isBlank()) {
-            _uiState.update {
-                it.copy(errorState = IncompleteFormError())
-            }
-            return
-        }
-        viewModelScope.launch {
-            if (uiState.value.selectedDeckId != null) {
-                upsertFlashCardToSet(
-                    uiState.value.currentCard,
-                    uiState.value.selectedDeckId!!
-                ).onSuccess {
-                    navigator.popBackStack()
-                }.onFailure { error ->
-                    _uiState.update {
-                        it.copy(errorState = error)
-                    }
-                }
+        viewModelScope.launch(exceptionHandler) {
+            if (
+                uiState.value.currentCard.front.isBlank() ||
+                uiState.value.currentCard.back.isBlank() ||
+                uiState.value.selectedDeckId == null
+            ) throw IncompleteFormError()
+
+            uiState.value.selectedDeckId?.let { selectedDeckId ->
+                upsertFlashCardToSet(uiState.value.currentCard, selectedDeckId).getOrThrow()
+                navigator.popBackStack()
             }
         }
     }

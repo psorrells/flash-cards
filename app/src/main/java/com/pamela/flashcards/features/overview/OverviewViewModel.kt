@@ -12,6 +12,7 @@ import com.pamela.flashcards.navigation.AddDeckDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.navigation.PracticeDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -28,11 +29,17 @@ class OverviewViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<OverviewUiState> = MutableStateFlow(OverviewUiState())
     val uiState: StateFlow<OverviewUiState> = _uiState
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _uiState.update {
+            it.copy(errorState = throwable)
+        }
+    }
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             if (getAllFlashCardDecks().isFailure) {
-                upsertSampleDecks().onSuccess { updateDecks() }
+                upsertSampleDecks().getOrThrow()
+                updateDecks()
             }
         }
     }
@@ -54,31 +61,23 @@ class OverviewViewModel @Inject constructor(
     }
 
     fun deleteDeck(deck: FlashCardDeckDomain) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             deleteFlashCardDeck(deck)
                 .onSuccess {
                     updateDecks()
                 }.onFailure { error ->
-                    _uiState.update {
-                        it.copy(errorState = FailedDeleteError(error))
-                    }
+                    throw FailedDeleteError(error)
                 }
         }
     }
 
     private fun updateDecks() {
-        viewModelScope.launch {
-            try {
-                _uiState.update {
-                    it.copy(
-                        decks = getAllFlashCardDecks().getOrThrow(),
-                        errorState = null
-                    )
-                }
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(errorState = e)
-                }
+        viewModelScope.launch(exceptionHandler) {
+            _uiState.update {
+                it.copy(
+                    decks = getAllFlashCardDecks().getOrThrow(),
+                    errorState = null
+                )
             }
         }
     }

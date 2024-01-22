@@ -13,6 +13,7 @@ import com.pamela.flashcards.navigation.AddDeckDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.util.getUuidOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -34,18 +35,20 @@ class AddDeckViewModel @Inject constructor(
 
     private val deckId: UUID? by lazy { getUuidOrNull(savedStateHandle[AddDeckDestination.cardDeckId]) }
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _uiState.update {
+            it.copy(errorState = throwable)
+        }
+    }
+
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             if (deckId != null) {
                 getFlashCardDeckById(deckId!!)
-                    .onSuccess { flashCardDeck ->
+                    .getOrThrow()
+                    .let { flashCardDeck ->
                         _uiState.update {
                             it.copy(flashCardDeck = flashCardDeck)
-                        }
-                    }
-                    .onFailure { error ->
-                        _uiState.update {
-                            it.copy(errorState = error)
                         }
                     }
             }
@@ -65,16 +68,10 @@ class AddDeckViewModel @Inject constructor(
     }
 
     fun saveDeck() {
-        if (uiState.value.flashCardDeck.name.isBlank()) {
-            _uiState.update {
-                it.copy(errorState = IncompleteFormError())
-            }
-            return
-        }
-        viewModelScope.launch {
-            upsertFlashCardDeck(uiState.value.flashCardDeck).onSuccess {
-                navigator.popBackStack()
-            }
+        viewModelScope.launch(exceptionHandler) {
+            if (uiState.value.flashCardDeck.name.isBlank()) throw IncompleteFormError()
+            upsertFlashCardDeck(uiState.value.flashCardDeck).getOrThrow()
+            navigator.popBackStack()
         }
     }
 }

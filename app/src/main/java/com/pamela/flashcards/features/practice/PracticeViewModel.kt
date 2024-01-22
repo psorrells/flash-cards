@@ -41,7 +41,9 @@ class PracticeViewModel @Inject constructor(
 
     private val deckId: UUID? by lazy { getUuidOrNull(savedStateHandle[PracticeDestination.cardDeckId]) }
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        setErrorState(throwable)
+        _uiState.update { state ->
+            state.copy(errorState = throwable, isFlipped = false)
+        }
     }
 
     init {
@@ -93,12 +95,6 @@ class PracticeViewModel @Inject constructor(
                         state.copy(currentCard = card, errorState = null, isFlipped = false)
                     }
                 }
-        }
-    }
-
-    private fun setErrorState(error: Throwable) {
-        _uiState.update { state ->
-            state.copy(errorState = error, isFlipped = false)
         }
     }
 }
