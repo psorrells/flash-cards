@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.pamela.flashcards.database.FlashCardsDatabase
 import com.pamela.flashcards.database.flashcards.FlashCardsDao
-import com.pamela.flashcards.database.flashcardsets.FlashCardSetsDao
+import com.pamela.flashcards.database.decks.FlashCardDecksDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,8 +21,8 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideFlashCardSetsDao(flashCardsDatabase: FlashCardsDatabase): FlashCardSetsDao {
-        return flashCardsDatabase.flashCardSetsDao()
+    fun provideFlashCardDecksDao(flashCardsDatabase: FlashCardsDatabase): FlashCardDecksDao {
+        return flashCardsDatabase.flashCardDecksDao()
     }
 
     @Provides

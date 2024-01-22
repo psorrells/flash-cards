@@ -30,7 +30,7 @@ import com.pamela.flashcards.ui.scaffoldDefaults
 fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var showSelectSetDialog by remember { mutableStateOf(false) }
+    var showSelectDeckDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.scaffoldDefaults(),
@@ -51,9 +51,9 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             PopUpFieldWithLabel(
-                label = stringResource(id = R.string.set_label),
-                value = viewModel.getCurrentSelectedSetName(),
-                onClick = { showSelectSetDialog = true }
+                label = stringResource(id = R.string.deck_label),
+                value = viewModel.getCurrentSelectedDeckName(),
+                onClick = { showSelectDeckDialog = true }
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextAreaWithLabel(
@@ -68,14 +68,14 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
                 onChangeValue = { viewModel.updateFlashCard(back = it) }
             )
         }
-        if (showSelectSetDialog) {
-            SelectSetDialog(
-                options = uiState.allFlashCardSets,
+        if (showSelectDeckDialog) {
+            SelectDeckDialog(
+                options = uiState.allFlashCardDecks,
                 onSelect = {
-                    viewModel.updateSelectedSet(it.id)
-                    showSelectSetDialog = false
+                    viewModel.updateSelectedDeck(it.id)
+                    showSelectDeckDialog = false
                 },
-                onDismiss = { showSelectSetDialog = false }
+                onDismiss = { showSelectDeckDialog = false }
             )
         }
     }

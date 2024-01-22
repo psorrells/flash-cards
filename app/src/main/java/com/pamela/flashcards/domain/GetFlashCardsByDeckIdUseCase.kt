@@ -6,12 +6,12 @@ import com.pamela.flashcards.model.FlashCardDomain
 import java.util.UUID
 import javax.inject.Inject
 
-class GetFlashCardsBySetIdUseCase @Inject constructor(
+class GetFlashCardsByDeckIdUseCase @Inject constructor(
     private val flashCardsRepository: FlashCardsRepository
 ) {
-    suspend operator fun invoke(setId: UUID): Result<List<FlashCardDomain>> {
+    suspend operator fun invoke(deckId: UUID): Result<List<FlashCardDomain>> {
         return try {
-            val result = flashCardsRepository.getAllCardsBySetId(setId)
+            val result = flashCardsRepository.getAllCardsByDeckId(deckId)
 
             if (result.isEmpty()) {
                 throw EmptyResultError()

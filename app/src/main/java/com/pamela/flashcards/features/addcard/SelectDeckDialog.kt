@@ -14,22 +14,20 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pamela.flashcards.R
-import com.pamela.flashcards.model.FlashCardSetNameIdDomain
+import com.pamela.flashcards.model.FlashCardDeckNameIdDomain
 import com.pamela.flashcards.ui.component.StyledTextButton
 
 @Composable
-fun SelectSetDialog(
-    options: List<FlashCardSetNameIdDomain>,
-    onSelect: (FlashCardSetNameIdDomain) -> Unit,
+fun SelectDeckDialog(
+    options: List<FlashCardDeckNameIdDomain>,
+    onSelect: (FlashCardDeckNameIdDomain) -> Unit,
     onDismiss: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
@@ -43,7 +41,7 @@ fun SelectSetDialog(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.select_set),
+                    text = stringResource(id = R.string.select_deck),
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(8.dp))

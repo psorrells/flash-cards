@@ -6,12 +6,12 @@ import com.pamela.flashcards.model.FlashCardDomain
 import java.util.UUID
 import javax.inject.Inject
 
-class GetNextDueCardBySetIdUseCase @Inject constructor(
+class GetNextDueCardByDeckIdUseCase @Inject constructor(
     private val flashCardsRepository: FlashCardsRepository
 ) {
-    suspend operator fun invoke(setId: UUID): Result<FlashCardDomain> {
+    suspend operator fun invoke(deckId: UUID): Result<FlashCardDomain> {
         return try {
-            val result = flashCardsRepository.getNextDueCardBySetId(setId)
+            val result = flashCardsRepository.getNextDueCardByDeckId(deckId)
             if (result == null) {
                 throw EmptyResultError()
             } else {

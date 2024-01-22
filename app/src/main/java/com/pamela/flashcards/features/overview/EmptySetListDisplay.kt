@@ -6,19 +6,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.pamela.flashcards.R
 import com.pamela.flashcards.ui.component.AlertText
 
 @Composable
-fun EmptySetListDisplay() {
+fun EmptyDeckListDisplay() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
             imageVector = Icons.Rounded.Search,
@@ -27,7 +24,7 @@ fun EmptySetListDisplay() {
             tint = MaterialTheme.colorScheme.primary
         )
         AlertText(
-            text = stringResource(id = R.string.no_sets),
+            text = stringResource(id = R.string.no_decks),
             color = MaterialTheme.colorScheme.primary
         )
     }
@@ -37,6 +34,6 @@ fun EmptySetListDisplay() {
 @Composable
 fun PreviewEmptyDisplay() {
     Column(Modifier.fillMaxSize()) {
-        EmptySetListDisplay()
+        EmptyDeckListDisplay()
     }
 }

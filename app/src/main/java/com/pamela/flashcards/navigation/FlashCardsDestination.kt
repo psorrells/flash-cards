@@ -12,35 +12,35 @@ object OverviewDestination : FlashCardsDestination {
 
 object PracticeDestination : FlashCardsDestination {
     override val route = "practice"
-    const val cardSetId = "cardSetId"
+    const val cardDeckId = "cardDeckId"
     override val routeWithArgs: String
-        get() = "$route/{$cardSetId}"
+        get() = "$route/{$cardDeckId}"
 
-    fun populateRouteWithArgs(cardSetId: String): String {
-        return "$route/$cardSetId"
+    fun populateRouteWithArgs(cardDeckId: String): String {
+        return "$route/$cardDeckId"
     }
 }
 
-object AddSetDestination : FlashCardsDestination {
-    override val route = "add-set"
-    const val cardSetId = "cardSetId"
+object AddDeckDestination : FlashCardsDestination {
+    override val route = "add-deck"
+    const val cardDeckId = "cardDeckId"
     override val routeWithArgs: String
-        get() = "$route/{$cardSetId}"
+        get() = "$route/{$cardDeckId}"
 
-    fun populateRouteWithArgs(cardSetId: String? = null): String {
-        return "$route/$cardSetId"
+    fun populateRouteWithArgs(cardDeckId: String? = null): String {
+        return "$route/$cardDeckId"
     }
 }
 
 object AddCardDestination : FlashCardsDestination {
     override val route = "add-card"
-    const val cardSetId = "cardSetId"
+    const val cardDeckId = "cardDeckId"
     const val cardId = "cardId"
     override val routeWithArgs: String
-        get() = "$route/{$cardSetId}/{$cardId}"
+        get() = "$route/{$cardDeckId}/{$cardId}"
 
-    fun populateRouteWithArgs(cardSetId: String? = null, cardId: String? = null): String {
-        return "$route/$cardSetId/$cardId"
+    fun populateRouteWithArgs(cardDeckId: String? = null, cardId: String? = null): String {
+        return "$route/$cardDeckId/$cardId"
     }
 }
 

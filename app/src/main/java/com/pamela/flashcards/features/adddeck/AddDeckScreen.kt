@@ -1,20 +1,12 @@
-package com.pamela.flashcards.features.addset
+package com.pamela.flashcards.features.adddeck
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -29,7 +21,7 @@ import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 
 @Composable
-fun AddSetScreen(viewModel: AddSetViewModel = hiltViewModel()) {
+fun AddDeckScreen(viewModel: AddDeckViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -37,7 +29,7 @@ fun AddSetScreen(viewModel: AddSetViewModel = hiltViewModel()) {
         topBar = { TopBarHeader(titleText = viewModel.getPageTitle()) },
         bottomBar = {
             BottomBarButtonFullWidth(
-                onClick = viewModel::saveSet,
+                onClick = viewModel::saveDeck,
                 text = stringResource(id = R.string.save),
                 icon = Icons.Rounded.Check
             )
@@ -51,8 +43,8 @@ fun AddSetScreen(viewModel: AddSetViewModel = hiltViewModel()) {
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             TextFieldWithLabel(
-                label = stringResource(id = R.string.set_name_label),
-                value = uiState.flashCardSet.name,
+                label = stringResource(id = R.string.deck_name_label),
+                value = uiState.flashCardDeck.name,
                 onChangeValue = viewModel::updateName
             )
         }

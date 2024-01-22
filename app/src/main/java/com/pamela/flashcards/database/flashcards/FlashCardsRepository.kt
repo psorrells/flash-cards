@@ -6,39 +6,39 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 abstract class FlashCardsRepository {
-    abstract suspend fun getAllCardsBySetId(setId: UUID): List<FlashCardDomain>
+    abstract suspend fun getAllCardsByDeckId(deckId: UUID): List<FlashCardDomain>
 
     abstract suspend fun getCardById(id: UUID): FlashCardDomain
 
-    abstract suspend fun getNextDueCardBySetId(setId: UUID): FlashCardDomain?
+    abstract suspend fun getNextDueCardByDeckId(deckId: UUID): FlashCardDomain?
 
-    abstract suspend fun upsertCardToSet(card: FlashCardDomain, setId: UUID)
+    abstract suspend fun upsertCardToDeck(card: FlashCardDomain, deckId: UUID)
 
-    abstract suspend fun deleteCardFromSet(card: FlashCardDomain, setId: UUID)
+    abstract suspend fun deleteCardFromDeck(card: FlashCardDomain, deckId: UUID)
 }
 
 @Singleton
 class FlashCardsRepositoryImpl @Inject constructor(
     private val flashCardsDao: FlashCardsDao
 ) : FlashCardsRepository() {
-    override suspend fun getAllCardsBySetId(setId: UUID): List<FlashCardDomain> {
-        return flashCardsDao.getAllCardsBySetId(setId.toString()).map { it.toDomain() }
+    override suspend fun getAllCardsByDeckId(deckId: UUID): List<FlashCardDomain> {
+        return flashCardsDao.getAllCardsByDeckId(deckId.toString()).map { it.toDomain() }
     }
 
     override suspend fun getCardById(id: UUID): FlashCardDomain {
         return flashCardsDao.getCardById(id.toString()).toDomain()
     }
 
-    override suspend fun getNextDueCardBySetId(setId: UUID): FlashCardDomain? {
-        return flashCardsDao.getNextDueCardBySetIdAndDueDate(setId.toString())?.toDomain()
+    override suspend fun getNextDueCardByDeckId(deckId: UUID): FlashCardDomain? {
+        return flashCardsDao.getNextDueCardByDeckIdAndDueDate(deckId.toString())?.toDomain()
     }
 
-    override suspend fun upsertCardToSet(card: FlashCardDomain, setId: UUID) {
-        flashCardsDao.upsert(card.toEntity(setId))
+    override suspend fun upsertCardToDeck(card: FlashCardDomain, deckId: UUID) {
+        flashCardsDao.upsert(card.toEntity(deckId))
     }
 
-    override suspend fun deleteCardFromSet(card: FlashCardDomain, setId: UUID) {
-        flashCardsDao.delete(card.toEntity(setId))
+    override suspend fun deleteCardFromDeck(card: FlashCardDomain, deckId: UUID) {
+        flashCardsDao.delete(card.toEntity(deckId))
     }
 
 }

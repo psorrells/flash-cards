@@ -4,12 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.pamela.flashcards.database.flashcards.FlashCardEntity
 import com.pamela.flashcards.database.flashcards.FlashCardsDao
-import com.pamela.flashcards.database.flashcardsets.FlashCardSetEntity
-import com.pamela.flashcards.database.flashcardsets.FlashCardSetsDao
+import com.pamela.flashcards.database.decks.FlashCardDeckEntity
+import com.pamela.flashcards.database.decks.FlashCardDecksDao
 
-@Database(entities = [FlashCardEntity::class, FlashCardSetEntity::class], version = 1)
+@Database(entities = [FlashCardEntity::class, FlashCardDeckEntity::class], version = 1)
 abstract class FlashCardsDatabase : RoomDatabase() {
     abstract fun flashCardsDao(): FlashCardsDao
 
-    abstract fun flashCardSetsDao(): FlashCardSetsDao
+    abstract fun flashCardDecksDao(): FlashCardDecksDao
 }

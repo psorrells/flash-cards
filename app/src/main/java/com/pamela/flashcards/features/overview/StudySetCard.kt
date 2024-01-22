@@ -1,10 +1,7 @@
 package com.pamela.flashcards.features.overview
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.EaseOutBounce
 import androidx.compose.animation.core.EaseOutCirc
-import androidx.compose.animation.core.EaseOutCubic
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,17 +16,14 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -43,7 +36,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.pamela.flashcards.R
-import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.model.FlashCardDeckDomain
 import com.pamela.flashcards.ui.component.StyledTextButton
 import com.pamela.flashcards.ui.styles.getButtonStyles
 import com.pamela.flashcards.util.getFormattedDate
@@ -51,11 +44,11 @@ import com.pamela.flashcards.util.getFormattedTime
 
 @Composable
 fun StudySetCard(
-    cardSet: FlashCardSetDomain,
-    onClickSet: (FlashCardSetDomain) -> Unit,
-    onClickDelete: (FlashCardSetDomain) -> Unit,
-    onClickEdit: (FlashCardSetDomain) -> Unit,
-    onClickAddCard: (FlashCardSetDomain) -> Unit
+    cardSet: FlashCardDeckDomain,
+    onClickSet: (FlashCardDeckDomain) -> Unit,
+    onClickDelete: (FlashCardDeckDomain) -> Unit,
+    onClickEdit: (FlashCardDeckDomain) -> Unit,
+    onClickAddCard: (FlashCardDeckDomain) -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -155,7 +148,7 @@ fun StudySetCard(
         }
     }
     if (showDeleteDialog) {
-        DeleteSetDialog(
+        DeleteDeckDialog(
             onCancel = { showDeleteDialog = false },
             onConfirm = { onClickDelete(cardSet); showDeleteDialog = false }
         )

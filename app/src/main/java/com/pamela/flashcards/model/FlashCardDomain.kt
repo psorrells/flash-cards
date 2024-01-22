@@ -13,10 +13,10 @@ data class FlashCardDomain(
     val lastIntervalInMillis: Long = 0L,
     val nextDueAt: Instant = Instant.now()
 ) {
-    fun toEntity(setId: UUID): FlashCardEntity {
+    fun toEntity(deckId: UUID): FlashCardEntity {
         return FlashCardEntity(
             id = id.toString(),
-            setId = setId.toString(),
+            deckId = deckId.toString(),
             front = front,
             back = back,
             createdAt = createdAt.toEpochMilli(),

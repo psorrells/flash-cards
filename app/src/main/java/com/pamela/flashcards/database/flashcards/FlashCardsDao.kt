@@ -8,14 +8,14 @@ import java.time.Instant
 
 @Dao
 interface FlashCardsDao {
-    @Query("SELECT * from cards where set_id = (:setId)")
-    suspend fun getAllCardsBySetId(setId: String): List<FlashCardEntity>
+    @Query("SELECT * from cards where deck_id = (:deckId)")
+    suspend fun getAllCardsByDeckId(deckId: String): List<FlashCardEntity>
 
     @Query("SELECT * from cards where id = (:id)")
     suspend fun getCardById(id: String): FlashCardEntity
 
-    @Query("SELECT * from cards where set_id = (:setId) and next_due_at <= (:dueDate) order by next_due_at asc, last_studied_at asc LIMIT 1")
-    suspend fun getNextDueCardBySetIdAndDueDate(setId: String, dueDate: Long = Instant.now().toEpochMilli()): FlashCardEntity?
+    @Query("SELECT * from cards where deck_id = (:deckId) and next_due_at <= (:dueDate) order by next_due_at asc, last_studied_at asc LIMIT 1")
+    suspend fun getNextDueCardByDeckIdAndDueDate(deckId: String, dueDate: Long = Instant.now().toEpochMilli()): FlashCardEntity?
 
     @Upsert
     suspend fun upsert(card: FlashCardEntity)

@@ -5,12 +5,12 @@ import com.pamela.flashcards.model.FlashCardDomain
 import java.util.UUID
 import javax.inject.Inject
 
-class UpsertFlashCardToSetUseCase @Inject constructor(
+class UpsertFlashCardToDeckUseCase @Inject constructor(
     private val flashCardsRepository: FlashCardsRepository
 ) {
-    suspend operator fun invoke(card: FlashCardDomain, setId: UUID): Result<Unit> {
+    suspend operator fun invoke(card: FlashCardDomain, deckId: UUID): Result<Unit> {
         return try {
-            flashCardsRepository.upsertCardToSet(card, setId)
+            flashCardsRepository.upsertCardToDeck(card, deckId)
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

@@ -4,12 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.R
-import com.pamela.flashcards.domain.GetAllFlashCardSetsNameIdUseCase
+import com.pamela.flashcards.domain.GetAllFlashCardDecksNameIdUseCase
 import com.pamela.flashcards.domain.GetFlashCardByIdUseCase
 import com.pamela.flashcards.domain.GetStringResourceUseCase
-import com.pamela.flashcards.domain.UpsertFlashCardToSetUseCase
+import com.pamela.flashcards.domain.UpsertFlashCardToDeckUseCase
 import com.pamela.flashcards.model.FlashCardDomain
-import com.pamela.flashcards.model.FlashCardSetNameIdDomain
+import com.pamela.flashcards.model.FlashCardDeckNameIdDomain
 import com.pamela.flashcards.navigation.AddCardDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.util.getUuidOrNull
@@ -25,9 +25,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AddCardViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getAllFlashCardSetsNameId: GetAllFlashCardSetsNameIdUseCase,
+    private val getAllFlashCardSetsNameId: GetAllFlashCardDecksNameIdUseCase,
     private val getFlashCardById: GetFlashCardByIdUseCase,
-    private val upsertFlashCardToSet: UpsertFlashCardToSetUseCase,
+    private val upsertFlashCardToSet: UpsertFlashCardToDeckUseCase,
     private val getStringResource: GetStringResourceUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -35,21 +35,21 @@ class AddCardViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AddCardUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val cardSetId: UUID? by lazy { getUuidOrNull(savedStateHandle[AddCardDestination.cardSetId]) }
+    private val deckId: UUID? by lazy { getUuidOrNull(savedStateHandle[AddCardDestination.cardDeckId]) }
     private val cardId: UUID? by lazy { getUuidOrNull(savedStateHandle[AddCardDestination.cardId]) }
 
     init {
         viewModelScope.launch {
-            val flashCardSetsResult = async { getAllFlashCardSetsNameId() }
+            val flashCardDecksResult = async { getAllFlashCardSetsNameId() }
             val flashCardResult = async { cardId?.let { getFlashCardById(it) } }
             try {
-                val sets = flashCardSetsResult.await().getOrThrow()
+                val decks = flashCardDecksResult.await().getOrThrow()
                 val card = flashCardResult.await()?.getOrThrow()
                 _uiState.update { state ->
                     state.copy(
                         currentCard = card ?: FlashCardDomain(),
-                        selectedFlashCardSetId = card?.id ?: cardSetId,
-                        allFlashCardSets = sets
+                        selectedDeckId = card?.id ?: deckId,
+                        allFlashCardDecks = decks
                     )
                 }
             } catch (e: Exception) {
@@ -63,15 +63,15 @@ class AddCardViewModel @Inject constructor(
         else getStringResource(R.string.add_card_header)
     }
 
-    fun getCurrentSelectedSetName(): String {
-        return uiState.value.allFlashCardSets.find {
-            it.id == uiState.value.selectedFlashCardSetId
+    fun getCurrentSelectedDeckName(): String {
+        return uiState.value.allFlashCardDecks.find {
+            it.id == uiState.value.selectedDeckId
         }?.name ?: ""
     }
 
-    fun updateSelectedSet(setId: UUID) {
+    fun updateSelectedDeck(deckId: UUID) {
         _uiState.update {
-            it.copy(selectedFlashCardSetId = setId)
+            it.copy(selectedDeckId = deckId)
         }
     }
 
@@ -90,10 +90,10 @@ class AddCardViewModel @Inject constructor(
 
     fun saveCard() {
         viewModelScope.launch {
-            if (uiState.value.selectedFlashCardSetId != null) {
+            if (uiState.value.selectedDeckId != null) {
                 upsertFlashCardToSet(
                     uiState.value.currentCard,
-                    uiState.value.selectedFlashCardSetId!!
+                    uiState.value.selectedDeckId!!
                 ).onSuccess {
                     navigator.popBackStack()
                 }
@@ -103,7 +103,7 @@ class AddCardViewModel @Inject constructor(
 }
 
 data class AddCardUiState(
-    val selectedFlashCardSetId: UUID? = null,
-    val allFlashCardSets: List<FlashCardSetNameIdDomain> = listOf(),
+    val selectedDeckId: UUID? = null,
+    val allFlashCardDecks: List<FlashCardDeckNameIdDomain> = listOf(),
     val currentCard: FlashCardDomain = FlashCardDomain()
 )

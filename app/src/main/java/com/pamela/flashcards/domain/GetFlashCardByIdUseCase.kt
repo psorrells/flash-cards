@@ -8,9 +8,9 @@ import javax.inject.Inject
 class GetFlashCardByIdUseCase @Inject constructor(
     private val flashCardsRepository: FlashCardsRepository
 ) {
-    suspend operator fun invoke(setId: UUID): Result<FlashCardDomain> {
+    suspend operator fun invoke(id: UUID): Result<FlashCardDomain> {
         return try {
-            val result = flashCardsRepository.getCardById(setId)
+            val result = flashCardsRepository.getCardById(id)
             Result.success(result)
         } catch (e: Exception) {
             Result.failure(e)

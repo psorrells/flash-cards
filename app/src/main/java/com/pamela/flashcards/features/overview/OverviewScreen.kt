@@ -3,23 +3,13 @@ package com.pamela.flashcards.features.overview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,7 +41,7 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
         bottomBar = {
             BottomBarButtonFullWidth(
                 onClick = viewModel::navigateToAddSetScreen,
-                text = stringResource(id = R.string.add_new_set),
+                text = stringResource(id = R.string.add_new_deck),
                 icon = Icons.Rounded.Add
             )
         }
@@ -70,11 +60,11 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         contentPadding = PaddingValues(vertical = 16.dp)
                     ) {
-                        items(uiState.sets) { cardSet ->
+                        items(uiState.decks) { cardSet ->
                             StudySetCard(
                                 cardSet,
                                 viewModel::navigateToPracticeScreen,
-                                viewModel::deleteSet,
+                                viewModel::deleteDeck,
                                 viewModel::navigateToAddSetScreen,
                                 viewModel::navigateToAddCardScreen
                             )
@@ -82,7 +72,7 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                     }
                 }
 
-                is EmptyResultError -> EmptySetListDisplay()
+                is EmptyResultError -> EmptyDeckListDisplay()
                 is FailedDeleteError -> DbFailureBottomSheet()
                 else -> DefaultErrorMessage()
             }

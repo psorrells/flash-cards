@@ -10,7 +10,7 @@ import java.util.UUID
 @Entity(tableName = "cards")
 data class FlashCardEntity(
     @PrimaryKey val id: String,
-    @ColumnInfo(name = "set_id") val setId: String,
+    @ColumnInfo(name = "deck_id") val deckId: String,
     @ColumnInfo(name = "front") val front: String,
     @ColumnInfo(name = "back") val back: String,
     @ColumnInfo(name = "created_at") val createdAt: Long,

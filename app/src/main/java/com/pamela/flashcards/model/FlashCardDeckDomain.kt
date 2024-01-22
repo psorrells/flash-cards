@@ -1,10 +1,10 @@
 package com.pamela.flashcards.model
 
-import com.pamela.flashcards.database.flashcardsets.FlashCardSetEntity
+import com.pamela.flashcards.database.decks.FlashCardDeckEntity
 import java.time.Instant
 import java.util.UUID
 
-data class FlashCardSetDomain(
+data class FlashCardDeckDomain(
     val id: UUID = UUID.randomUUID(),
     val name: String,
     val size: Int = 0,
@@ -12,8 +12,8 @@ data class FlashCardSetDomain(
     val createdAt: Instant = Instant.now(),
     val lastStudiedAt: Instant? = null
 ) {
-    fun toEntity(): FlashCardSetEntity {
-        return FlashCardSetEntity(
+    fun toEntity(): FlashCardDeckEntity {
+        return FlashCardDeckEntity(
             id = id.toString(),
             name = name,
             createdAt = createdAt.toEpochMilli()
@@ -21,7 +21,7 @@ data class FlashCardSetDomain(
     }
 }
 
-data class FlashCardSetNameIdDomain(
+data class FlashCardDeckNameIdDomain(
     val id: UUID = UUID.randomUUID(),
     val name: String = ""
 )

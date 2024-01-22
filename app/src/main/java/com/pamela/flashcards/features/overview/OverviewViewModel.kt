@@ -2,12 +2,12 @@ package com.pamela.flashcards.features.overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pamela.flashcards.domain.DeleteFlashCardSetUseCase
-import com.pamela.flashcards.domain.GetAllFlashCardSetsUseCase
+import com.pamela.flashcards.domain.DeleteFlashCardDeckUseCase
+import com.pamela.flashcards.domain.GetAllFlashCardDecksUseCase
 import com.pamela.flashcards.model.FailedDeleteError
-import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.model.FlashCardDeckDomain
 import com.pamela.flashcards.navigation.AddCardDestination
-import com.pamela.flashcards.navigation.AddSetDestination
+import com.pamela.flashcards.navigation.AddDeckDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.navigation.PracticeDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,8 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OverviewViewModel @Inject constructor(
-    private val getAllFlashCardSets: GetAllFlashCardSetsUseCase,
-    private val deleteFlashCardSet: DeleteFlashCardSetUseCase,
+    private val getAllFlashCardDecks: GetAllFlashCardDecksUseCase,
+    private val deleteFlashCardDeck: DeleteFlashCardDeckUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -28,26 +28,26 @@ class OverviewViewModel @Inject constructor(
     val uiState: StateFlow<OverviewUiState> = _uiState
 
     fun initializeState() {
-        updateSets()
+        updateDecks()
     }
 
-    fun navigateToPracticeScreen(cardSet: FlashCardSetDomain) {
+    fun navigateToPracticeScreen(cardSet: FlashCardDeckDomain) {
         navigator.navigateTo(PracticeDestination.populateRouteWithArgs(cardSet.id.toString()))
     }
 
-    fun navigateToAddSetScreen(cardSet: FlashCardSetDomain? = null) {
-        navigator.navigateTo(AddSetDestination.populateRouteWithArgs(cardSet?.id.toString()))
+    fun navigateToAddSetScreen(cardSet: FlashCardDeckDomain? = null) {
+        navigator.navigateTo(AddDeckDestination.populateRouteWithArgs(cardSet?.id.toString()))
     }
 
-    fun navigateToAddCardScreen(cardSet: FlashCardSetDomain? = null) {
-        navigator.navigateTo(AddCardDestination.populateRouteWithArgs(cardSetId = cardSet?.id.toString()))
+    fun navigateToAddCardScreen(cardSet: FlashCardDeckDomain? = null) {
+        navigator.navigateTo(AddCardDestination.populateRouteWithArgs(cardDeckId = cardSet?.id.toString()))
     }
 
-    fun deleteSet(set: FlashCardSetDomain) {
+    fun deleteDeck(deck: FlashCardDeckDomain) {
         viewModelScope.launch {
-            deleteFlashCardSet(set)
+            deleteFlashCardDeck(deck)
                 .onSuccess {
-                    updateSets()
+                    updateDecks()
                 }.onFailure { error ->
                     _uiState.update {
                         it.copy(errorState = FailedDeleteError(error))
@@ -56,12 +56,12 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    private fun updateSets() {
+    private fun updateDecks() {
         viewModelScope.launch {
             try {
                 _uiState.update {
                     it.copy(
-                        sets = getAllFlashCardSets().getOrThrow(),
+                        decks = getAllFlashCardDecks().getOrThrow(),
                         errorState = null
                     )
                 }
@@ -75,6 +75,6 @@ class OverviewViewModel @Inject constructor(
 }
 
 data class OverviewUiState(
-    val sets: List<FlashCardSetDomain> = emptyList(),
+    val decks: List<FlashCardDeckDomain> = emptyList(),
     val errorState: Throwable? = null
 )

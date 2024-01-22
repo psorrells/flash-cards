@@ -7,10 +7,10 @@ import java.util.UUID
 import javax.inject.Inject
 
 class UpdateFlashCardStatsUseCase @Inject constructor(
-    private val upsertFlashCardToSet: UpsertFlashCardToSetUseCase,
+    private val upsertFlashCardToSet: UpsertFlashCardToDeckUseCase,
     private val getNewIntervalByDifficulty: GetNewIntervalByDifficultyUseCase
 ) {
-    suspend operator fun invoke(flashCard: FlashCardDomain, setId: UUID, difficulty: Difficulty): Result<Unit> {
+    suspend operator fun invoke(flashCard: FlashCardDomain, deckId: UUID, difficulty: Difficulty): Result<Unit> {
         val now = Instant.now()
         val newIntervalInMillis: Long = getNewIntervalByDifficulty(flashCard, difficulty)
         val newDueDate: Instant = now.plusMillis(newIntervalInMillis)
@@ -21,6 +21,6 @@ class UpdateFlashCardStatsUseCase @Inject constructor(
             nextDueAt = newDueDate
         )
 
-        return upsertFlashCardToSet(updatedFlashCard, setId)
+        return upsertFlashCardToSet(updatedFlashCard, deckId)
     }
 }

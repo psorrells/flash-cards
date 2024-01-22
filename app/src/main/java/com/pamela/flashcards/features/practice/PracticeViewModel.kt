@@ -3,12 +3,12 @@ package com.pamela.flashcards.features.practice
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pamela.flashcards.domain.GetFlashCardSetByIdUseCase
-import com.pamela.flashcards.domain.GetNextDueCardBySetIdUseCase
+import com.pamela.flashcards.domain.GetFlashCardDeckByIdUseCase
+import com.pamela.flashcards.domain.GetNextDueCardByDeckIdUseCase
 import com.pamela.flashcards.domain.UpdateFlashCardStatsUseCase
 import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.model.FlashCardDomain
-import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.model.FlashCardDeckDomain
 import com.pamela.flashcards.model.GetNewCardException
 import com.pamela.flashcards.model.MissingSavedStateError
 import com.pamela.flashcards.navigation.AddCardDestination
@@ -20,9 +20,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -30,8 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PracticeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getFlashCardSetById: GetFlashCardSetByIdUseCase,
-    private val getNextDueCardBySetId: GetNextDueCardBySetIdUseCase,
+    private val getFlashCardDeckById: GetFlashCardDeckByIdUseCase,
+    private val getNextDueCardByDeckId: GetNextDueCardByDeckIdUseCase,
     private val updateFlashCardStats: UpdateFlashCardStatsUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -40,14 +38,14 @@ class PracticeViewModel @Inject constructor(
         MutableStateFlow(PracticeUiState())
     val uiState: StateFlow<PracticeUiState> = _uiState.asStateFlow()
 
-    private val cardSetId: UUID? by lazy { getUuidOrNull(savedStateHandle[PracticeDestination.cardSetId]) }
+    private val deckId: UUID? by lazy { getUuidOrNull(savedStateHandle[PracticeDestination.cardDeckId]) }
 
     init {
         viewModelScope.launch {
-            cardSetId?.let { setId ->
+            deckId?.let { deckId ->
                 try {
-                    val cardSetResult = async { getFlashCardSetById(setId) }
-                    val currentCardResult = async { getNextDueCardBySetId(setId) }
+                    val cardSetResult = async { getFlashCardDeckById(deckId) }
+                    val currentCardResult = async { getNextDueCardByDeckId(deckId) }
                     _uiState.update {
                         it.copy(
                             cardSet = cardSetResult.await().getOrThrow(),
@@ -59,15 +57,15 @@ class PracticeViewModel @Inject constructor(
                     setErrorState(e)
                 }
             }
-            if (cardSetId == null) {
-                setErrorState(MissingSavedStateError(PracticeDestination.cardSetId))
+            if (deckId == null) {
+                setErrorState(MissingSavedStateError(PracticeDestination.cardDeckId))
             }
         }
     }
 
     fun navigateToAddCard() {
-        cardSetId?.let {
-            navigator.navigateTo(AddCardDestination.populateRouteWithArgs(cardSetId = it.toString()))
+        deckId?.let {
+            navigator.navigateTo(AddCardDestination.populateRouteWithArgs(cardDeckId = it.toString()))
         }
     }
 
@@ -93,7 +91,7 @@ class PracticeViewModel @Inject constructor(
 
     fun setCurrentCardWithNextDueCard() {
         viewModelScope.launch {
-            getNextDueCardBySetId(uiState.value.cardSet.id).onSuccess { card ->
+            getNextDueCardByDeckId(uiState.value.cardSet.id).onSuccess { card ->
                 _uiState.update { state ->
                     state.copy(currentCard = card, errorState = null, isFlipped = false)
                 }
@@ -112,7 +110,7 @@ class PracticeViewModel @Inject constructor(
 
 data class PracticeUiState(
     val currentCard: FlashCardDomain = FlashCardDomain(),
-    val cardSet: FlashCardSetDomain = FlashCardSetDomain(name = ""),
+    val cardSet: FlashCardDeckDomain = FlashCardDeckDomain(name = ""),
     val isFlipped: Boolean = false,
     val errorState: Throwable? = null
 )
