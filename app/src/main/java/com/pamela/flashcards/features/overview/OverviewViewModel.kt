@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.domain.DeleteFlashCardSetUseCase
 import com.pamela.flashcards.domain.GetAllFlashCardSetsUseCase
+import com.pamela.flashcards.model.FailedDeleteError
 import com.pamela.flashcards.model.FlashCardSetDomain
 import com.pamela.flashcards.navigation.AddCardDestination
 import com.pamela.flashcards.navigation.AddSetDestination
@@ -44,9 +45,14 @@ class OverviewViewModel @Inject constructor(
 
     fun deleteSet(set: FlashCardSetDomain) {
         viewModelScope.launch {
-            deleteFlashCardSet(set).onSuccess {
-                updateSets()
-            }
+            deleteFlashCardSet(set)
+                .onSuccess {
+                    updateSets()
+                }.onFailure { error ->
+                    _uiState.update {
+                        it.copy(errorState = FailedDeleteError(error))
+                    }
+                }
         }
     }
 

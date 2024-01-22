@@ -3,6 +3,7 @@
 
     <!-- Error Messages -->
     <string name="default_error_text">We encountered an error. Please try again!</string>
+    <string name="database_error_text">We encountered an error with our database. Please restart the app and try again.</string>
 
     <!-- Standard Buttons -->
     <string name="add_card">Add card</string>

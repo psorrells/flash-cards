@@ -11,3 +11,8 @@ class MissingSavedStateError(arg: String) : Exception() {
 class GetNewCardException : Exception() {
     override val message = "Time to fetch a new card!"
 }
+
+class FailedDeleteError(e: Throwable) : Exception() {
+    override val message = "Failed to delete record: ${e.message}"
+    override val cause = e
+}

@@ -32,7 +32,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pamela.flashcards.R
 import com.pamela.flashcards.model.EmptyResultError
+import com.pamela.flashcards.model.FailedDeleteError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
+import com.pamela.flashcards.ui.component.DbFailureBottomSheet
 import com.pamela.flashcards.ui.component.DefaultErrorMessage
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
@@ -81,6 +83,7 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                 }
 
                 is EmptyResultError -> EmptySetListDisplay()
+                is FailedDeleteError -> DbFailureBottomSheet()
                 else -> DefaultErrorMessage()
             }
         }
