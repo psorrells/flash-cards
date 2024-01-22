@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.domain.DeleteFlashCardDeckUseCase
 import com.pamela.flashcards.domain.GetAllFlashCardDecksUseCase
+import com.pamela.flashcards.domain.UpsertSampleDecksUseCase
 import com.pamela.flashcards.model.FailedDeleteError
 import com.pamela.flashcards.model.FlashCardDeckDomain
 import com.pamela.flashcards.navigation.AddCardDestination
@@ -21,11 +22,20 @@ import javax.inject.Inject
 class OverviewViewModel @Inject constructor(
     private val getAllFlashCardDecks: GetAllFlashCardDecksUseCase,
     private val deleteFlashCardDeck: DeleteFlashCardDeckUseCase,
+    private val upsertSampleDecks: UpsertSampleDecksUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<OverviewUiState> = MutableStateFlow(OverviewUiState())
     val uiState: StateFlow<OverviewUiState> = _uiState
+
+    init {
+        viewModelScope.launch {
+            if (getAllFlashCardDecks().isFailure) {
+                upsertSampleDecks().onSuccess { updateDecks() }
+            }
+        }
+    }
 
     fun initializeState() {
         updateDecks()

@@ -20,6 +20,9 @@ interface FlashCardsDao {
     @Upsert
     suspend fun upsert(card: FlashCardEntity)
 
+    @Upsert
+    suspend fun upsertAll(vararg cards: FlashCardEntity)
+
     @Delete
     suspend fun delete(card: FlashCardEntity)
 }
