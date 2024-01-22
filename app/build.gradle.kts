@@ -89,6 +89,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
+
     val androidHiltVersion = "1.1.0"
     val daggerHiltVersion = "2.50"
 

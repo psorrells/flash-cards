@@ -18,6 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pamela.flashcards.R
+import com.pamela.flashcards.ui.component.StyledButton
+import com.pamela.flashcards.ui.component.StyledTextButton
 import com.pamela.flashcards.ui.styles.getButtonStyles
 
 @Composable
@@ -37,23 +39,24 @@ fun DeleteSetDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.delete_set_header),
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(id = R.string.delete_set_body),
-                    style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center)
+                    style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(
+                StyledButton(
                     onClick = onConfirm,
-                    colors = getButtonStyles().errorDefault
-                ) {
-                    Text(text = stringResource(id = R.string.confirm_delete_set))
-                }
-                TextButton(onClick = onCancel) {
-                    Text(text = stringResource(id = R.string.cancel_delete_set))
-                }
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError,
+                    text = stringResource(id = R.string.confirm_delete_set)
+                )
+                StyledTextButton(
+                    onClick = onCancel,
+                    text = stringResource(id = R.string.cancel_delete_set)
+                )
             }
         }
     }

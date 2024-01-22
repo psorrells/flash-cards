@@ -4,7 +4,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import com.pamela.flashcards.ui.theme.colorPositive
 
 interface ButtonStyles {
     val errorDefault: ButtonColors
@@ -21,6 +21,6 @@ fun getButtonStyles(): ButtonStyles {
         override val errorText =
             ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
         override val positiveText =
-            ButtonDefaults.textButtonColors(contentColor = Color(0,155,55,255))
+            ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorPositive() )
     }
 }

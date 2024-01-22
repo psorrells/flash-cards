@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.pamela.flashcards.R
 import com.pamela.flashcards.model.FlashCardSetDomain
+import com.pamela.flashcards.ui.component.StyledTextButton
 import com.pamela.flashcards.ui.styles.getButtonStyles
 import com.pamela.flashcards.util.getFormattedDate
 import com.pamela.flashcards.util.getFormattedTime
@@ -65,17 +66,21 @@ fun StudySetCard(
     LaunchedEffect(key1 = cardSet, block = { expanded = false })
     ElevatedCard(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
         elevation = CardDefaults.elevatedCardElevation(
             defaultElevation = 8.dp
         ),
-        modifier = Modifier.clickable { onClickSet(cardSet) }.wrapContentSize()
+        modifier = Modifier
+            .clickable { onClickSet(cardSet) }
+            .wrapContentSize()
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth(widthValue)
-            .animateContentSize(animationSpec = tween(300, easing = EaseOutCirc))) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(widthValue)
+                .animateContentSize(animationSpec = tween(300, easing = EaseOutCirc))
+        ) {
             if (showContent) {
                 IconButton(
                     onClick = { expanded = expanded.not() },
@@ -94,13 +99,13 @@ fun StudySetCard(
                         .padding(14.dp)
                 ) {
                     Text(
-                        style = MaterialTheme.typography.labelLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         text = cardSet.name
                     )
                     if (expanded) {
                         Spacer(modifier = Modifier.height(14.dp))
                         Text(
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.labelLarge,
                             text = stringResource(
                                 id = R.string.cards_due,
                                 cardSet.totalDue,
@@ -124,23 +129,20 @@ fun StudySetCard(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            TextButton(
+                            StyledTextButton(
                                 onClick = { onClickAddCard(cardSet) },
+                                text = stringResource(id = R.string.add_card),
                                 colors = getButtonStyles().positiveText
-                            ) {
-                                Text(text = stringResource(id = R.string.add_card))
-                            }
-                            TextButton(
-                                onClick = { onClickEdit(cardSet) }
-                            ) {
-                                Text(text = stringResource(id = R.string.edit))
-                            }
-                            TextButton(
+                            )
+                            StyledTextButton(
+                                onClick = { onClickEdit(cardSet) },
+                                text = stringResource(id = R.string.edit)
+                            )
+                            StyledTextButton(
                                 onClick = { showDeleteDialog = true },
+                                text = stringResource(id = R.string.delete),
                                 colors = getButtonStyles().errorText
-                            ) {
-                                Text(text = stringResource(id = R.string.delete))
-                            }
+                            )
                         }
                     }
                 }
