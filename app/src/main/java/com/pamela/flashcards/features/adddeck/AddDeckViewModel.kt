@@ -8,6 +8,7 @@ import com.pamela.flashcards.domain.GetFlashCardDeckByIdUseCase
 import com.pamela.flashcards.domain.GetStringResourceUseCase
 import com.pamela.flashcards.domain.UpsertFlashCardDeckUseCase
 import com.pamela.flashcards.model.FlashCardDeckDomain
+import com.pamela.flashcards.model.IncompleteFormError
 import com.pamela.flashcards.navigation.AddDeckDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.util.getUuidOrNull
@@ -36,11 +37,17 @@ class AddDeckViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             if (deckId != null) {
-                getFlashCardDeckById(deckId!!).onSuccess { flashCardDeck ->
-                    _uiState.update {
-                        it.copy(flashCardDeck = flashCardDeck)
+                getFlashCardDeckById(deckId!!)
+                    .onSuccess { flashCardDeck ->
+                        _uiState.update {
+                            it.copy(flashCardDeck = flashCardDeck)
+                        }
                     }
-                }
+                    .onFailure { error ->
+                        _uiState.update {
+                            it.copy(errorState = error)
+                        }
+                    }
             }
         }
     }
@@ -53,11 +60,17 @@ class AddDeckViewModel @Inject constructor(
     fun updateName(name: String) {
         _uiState.update {
             val newDeck = it.flashCardDeck.copy(name = name)
-            it.copy(flashCardDeck = newDeck)
+            it.copy(flashCardDeck = newDeck, errorState = null)
         }
     }
 
     fun saveDeck() {
+        if (uiState.value.flashCardDeck.name.isBlank()) {
+            _uiState.update {
+                it.copy(errorState = IncompleteFormError())
+            }
+            return
+        }
         viewModelScope.launch {
             upsertFlashCardDeck(uiState.value.flashCardDeck).onSuccess {
                 navigator.popBackStack()
@@ -67,5 +80,6 @@ class AddDeckViewModel @Inject constructor(
 }
 
 data class AddDeckUiState(
-    val flashCardDeck: FlashCardDeckDomain = FlashCardDeckDomain(name = "")
+    val flashCardDeck: FlashCardDeckDomain = FlashCardDeckDomain(name = ""),
+    val errorState: Throwable? = null
 )

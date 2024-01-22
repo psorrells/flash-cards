@@ -6,6 +6,7 @@
     <string name="database_error">We encountered an error with our database. Please restart the app and try again.</string>
     <string name="invalid_deck_error">We couldn\'t find the selected deck in the database. Please select a different deck and try again.</string>
     <string name="incomplete_add_card_form">Please fill out the front and back of the card and select a valid deck!</string>
+    <string name="incomplete_add_deck_form">Please fill out the name of the deck!</string>
 
     <!-- Standard Buttons -->
     <string name="add_card">Add card</string>

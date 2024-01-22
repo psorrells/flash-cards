@@ -15,8 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pamela.flashcards.R
+import com.pamela.flashcards.model.IncompleteFormError
+import com.pamela.flashcards.model.UserErrorException
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
+import com.pamela.flashcards.ui.component.DefaultErrorMessage
 import com.pamela.flashcards.ui.component.TextFieldWithLabel
+import com.pamela.flashcards.ui.component.TextOnlyErrorBottomSheet
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 
@@ -31,7 +35,8 @@ fun AddDeckScreen(viewModel: AddDeckViewModel = hiltViewModel()) {
             BottomBarButtonFullWidth(
                 onClick = viewModel::saveDeck,
                 text = stringResource(id = R.string.save),
-                icon = Icons.Rounded.Check
+                icon = Icons.Rounded.Check,
+                enabled = uiState.errorState == null || uiState.errorState is UserErrorException
             )
         }
     ) { paddingValues ->
@@ -42,11 +47,20 @@ fun AddDeckScreen(viewModel: AddDeckViewModel = hiltViewModel()) {
                 .padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            TextFieldWithLabel(
-                label = stringResource(id = R.string.deck_name_label),
-                value = uiState.flashCardDeck.name,
-                onChangeValue = viewModel::updateName
-            )
+            when (uiState.errorState) {
+                null, is UserErrorException -> {
+                    TextFieldWithLabel(
+                        label = stringResource(id = R.string.deck_name_label),
+                        value = uiState.flashCardDeck.name,
+                        onChangeValue = viewModel::updateName
+                    )
+                }
+
+                else -> DefaultErrorMessage()
+            }
+        }
+        if (uiState.errorState is IncompleteFormError) {
+            TextOnlyErrorBottomSheet(text = stringResource(id = R.string.incomplete_add_deck_form))
         }
     }
 }

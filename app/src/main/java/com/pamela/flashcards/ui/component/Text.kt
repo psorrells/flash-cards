@@ -23,7 +23,8 @@ fun AlertText(text: String, color: Color) {
         style = MaterialTheme.typography.bodyLarge,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
-        color = color
+        color = color,
+        modifier = Modifier.fillMaxWidth()
     )
 }
 
