@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +38,7 @@ import com.pamela.flashcards.ui.theme.FlashCardsTheme
 @Composable
 fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(key1 = Unit, block = { viewModel.setCurrentCardWithNextDueCard() })
     val displayHeight = LocalConfiguration.current.screenHeightDp.dp
     var yValue by remember { mutableStateOf(0.dp) }
     val onFinishCardFlipAnimHideCard = { float: Float ->
