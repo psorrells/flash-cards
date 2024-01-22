@@ -61,7 +61,7 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                         contentPadding = PaddingValues(vertical = 16.dp)
                     ) {
                         items(uiState.decks) { cardSet ->
-                            StudySetCard(
+                            StudyDeckCard(
                                 cardSet,
                                 viewModel::navigateToPracticeScreen,
                                 viewModel::deleteDeck,

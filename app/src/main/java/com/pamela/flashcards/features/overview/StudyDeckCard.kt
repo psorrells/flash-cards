@@ -43,9 +43,9 @@ import com.pamela.flashcards.util.getFormattedDate
 import com.pamela.flashcards.util.getFormattedTime
 
 @Composable
-fun StudySetCard(
-    cardSet: FlashCardDeckDomain,
-    onClickSet: (FlashCardDeckDomain) -> Unit,
+fun StudyDeckCard(
+    cardDeck: FlashCardDeckDomain,
+    onClickDeck: (FlashCardDeckDomain) -> Unit,
     onClickDelete: (FlashCardDeckDomain) -> Unit,
     onClickEdit: (FlashCardDeckDomain) -> Unit,
     onClickAddCard: (FlashCardDeckDomain) -> Unit
@@ -57,7 +57,7 @@ fun StudySetCard(
 
     var expanded by remember { mutableStateOf(false) }
     val showContent by remember { derivedStateOf { widthValue > 0.75F } }
-    LaunchedEffect(key1 = cardSet, block = { expanded = false })
+    LaunchedEffect(key1 = cardDeck, block = { expanded = false })
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -67,7 +67,7 @@ fun StudySetCard(
             defaultElevation = 8.dp
         ),
         modifier = Modifier
-            .clickable { onClickSet(cardSet) }
+            .clickable { onClickDeck(cardDeck) }
             .wrapContentSize()
     ) {
         Box(
@@ -97,7 +97,7 @@ fun StudySetCard(
                 ) {
                     Text(
                         style = MaterialTheme.typography.titleMedium,
-                        text = cardSet.name
+                        text = cardDeck.name
                     )
                     if (expanded) {
                         Spacer(modifier = Modifier.height(8.dp))
@@ -105,18 +105,18 @@ fun StudySetCard(
                             style = MaterialTheme.typography.labelLarge,
                             text = stringResource(
                                 id = R.string.cards_due,
-                                cardSet.totalDue,
-                                cardSet.size
+                                cardDeck.totalDue,
+                                cardDeck.size
                             )
                         )
                         Text(
                             style = MaterialTheme.typography.bodyMedium,
                             text =
-                            if (cardSet.lastStudiedAt != null) {
+                            if (cardDeck.lastStudiedAt != null) {
                                 stringResource(
                                     id = R.string.last_studied_time,
-                                    cardSet.lastStudiedAt.getFormattedDate(),
-                                    cardSet.lastStudiedAt.getFormattedTime()
+                                    cardDeck.lastStudiedAt.getFormattedDate(),
+                                    cardDeck.lastStudiedAt.getFormattedTime()
                                 )
                             } else {
                                 stringResource(id = R.string.never)
@@ -128,12 +128,12 @@ fun StudySetCard(
                             horizontalArrangement = Arrangement.End
                         ) {
                             StyledTextButton(
-                                onClick = { onClickAddCard(cardSet) },
+                                onClick = { onClickAddCard(cardDeck) },
                                 text = stringResource(id = R.string.add_card),
                                 colors = getButtonStyles().positiveText
                             )
                             StyledTextButton(
-                                onClick = { onClickEdit(cardSet) },
+                                onClick = { onClickEdit(cardDeck) },
                                 text = stringResource(id = R.string.edit)
                             )
                             StyledTextButton(
@@ -150,7 +150,7 @@ fun StudySetCard(
     if (showDeleteDialog) {
         DeleteDeckDialog(
             onCancel = { showDeleteDialog = false },
-            onConfirm = { onClickDelete(cardSet); showDeleteDialog = false }
+            onConfirm = { onClickDelete(cardDeck); showDeleteDialog = false }
         )
     }
 }
