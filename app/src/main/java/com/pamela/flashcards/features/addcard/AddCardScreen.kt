@@ -20,9 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pamela.flashcards.R
+import com.pamela.flashcards.model.IncompleteFormError
+import com.pamela.flashcards.model.InvalidFlashCardDeckIdError
+import com.pamela.flashcards.model.UserErrorException
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
+import com.pamela.flashcards.ui.component.DefaultErrorMessage
 import com.pamela.flashcards.ui.component.PopUpFieldWithLabel
 import com.pamela.flashcards.ui.component.TextAreaWithLabel
+import com.pamela.flashcards.ui.component.TextOnlyErrorBottomSheet
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 
@@ -39,7 +44,8 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
             BottomBarButtonFullWidth(
                 onClick = viewModel::saveCard,
                 text = stringResource(id = R.string.save),
-                icon = Icons.Rounded.Check
+                icon = Icons.Rounded.Check,
+                enabled = uiState.errorState == null || uiState.errorState is UserErrorException
             )
         }
     ) { paddingValues ->
@@ -50,23 +56,35 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
                 .padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            PopUpFieldWithLabel(
-                label = stringResource(id = R.string.deck_label),
-                value = viewModel.getCurrentSelectedDeckName(),
-                onClick = { showSelectDeckDialog = true }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextAreaWithLabel(
-                label = stringResource(id = R.string.card_front_label),
-                value = uiState.currentCard.front,
-                onChangeValue = { viewModel.updateFlashCard(front = it) }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextAreaWithLabel(
-                label = stringResource(id = R.string.card_back_label),
-                value = uiState.currentCard.back,
-                onChangeValue = { viewModel.updateFlashCard(back = it) }
-            )
+            when (uiState.errorState) {
+                null, is UserErrorException -> {
+                    PopUpFieldWithLabel(
+                        label = stringResource(id = R.string.deck_label),
+                        value = viewModel.getCurrentSelectedDeckName(),
+                        onClick = { showSelectDeckDialog = true }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextAreaWithLabel(
+                        label = stringResource(id = R.string.card_front_label),
+                        value = uiState.currentCard.front,
+                        onChangeValue = { viewModel.updateFlashCard(front = it) }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextAreaWithLabel(
+                        label = stringResource(id = R.string.card_back_label),
+                        value = uiState.currentCard.back,
+                        onChangeValue = { viewModel.updateFlashCard(back = it) }
+                    )
+                }
+
+                else -> DefaultErrorMessage()
+            }
+        }
+        if (uiState.errorState is IncompleteFormError) {
+            TextOnlyErrorBottomSheet(text = stringResource(id = R.string.incomplete_add_card_form))
+        }
+        if (uiState.errorState is InvalidFlashCardDeckIdError) {
+            TextOnlyErrorBottomSheet(text = stringResource(id = R.string.invalid_deck_error))
         }
         if (showSelectDeckDialog) {
             SelectDeckDialog(

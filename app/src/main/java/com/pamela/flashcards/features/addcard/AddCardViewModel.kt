@@ -10,6 +10,7 @@ import com.pamela.flashcards.domain.GetStringResourceUseCase
 import com.pamela.flashcards.domain.UpsertFlashCardToDeckUseCase
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.model.FlashCardDeckNameIdDomain
+import com.pamela.flashcards.model.IncompleteFormError
 import com.pamela.flashcards.navigation.AddCardDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.util.getUuidOrNull
@@ -49,11 +50,16 @@ class AddCardViewModel @Inject constructor(
                     state.copy(
                         currentCard = card ?: FlashCardDomain(),
                         selectedDeckId = card?.id ?: deckId,
-                        allFlashCardDecks = decks
+                        allFlashCardDecks = decks,
+                        errorState = null
                     )
                 }
             } catch (e: Exception) {
-                // TODO: show error?
+                _uiState.update { state ->
+                    state.copy(
+                        errorState = e
+                    )
+                }
             }
         }
     }
@@ -71,7 +77,7 @@ class AddCardViewModel @Inject constructor(
 
     fun updateSelectedDeck(deckId: UUID) {
         _uiState.update {
-            it.copy(selectedDeckId = deckId)
+            it.copy(selectedDeckId = deckId, errorState = null)
         }
     }
 
@@ -84,11 +90,17 @@ class AddCardViewModel @Inject constructor(
             back = back ?: uiState.value.currentCard.back,
         )
         _uiState.update {
-            it.copy(currentCard = newFlashCard)
+            it.copy(currentCard = newFlashCard, errorState = null)
         }
     }
 
     fun saveCard() {
+        if (uiState.value.currentCard.front.isBlank() or uiState.value.currentCard.back.isBlank()) {
+            _uiState.update {
+                it.copy(errorState = IncompleteFormError())
+            }
+            return
+        }
         viewModelScope.launch {
             if (uiState.value.selectedDeckId != null) {
                 upsertFlashCardToSet(
@@ -96,6 +108,10 @@ class AddCardViewModel @Inject constructor(
                     uiState.value.selectedDeckId!!
                 ).onSuccess {
                     navigator.popBackStack()
+                }.onFailure { error ->
+                    _uiState.update {
+                        it.copy(errorState = error)
+                    }
                 }
             }
         }
@@ -105,5 +121,6 @@ class AddCardViewModel @Inject constructor(
 data class AddCardUiState(
     val selectedDeckId: UUID? = null,
     val allFlashCardDecks: List<FlashCardDeckNameIdDomain> = listOf(),
-    val currentCard: FlashCardDomain = FlashCardDomain()
+    val currentCard: FlashCardDomain = FlashCardDomain(),
+    val errorState: Throwable? = null
 )

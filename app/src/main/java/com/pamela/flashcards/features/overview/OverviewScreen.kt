@@ -24,8 +24,8 @@ import com.pamela.flashcards.R
 import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.model.FailedDeleteError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
-import com.pamela.flashcards.ui.component.DbFailureBottomSheet
 import com.pamela.flashcards.ui.component.DefaultErrorMessage
+import com.pamela.flashcards.ui.component.TextOnlyErrorBottomSheet
 import com.pamela.flashcards.ui.component.TopBarHeader
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
@@ -73,7 +73,10 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                 }
 
                 is EmptyResultError -> EmptyDeckListDisplay()
-                is FailedDeleteError -> DbFailureBottomSheet()
+                is FailedDeleteError -> {
+                    TextOnlyErrorBottomSheet(text = stringResource(id = R.string.database_error))
+                }
+
                 else -> DefaultErrorMessage()
             }
         }
