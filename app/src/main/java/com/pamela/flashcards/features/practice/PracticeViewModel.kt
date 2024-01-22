@@ -16,6 +16,7 @@ import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.navigation.PracticeDestination
 import com.pamela.flashcards.util.getUuidOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,26 +40,23 @@ class PracticeViewModel @Inject constructor(
     val uiState: StateFlow<PracticeUiState> = _uiState.asStateFlow()
 
     private val deckId: UUID? by lazy { getUuidOrNull(savedStateHandle[PracticeDestination.cardDeckId]) }
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        setErrorState(throwable)
+    }
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
+            if (deckId == null) throw MissingSavedStateError(PracticeDestination.cardDeckId)
             deckId?.let { deckId ->
-                try {
-                    val cardSetResult = async { getFlashCardDeckById(deckId) }
-                    val currentCardResult = async { getNextDueCardByDeckId(deckId) }
-                    _uiState.update {
-                        it.copy(
-                            cardSet = cardSetResult.await().getOrThrow(),
-                            currentCard = currentCardResult.await().getOrThrow(),
-                            errorState = null
-                        )
-                    }
-                } catch (e: Exception) {
-                    setErrorState(e)
+                val cardSetResult = async { getFlashCardDeckById(deckId) }
+                val currentCardResult = async { getNextDueCardByDeckId(deckId) }
+                _uiState.update {
+                    it.copy(
+                        cardSet = cardSetResult.await().getOrThrow(),
+                        currentCard = currentCardResult.await().getOrThrow(),
+                        errorState = null
+                    )
                 }
-            }
-            if (deckId == null) {
-                setErrorState(MissingSavedStateError(PracticeDestination.cardDeckId))
             }
         }
     }
@@ -76,28 +74,25 @@ class PracticeViewModel @Inject constructor(
     }
 
     fun updateFlashCardWithDifficulty(difficulty: Difficulty) {
-        viewModelScope.launch {
-                updateFlashCardStats(
-                    uiState.value.currentCard,
-                    uiState.value.cardSet.id,
-                    difficulty
-                ).onSuccess {
-                    setErrorState(GetNewCardException())
-                }.onFailure { error ->
-                    setErrorState(error)
-                }
+        viewModelScope.launch(exceptionHandler) {
+            updateFlashCardStats(
+                uiState.value.currentCard,
+                uiState.value.cardSet.id,
+                difficulty
+            ).getOrThrow()
+            throw GetNewCardException()
         }
     }
 
     fun setCurrentCardWithNextDueCard() {
-        viewModelScope.launch {
-            getNextDueCardByDeckId(uiState.value.cardSet.id).onSuccess { card ->
-                _uiState.update { state ->
-                    state.copy(currentCard = card, errorState = null, isFlipped = false)
+        viewModelScope.launch(exceptionHandler) {
+            getNextDueCardByDeckId(uiState.value.cardSet.id)
+                .getOrThrow()
+                .let { card ->
+                    _uiState.update { state ->
+                        state.copy(currentCard = card, errorState = null, isFlipped = false)
+                    }
                 }
-            }.onFailure { error ->
-                setErrorState(error)
-            }
         }
     }
 
