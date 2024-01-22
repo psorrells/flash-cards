@@ -39,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.pamela.flashcards.R
@@ -96,14 +97,17 @@ fun StudySetCard(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(14.dp)
+                        .composed {
+                            if (expanded) padding(top = 14.dp, start = 14.dp, end = 14.dp)
+                            else padding(14.dp)
+                        }
                 ) {
                     Text(
                         style = MaterialTheme.typography.titleMedium,
                         text = cardSet.name
                     )
                     if (expanded) {
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             style = MaterialTheme.typography.labelLarge,
                             text = stringResource(
@@ -125,6 +129,7 @@ fun StudySetCard(
                                 stringResource(id = R.string.never)
                             }
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
