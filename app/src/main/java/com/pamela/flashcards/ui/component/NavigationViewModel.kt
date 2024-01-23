@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.pamela.flashcards.navigation.AddCardDestination
 import com.pamela.flashcards.navigation.AddDeckDestination
 import com.pamela.flashcards.navigation.Navigator
+import com.pamela.flashcards.navigation.NotificationsSettingsDestination
 import com.pamela.flashcards.navigation.OverviewDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -23,5 +24,9 @@ class NavigationViewModel @Inject constructor(
 
     fun navigateToAddNewCard() {
         navigator.navigateTo(AddCardDestination.populateRouteWithArgs())
+    }
+
+    fun navigateToNotificationsSettings() {
+        navigator.navigateTo(NotificationsSettingsDestination.route)
     }
 }

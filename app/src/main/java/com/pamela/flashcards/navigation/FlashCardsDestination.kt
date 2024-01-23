@@ -10,6 +10,10 @@ object OverviewDestination : FlashCardsDestination {
     override val route = "overview"
 }
 
+object NotificationsSettingsDestination : FlashCardsDestination {
+    override val route = "notifications-settings"
+}
+
 object PracticeDestination : FlashCardsDestination {
     override val route = "practice"
     const val cardDeckId = "cardDeckId"

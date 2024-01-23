@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pamela.flashcards.features.addcard.AddCardScreen
 import com.pamela.flashcards.features.adddeck.AddDeckScreen
+import com.pamela.flashcards.features.notifications.NotificationsSettingsScreen
 import com.pamela.flashcards.features.overview.OverviewScreen
 import com.pamela.flashcards.features.practice.PracticeScreen
 import com.pamela.flashcards.ui.component.DefaultNavigationDrawer
@@ -47,6 +48,7 @@ fun FlashCardsHostController(
             composable(route = PracticeDestination.routeWithArgs) { PracticeScreen() }
             composable(route = AddDeckDestination.routeWithArgs) { AddDeckScreen() }
             composable(route = AddCardDestination.routeWithArgs) { AddCardScreen() }
+            composable(route = NotificationsSettingsDestination.route) { NotificationsSettingsScreen() }
         }
     }
 }

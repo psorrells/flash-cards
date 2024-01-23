@@ -64,8 +64,16 @@ fun DefaultNavigationDrawer(
                     onClick = { coroutineScope.launch { viewModel.navigateToAddNewCard(); drawerState.close() } },
                     shape = RectangleShape
                 )
+                NavigationDrawerItem(
+                    label = { LabelText(text = stringResource(id = R.string.notifications_settings_header)) },
+                    selected = false,
+                    onClick = { coroutineScope.launch { viewModel.navigateToNotificationsSettings(); drawerState.close() } },
+                    shape = RectangleShape
+                )
                 Divider(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                     color = MaterialTheme.colorScheme.tertiaryContainer
                 )
                 extraNavItems()

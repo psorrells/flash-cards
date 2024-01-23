@@ -27,7 +27,6 @@ fun StyledTopBar(titleText: String, onClickNavigation: () -> Unit, actions: @Com
                 Text(
                     style = MaterialTheme.typography.titleLarge,
                     text = titleText,
-                    modifier = Modifier.padding(14.dp),
                     color = MaterialTheme.colorScheme.onBackground
                 )
             },

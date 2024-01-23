@@ -59,4 +59,9 @@
     <string name="card_front_label">Card front</string>
     <string name="card_back_label">Card back</string>
     <string name="select_deck">Select deck</string>
+
+    <!-- Notifications Settings -->
+    <string name="notifications_settings_header">Notifications Settings</string>
+    <string name="allow_notifications">Allow notifications</string>
+    <string name="why_notifications">In order to send flash cards to your notifications, we need permission. Please click the button below and turn notifications on to see flash cards!</string>
 </resources>
