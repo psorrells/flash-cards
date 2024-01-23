@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.pamela.flashcards.R
 import com.pamela.flashcards.ui.component.AlertText
+import com.pamela.flashcards.ui.theme.colorTextNeutral
 
 @Composable
 fun EmptyDeckListDisplay() {
@@ -21,11 +22,11 @@ fun EmptyDeckListDisplay() {
             imageVector = Icons.Rounded.Search,
             contentDescription = "",
             modifier = Modifier.fillMaxSize(0.4F),
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorTextNeutral()
         )
         AlertText(
             text = stringResource(id = R.string.no_decks),
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorTextNeutral()
         )
     }
 }

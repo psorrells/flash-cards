@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pamela.flashcards.R
+import com.pamela.flashcards.ui.styles.getButtonStyles
 
 @Composable
 fun DeleteDialog(
@@ -51,7 +52,8 @@ fun DeleteDialog(
                 )
                 StyledTextButton(
                     onClick = onCancel,
-                    text = stringResource(id = if (isDeck) R.string.cancel_delete_deck else R.string.cancel_delete_card)
+                    text = stringResource(id = if (isDeck) R.string.cancel_delete_deck else R.string.cancel_delete_card),
+                    colors = getButtonStyles().neutralText
                 )
             }
         }

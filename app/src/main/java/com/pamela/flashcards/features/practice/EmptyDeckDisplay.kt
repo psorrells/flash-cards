@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.pamela.flashcards.R
 import com.pamela.flashcards.ui.component.AlertText
 import com.pamela.flashcards.ui.component.StyledButton
+import com.pamela.flashcards.ui.theme.colorTextNeutral
 
 @Composable
 fun EmptyDeckDisplay(onClickAddCard: () -> Unit) {
@@ -24,11 +25,11 @@ fun EmptyDeckDisplay(onClickAddCard: () -> Unit) {
             imageVector = Icons.Rounded.Done,
             contentDescription = "",
             modifier = Modifier.fillMaxSize(0.4F),
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorTextNeutral()
         )
         AlertText(
             text = stringResource(id = R.string.no_cards),
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorTextNeutral()
         )
         Spacer(modifier = Modifier.height(32.dp))
         StyledButton(onClick = onClickAddCard, text = stringResource(id = R.string.add_card))

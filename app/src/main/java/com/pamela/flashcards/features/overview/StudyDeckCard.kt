@@ -135,7 +135,8 @@ fun StudyDeckCard(
                             )
                             StyledTextButton(
                                 onClick = { onClickEdit(cardDeck) },
-                                text = stringResource(id = R.string.edit)
+                                text = stringResource(id = R.string.edit),
+                                colors = getButtonStyles().neutralText
                             )
                             StyledTextButton(
                                 onClick = { showDeleteDialog = true },
