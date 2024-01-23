@@ -25,4 +25,7 @@ interface FlashCardsDao {
 
     @Delete
     suspend fun delete(card: FlashCardEntity)
+
+    @Query("DELETE from cards where id = (:id)")
+    suspend fun deleteCardById(id: String)
 }

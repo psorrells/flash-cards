@@ -7,9 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,13 +36,16 @@ import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.model.GetNewCardException
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.DefaultErrorMessage
-import com.pamela.flashcards.ui.component.TopBarHeader
+import com.pamela.flashcards.ui.component.DeleteDialog
+import com.pamela.flashcards.ui.component.StyledTopBar
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showDeleteDialog by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit, block = { viewModel.setCurrentCardWithNextDueCard() })
     val displayHeight = LocalConfiguration.current.screenHeightDp.dp
     var yValue by remember { mutableStateOf(0.dp) }
@@ -62,7 +70,26 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
         modifier = Modifier
             .scaffoldDefaults()
             .clipToBounds(),
-        topBar = { TopBarHeader(titleText = uiState.cardSet.name) },
+        topBar = {
+            StyledTopBar(
+                titleText = uiState.cardSet.name,
+                onClickNavigation = {},
+                actions = {
+                    IconButton(onClick = { viewModel.navigateToEditCard() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Edit,
+                            contentDescription = stringResource(id = R.string.edit_card)
+                        )
+                    }
+                    IconButton(onClick = { showDeleteDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = stringResource(id = R.string.delete_card)
+                        )
+                    }
+                }
+            )
+        },
         bottomBar = {
             if (uiState.isFlipped.not()) {
                 BottomBarButtonFullWidth(
@@ -90,9 +117,17 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     setIsFlipped = viewModel::setIsFlipped,
                     animationListener = onFinishCardFlipAnimHideCard
                 )
+
                 is EmptyResultError -> EmptyDeckDisplay(viewModel::navigateToAddCard)
                 else -> DefaultErrorMessage()
             }
+        }
+        if (showDeleteDialog) {
+            DeleteDialog(
+                onCancel = { showDeleteDialog = false },
+                onConfirm = { viewModel.deleteCurrentCard(); showDeleteDialog = false },
+                isDeck = false
+            )
         }
     }
 }

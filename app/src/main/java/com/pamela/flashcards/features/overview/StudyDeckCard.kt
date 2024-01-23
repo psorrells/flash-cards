@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.pamela.flashcards.R
 import com.pamela.flashcards.model.FlashCardDeckDomain
+import com.pamela.flashcards.ui.component.DeleteDialog
 import com.pamela.flashcards.ui.component.StyledTextButton
 import com.pamela.flashcards.ui.styles.getButtonStyles
 import com.pamela.flashcards.util.getFormattedDate
@@ -148,9 +149,10 @@ fun StudyDeckCard(
         }
     }
     if (showDeleteDialog) {
-        DeleteDeckDialog(
+        DeleteDialog(
             onCancel = { showDeleteDialog = false },
-            onConfirm = { onClickDelete(cardDeck); showDeleteDialog = false }
+            onConfirm = { onClickDelete(cardDeck); showDeleteDialog = false },
+            isDeck = true
         )
     }
 }

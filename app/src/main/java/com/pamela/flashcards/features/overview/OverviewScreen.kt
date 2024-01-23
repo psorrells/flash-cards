@@ -26,7 +26,7 @@ import com.pamela.flashcards.model.FailedDeleteError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.DefaultErrorMessage
 import com.pamela.flashcards.ui.component.TextOnlyErrorBottomSheet
-import com.pamela.flashcards.ui.component.TopBarHeader
+import com.pamela.flashcards.ui.component.StyledTopBar
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
@@ -37,7 +37,7 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
     LaunchedEffect(key1 = Unit, block = { viewModel.initializeState() })
     Scaffold(
         modifier = Modifier.scaffoldDefaults(),
-        topBar = { TopBarHeader(titleText = stringResource(id = R.string.overview_header)) },
+        topBar = { StyledTopBar(titleText = stringResource(id = R.string.overview_header), {}) },
         bottomBar = {
             BottomBarButtonFullWidth(
                 onClick = viewModel::navigateToAddSetScreen,

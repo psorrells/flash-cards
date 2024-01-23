@@ -21,7 +21,7 @@ import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.DefaultErrorMessage
 import com.pamela.flashcards.ui.component.TextFieldWithLabel
 import com.pamela.flashcards.ui.component.TextOnlyErrorBottomSheet
-import com.pamela.flashcards.ui.component.TopBarHeader
+import com.pamela.flashcards.ui.component.StyledTopBar
 import com.pamela.flashcards.ui.scaffoldDefaults
 
 @Composable
@@ -30,7 +30,7 @@ fun AddDeckScreen(viewModel: AddDeckViewModel = hiltViewModel()) {
 
     Scaffold(
         modifier = Modifier.scaffoldDefaults(),
-        topBar = { TopBarHeader(titleText = viewModel.getPageTitle()) },
+        topBar = { StyledTopBar(titleText = viewModel.getPageTitle(), {}) },
         bottomBar = {
             BottomBarButtonFullWidth(
                 onClick = viewModel::saveDeck,

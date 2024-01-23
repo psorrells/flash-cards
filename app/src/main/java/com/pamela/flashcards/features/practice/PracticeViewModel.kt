@@ -3,6 +3,7 @@ package com.pamela.flashcards.features.practice
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pamela.flashcards.domain.DeleteFlashCardUseCase
 import com.pamela.flashcards.domain.GetFlashCardDeckByIdUseCase
 import com.pamela.flashcards.domain.GetNextDueCardByDeckIdUseCase
 import com.pamela.flashcards.domain.UpdateFlashCardStatsUseCase
@@ -32,6 +33,7 @@ class PracticeViewModel @Inject constructor(
     private val getFlashCardDeckById: GetFlashCardDeckByIdUseCase,
     private val getNextDueCardByDeckId: GetNextDueCardByDeckIdUseCase,
     private val updateFlashCardStats: UpdateFlashCardStatsUseCase,
+    private val deleteFlashCard: DeleteFlashCardUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -69,6 +71,17 @@ class PracticeViewModel @Inject constructor(
         }
     }
 
+    fun navigateToEditCard() {
+        deckId?.let {
+            navigator.navigateTo(
+                AddCardDestination.populateRouteWithArgs(
+                    cardDeckId = it.toString(),
+                    cardId = uiState.value.currentCard.id.toString()
+                )
+            )
+        }
+    }
+
     fun setIsFlipped(isFlipped: Boolean) {
         _uiState.update {
             it.copy(isFlipped = isFlipped)
@@ -95,6 +108,13 @@ class PracticeViewModel @Inject constructor(
                         state.copy(currentCard = card, errorState = null, isFlipped = false)
                     }
                 }
+        }
+    }
+
+    fun deleteCurrentCard() {
+        viewModelScope.launch(exceptionHandler) {
+            deleteFlashCard(uiState.value.currentCard).getOrThrow()
+            setCurrentCardWithNextDueCard()
         }
     }
 }

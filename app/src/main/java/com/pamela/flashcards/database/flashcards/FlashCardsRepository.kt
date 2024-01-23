@@ -16,7 +16,7 @@ abstract class FlashCardsRepository {
 
     abstract suspend fun upsertAllCardsToDeck(cards: List<FlashCardDomain>, deckId: UUID)
 
-    abstract suspend fun deleteCardFromDeck(card: FlashCardDomain, deckId: UUID)
+    abstract suspend fun deleteCard(card: FlashCardDomain)
 }
 
 @Singleton
@@ -43,8 +43,8 @@ class FlashCardsRepositoryImpl @Inject constructor(
         flashCardsDao.upsertAll(*cards.map { it.toEntity(deckId) }.toTypedArray())
     }
 
-    override suspend fun deleteCardFromDeck(card: FlashCardDomain, deckId: UUID) {
-        flashCardsDao.delete(card.toEntity(deckId))
+    override suspend fun deleteCard(card: FlashCardDomain) {
+        flashCardsDao.deleteCardById(card.id.toString())
     }
 
 }

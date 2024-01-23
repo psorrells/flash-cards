@@ -1,4 +1,4 @@
-package com.pamela.flashcards.features.overview
+package com.pamela.flashcards.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,13 +16,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pamela.flashcards.R
-import com.pamela.flashcards.ui.component.StyledButton
-import com.pamela.flashcards.ui.component.StyledTextButton
 
 @Composable
-fun DeleteDeckDialog(
+fun DeleteDialog(
     onCancel: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    isDeck: Boolean
 ) {
     Dialog(onDismissRequest = onCancel) {
         Card(
@@ -35,12 +34,12 @@ fun DeleteDeckDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(id = R.string.delete_deck_header),
+                    text = stringResource(id = R.string.delete_dialog_header),
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = stringResource(id = R.string.delete_deck_body),
+                    text = stringResource(id = if (isDeck) R.string.delete_deck_body else R.string.delete_card_body),
                     style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -48,11 +47,11 @@ fun DeleteDeckDialog(
                     onClick = onConfirm,
                     containerColor = MaterialTheme.colorScheme.error,
                     contentColor = MaterialTheme.colorScheme.onError,
-                    text = stringResource(id = R.string.confirm_delete_deck)
+                    text = stringResource(id = if (isDeck) R.string.confirm_delete_deck else R.string.confirm_delete_card)
                 )
                 StyledTextButton(
                     onClick = onCancel,
-                    text = stringResource(id = R.string.cancel_delete_deck)
+                    text = stringResource(id = if (isDeck) R.string.cancel_delete_deck else R.string.cancel_delete_card)
                 )
             }
         }

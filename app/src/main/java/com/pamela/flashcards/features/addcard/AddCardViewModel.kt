@@ -55,7 +55,7 @@ class AddCardViewModel @Inject constructor(
             _uiState.update { state ->
                 state.copy(
                     currentCard = card ?: FlashCardDomain(),
-                    selectedDeckId = card?.id ?: deckId,
+                    selectedDeckId = deckId,
                     allFlashCardDecks = decks,
                     errorState = null
                 )

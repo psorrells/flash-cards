@@ -23,6 +23,11 @@
     <string name="hard">Hard</string>
     <string name="again">Again</string>
 
+    <!-- Icon descriptions -->
+    <string name="menu">Menu</string>
+    <string name="edit_card">Edit card</string>
+    <string name="delete_card">Delete card</string>
+
     <!-- Overview Screen -->
     <string name="overview_header">Study Decks</string>
     <string name="no_decks">You don\'t have any flash card decks yet! Click the button below to add one.</string>
@@ -31,10 +36,13 @@
     <string name="never">Never</string>
     
     <!-- Delete Dialog -->
-    <string name="delete_deck_header">Are you sure?</string>
+    <string name="delete_dialog_header">Are you sure?</string>
     <string name="delete_deck_body">This will delete ALL cards in the deck. This CANNOT be undone!</string>
     <string name="confirm_delete_deck">Yes, delete this deck</string>
     <string name="cancel_delete_deck">No, don\'t delete this deck</string>
+    <string name="delete_card_body">This will permanently delete this card. This CANNOT be undone!</string>
+    <string name="confirm_delete_card">Yes, delete this card</string>
+    <string name="cancel_delete_card">No, don\'t delete this card</string>
 
     <!-- Practice Screen -->
     <string name="no_cards">There are no flash cards due in this deck! Click the button below to add one.</string>
