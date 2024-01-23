@@ -25,8 +25,8 @@ import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.model.FailedDeleteError
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.DefaultErrorMessage
-import com.pamela.flashcards.ui.component.TextOnlyErrorBottomSheet
 import com.pamela.flashcards.ui.component.StyledTopBar
+import com.pamela.flashcards.ui.component.TextOnlyErrorBottomSheet
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 
@@ -35,53 +35,58 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit, block = { viewModel.initializeState() })
-    Scaffold(
-        modifier = Modifier.scaffoldDefaults(),
-        topBar = { StyledTopBar(titleText = stringResource(id = R.string.overview_header), {}) },
-        bottomBar = {
-            BottomBarButtonFullWidth(
-                onClick = viewModel::navigateToAddSetScreen,
-                text = stringResource(id = R.string.add_new_deck),
-                icon = Icons.Rounded.Add
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            when (uiState.errorState) {
-                null -> {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        contentPadding = PaddingValues(vertical = 16.dp)
-                    ) {
-                        items(uiState.decks) { cardSet ->
-                            StudyDeckCard(
-                                cardSet,
-                                viewModel::navigateToPracticeScreen,
-                                viewModel::deleteDeck,
-                                viewModel::navigateToAddSetScreen,
-                                viewModel::navigateToAddCardScreen
-                            )
+        Scaffold(
+            modifier = Modifier.scaffoldDefaults(),
+            topBar = {
+                StyledTopBar(
+                    titleText = stringResource(id = R.string.overview_header),
+                    onClickNavigation = viewModel::openNavDrawer
+                )
+            },
+            bottomBar = {
+                BottomBarButtonFullWidth(
+                    onClick = viewModel::navigateToAddSetScreen,
+                    text = stringResource(id = R.string.add_new_deck),
+                    icon = Icons.Rounded.Add
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                when (uiState.errorState) {
+                    null -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            contentPadding = PaddingValues(vertical = 16.dp)
+                        ) {
+                            items(uiState.decks) { cardSet ->
+                                StudyDeckCard(
+                                    cardSet,
+                                    viewModel::navigateToPracticeScreen,
+                                    viewModel::deleteDeck,
+                                    viewModel::navigateToAddSetScreen,
+                                    viewModel::navigateToAddCardScreen
+                                )
+                            }
                         }
                     }
-                }
 
-                is EmptyResultError -> EmptyDeckListDisplay()
-                is FailedDeleteError -> {
-                    TextOnlyErrorBottomSheet(text = stringResource(id = R.string.database_error))
-                }
+                    is EmptyResultError -> EmptyDeckListDisplay()
+                    is FailedDeleteError -> {
+                        TextOnlyErrorBottomSheet(text = stringResource(id = R.string.database_error))
+                    }
 
-                else -> DefaultErrorMessage()
+                    else -> DefaultErrorMessage()
+                }
             }
         }
     }
-}
 
 @Preview
 @Composable

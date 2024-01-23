@@ -27,14 +27,16 @@ fun StyledTopBar(titleText: String, onClickNavigation: () -> Unit, actions: @Com
                 Text(
                     style = MaterialTheme.typography.titleLarge,
                     text = titleText,
-                    modifier = Modifier.padding(14.dp)
+                    modifier = Modifier.padding(14.dp),
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             },
             navigationIcon = {
                 IconButton(onClick = onClickNavigation) {
                     Icon(
                         imageVector = Icons.Rounded.Menu,
-                        contentDescription = stringResource(id = R.string.menu)
+                        contentDescription = stringResource(id = R.string.menu),
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             },

@@ -9,6 +9,7 @@ import com.pamela.flashcards.model.FailedDeleteError
 import com.pamela.flashcards.model.FlashCardDeckDomain
 import com.pamela.flashcards.navigation.AddCardDestination
 import com.pamela.flashcards.navigation.AddDeckDestination
+import com.pamela.flashcards.navigation.NavDrawerDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.navigation.PracticeDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -58,6 +59,10 @@ class OverviewViewModel @Inject constructor(
 
     fun navigateToAddCardScreen(cardSet: FlashCardDeckDomain? = null) {
         navigator.navigateTo(AddCardDestination.populateRouteWithArgs(cardDeckId = cardSet?.id.toString()))
+    }
+
+    fun openNavDrawer() {
+        navigator.navigateTo(NavDrawerDestination.route)
     }
 
     fun deleteDeck(deck: FlashCardDeckDomain) {

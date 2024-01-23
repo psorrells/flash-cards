@@ -13,6 +13,7 @@ import com.pamela.flashcards.model.FlashCardDeckDomain
 import com.pamela.flashcards.model.GetNewCardException
 import com.pamela.flashcards.model.MissingSavedStateError
 import com.pamela.flashcards.navigation.AddCardDestination
+import com.pamela.flashcards.navigation.NavDrawerDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.navigation.PracticeDestination
 import com.pamela.flashcards.util.getUuidOrNull
@@ -80,6 +81,10 @@ class PracticeViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun openNavDrawer() {
+        navigator.navigateTo(NavDrawerDestination.route)
     }
 
     fun setIsFlipped(isFlipped: Boolean) {

@@ -47,3 +47,7 @@ object AddCardDestination : FlashCardsDestination {
 object PreviousDestination : FlashCardsDestination {
     override val route = "previous"
 }
+
+object NavDrawerDestination : FlashCardsDestination {
+    override val route = "nav-drawer"
+}

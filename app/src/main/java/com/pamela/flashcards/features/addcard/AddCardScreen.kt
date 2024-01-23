@@ -26,9 +26,9 @@ import com.pamela.flashcards.model.UserErrorException
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.DefaultErrorMessage
 import com.pamela.flashcards.ui.component.PopUpFieldWithLabel
+import com.pamela.flashcards.ui.component.StyledTopBar
 import com.pamela.flashcards.ui.component.TextAreaWithLabel
 import com.pamela.flashcards.ui.component.TextOnlyErrorBottomSheet
-import com.pamela.flashcards.ui.component.StyledTopBar
 import com.pamela.flashcards.ui.scaffoldDefaults
 
 @Composable
@@ -39,7 +39,12 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
 
     Scaffold(
         modifier = Modifier.scaffoldDefaults(),
-        topBar = { StyledTopBar(titleText = viewModel.getPageTitle(), {}) },
+        topBar = {
+            StyledTopBar(
+                titleText = viewModel.getPageTitle(),
+                onClickNavigation = viewModel::openNavDrawer
+            )
+        },
         bottomBar = {
             BottomBarButtonFullWidth(
                 onClick = viewModel::saveCard,

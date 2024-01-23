@@ -12,6 +12,7 @@ import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.model.FlashCardDeckNameIdDomain
 import com.pamela.flashcards.model.IncompleteFormError
 import com.pamela.flashcards.navigation.AddCardDestination
+import com.pamela.flashcards.navigation.NavDrawerDestination
 import com.pamela.flashcards.navigation.Navigator
 import com.pamela.flashcards.util.getUuidOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -106,6 +107,10 @@ class AddCardViewModel @Inject constructor(
                 navigator.popBackStack()
             }
         }
+    }
+
+    fun openNavDrawer() {
+        navigator.navigateTo(NavDrawerDestination.route)
     }
 }
 
