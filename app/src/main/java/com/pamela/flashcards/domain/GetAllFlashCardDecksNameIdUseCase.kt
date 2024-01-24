@@ -3,13 +3,14 @@ package com.pamela.flashcards.domain
 import com.pamela.flashcards.database.decks.FlashCardDecksRepository
 import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.model.FlashCardDeckNameIdDomain
+import com.pamela.flashcards.util.getCancellableResult
 import javax.inject.Inject
 
 class GetAllFlashCardDecksNameIdUseCase @Inject constructor(
     private val flashCardDecksRepository: FlashCardDecksRepository
 ) {
     suspend operator fun invoke(): Result<List<FlashCardDeckNameIdDomain>> {
-        return try {
+        return getCancellableResult {
             val result = flashCardDecksRepository.getAllDecksNameIds()
 
             if (result.isEmpty()) {
@@ -17,8 +18,6 @@ class GetAllFlashCardDecksNameIdUseCase @Inject constructor(
             } else {
                 Result.success(result)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 }

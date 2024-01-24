@@ -7,22 +7,22 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
-abstract class FlashCardDecksRepository {
-    abstract suspend fun getAllDecks(): List<FlashCardDeckDomain>
+interface FlashCardDecksRepository {
+    suspend fun getAllDecks(): List<FlashCardDeckDomain>
 
-    abstract suspend fun getAllDecksNameIds(): List<FlashCardDeckNameIdDomain>
+    suspend fun getAllDecksNameIds(): List<FlashCardDeckNameIdDomain>
 
-    abstract suspend fun getDeckById(id: UUID): FlashCardDeckDomain
+    suspend fun getDeckById(id: UUID): FlashCardDeckDomain
 
-    abstract suspend fun upsertDeck(deck: FlashCardDeckDomain)
+    suspend fun upsertDeck(deck: FlashCardDeckDomain)
 
-    abstract suspend fun deleteDeck(deck: FlashCardDeckDomain)
+    suspend fun deleteDeck(deck: FlashCardDeckDomain)
 }
 
 @Singleton
 class FlashCardDecksRepositoryImpl @Inject constructor(
     private val flashCardDecksDao: FlashCardDecksDao
-) : FlashCardDecksRepository() {
+) : FlashCardDecksRepository {
     override suspend fun getAllDecks(): List<FlashCardDeckDomain> {
         return flashCardDecksDao.getAllDecks().map { it.toDomain() }
     }

@@ -8,6 +8,7 @@ import com.pamela.flashcards.model.dataDeck
 import com.pamela.flashcards.model.dataFlashCards
 import com.pamela.flashcards.model.kubernetesDeck
 import com.pamela.flashcards.model.kubernetesFlashCards
+import com.pamela.flashcards.util.getCancellableResult
 import javax.inject.Inject
 
 class UpsertSampleDecksUseCase @Inject constructor(
@@ -15,7 +16,7 @@ class UpsertSampleDecksUseCase @Inject constructor(
     private val flashCardDecksRepository: FlashCardDecksRepository
 ) {
     suspend operator fun invoke(): Result<Unit> {
-        return try {
+        return getCancellableResult {
             flashCardDecksRepository.upsertDeck(kubernetesDeck)
             flashCardsRepository.upsertAllCards(kubernetesFlashCards.map {  it.copy(deckId = kubernetesDeck.id) })
             flashCardDecksRepository.upsertDeck(awsDeck)
@@ -23,8 +24,6 @@ class UpsertSampleDecksUseCase @Inject constructor(
             flashCardDecksRepository.upsertDeck(dataDeck)
             flashCardsRepository.upsertAllCards(dataFlashCards.map {  it.copy(deckId = dataDeck.id) })
             Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 }

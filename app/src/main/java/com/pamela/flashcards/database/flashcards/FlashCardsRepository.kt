@@ -5,26 +5,26 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
-abstract class FlashCardsRepository {
-    abstract suspend fun getAllCardsByDeckId(deckId: UUID): List<FlashCardDomain>
+interface FlashCardsRepository {
+    suspend fun getAllCardsByDeckId(deckId: UUID): List<FlashCardDomain>
 
-    abstract suspend fun getCardById(id: UUID): FlashCardDomain
+    suspend fun getCardById(id: UUID): FlashCardDomain
 
-    abstract suspend fun getNextDueCardByDeckId(deckId: UUID): FlashCardDomain?
+    suspend fun getNextDueCardByDeckId(deckId: UUID): FlashCardDomain?
 
-    abstract suspend fun getNextDueCard(): FlashCardDomain?
+    suspend fun getNextDueCard(): FlashCardDomain?
 
-    abstract suspend fun upsertCard(card: FlashCardDomain)
+    suspend fun upsertCard(card: FlashCardDomain)
 
-    abstract suspend fun upsertAllCards(cards: List<FlashCardDomain>)
+    suspend fun upsertAllCards(cards: List<FlashCardDomain>)
 
-    abstract suspend fun deleteCard(card: FlashCardDomain)
+    suspend fun deleteCard(card: FlashCardDomain)
 }
 
 @Singleton
 class FlashCardsRepositoryImpl @Inject constructor(
     private val flashCardsDao: FlashCardsDao
-) : FlashCardsRepository() {
+) : FlashCardsRepository {
     override suspend fun getAllCardsByDeckId(deckId: UUID): List<FlashCardDomain> {
         return flashCardsDao.getAllCardsByDeckId(deckId.toString()).map { it.toDomain() }
     }

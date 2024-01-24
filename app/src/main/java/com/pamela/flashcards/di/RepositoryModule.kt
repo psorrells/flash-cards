@@ -4,6 +4,8 @@ import com.pamela.flashcards.database.flashcards.FlashCardsRepository
 import com.pamela.flashcards.database.flashcards.FlashCardsRepositoryImpl
 import com.pamela.flashcards.database.decks.FlashCardDecksRepository
 import com.pamela.flashcards.database.decks.FlashCardDecksRepositoryImpl
+import com.pamela.flashcards.database.preferences.PreferencesRepository
+import com.pamela.flashcards.database.preferences.PreferencesRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -19,4 +21,7 @@ interface RepositoryModule {
 
     @Binds
     fun provideFlashCardDecksRepository(impl: FlashCardDecksRepositoryImpl): FlashCardDecksRepository
+
+    @Binds
+    fun providePreferencesRepository(impl: PreferencesRepositoryImpl): PreferencesRepository
 }

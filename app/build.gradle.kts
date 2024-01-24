@@ -115,9 +115,11 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    implementation("androidx.room:room-rxjava2:$roomVersion")
-    implementation("androidx.room:room-rxjava3:$roomVersion")
     implementation("androidx.room:room-guava:$roomVersion")
     testImplementation("androidx.room:room-testing:$roomVersion")
     implementation("androidx.room:room-paging:$roomVersion")
+
+    val preferencesVersion = "1.0.0"
+
+    implementation("androidx.datastore:datastore-preferences:$preferencesVersion")
 }
