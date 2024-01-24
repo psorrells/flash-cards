@@ -1,4 +1,4 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.util
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext

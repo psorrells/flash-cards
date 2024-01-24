@@ -4,10 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
-import com.pamela.flashcards.domain.CreateNextDueCardBackNotificationUseCase
-import com.pamela.flashcards.domain.CreateNextDueCardFrontNotificationUseCase
-import com.pamela.flashcards.domain.GetFlashCardByIdUseCase
-import com.pamela.flashcards.domain.UpdateFlashCardStatsUseCase
+import com.pamela.flashcards.domain.notification.CreateNextDueCardBackNotificationUseCase
+import com.pamela.flashcards.domain.notification.CreateNextDueCardFrontNotificationUseCase
+import com.pamela.flashcards.domain.flashcard.GetFlashCardByIdUseCase
+import com.pamela.flashcards.domain.flashcard.UpdateFlashCardStatsUseCase
 import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.util.getUuidOrNull
 import dagger.hilt.android.AndroidEntryPoint

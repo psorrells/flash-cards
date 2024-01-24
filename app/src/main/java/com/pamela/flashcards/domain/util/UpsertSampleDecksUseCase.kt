@@ -1,4 +1,4 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.util
 
 import com.pamela.flashcards.database.decks.FlashCardDecksRepository
 import com.pamela.flashcards.database.flashcards.FlashCardsRepository

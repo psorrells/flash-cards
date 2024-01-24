@@ -1,4 +1,4 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.notification
 
 import com.pamela.flashcards.database.preferences.PreferencesRepository
 import com.pamela.flashcards.model.NotificationsPreferencesDomain

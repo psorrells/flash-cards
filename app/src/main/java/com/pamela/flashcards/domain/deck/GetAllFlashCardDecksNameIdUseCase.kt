@@ -1,4 +1,4 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.deck
 
 import com.pamela.flashcards.database.decks.FlashCardDecksRepository
 import com.pamela.flashcards.model.EmptyResultError

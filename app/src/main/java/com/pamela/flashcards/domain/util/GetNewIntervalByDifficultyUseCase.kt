@@ -1,4 +1,4 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.util
 
 import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.model.FlashCardDomain

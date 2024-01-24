@@ -1,14 +1,10 @@
 package com.pamela.flashcards.receivers
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.pamela.flashcards.domain.CreateFlashCardAlarmUseCase
-import com.pamela.flashcards.domain.CreateNextDueCardFrontNotificationUseCase
+import com.pamela.flashcards.domain.notification.CreateFlashCardAlarmUseCase
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint

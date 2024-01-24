@@ -1,4 +1,4 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.notification
 
 import android.Manifest
 import android.app.PendingIntent
@@ -10,6 +10,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.pamela.flashcards.MainActivity
 import com.pamela.flashcards.R
+import com.pamela.flashcards.domain.flashcard.GetNextDueCardUseCase
+import com.pamela.flashcards.domain.util.GetStringResourceUseCase
 import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.receivers.FlashCardNotificationReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,7 +20,7 @@ import javax.inject.Inject
 class CreateNextDueCardBackNotificationUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getStringResource: GetStringResourceUseCase,
-    private val getNextDueCard: GetNextDueCardWithDeckUseCase,
+    private val getNextDueCard: GetNextDueCardUseCase,
 ) {
     suspend operator fun invoke() {
         if (ActivityCompat.checkSelfPermission(

@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pamela.flashcards.R
-import com.pamela.flashcards.domain.GetFlashCardDeckByIdUseCase
-import com.pamela.flashcards.domain.GetStringResourceUseCase
-import com.pamela.flashcards.domain.UpsertFlashCardDeckUseCase
+import com.pamela.flashcards.domain.deck.GetFlashCardDeckByIdUseCase
+import com.pamela.flashcards.domain.util.GetStringResourceUseCase
+import com.pamela.flashcards.domain.deck.UpsertFlashCardDeckUseCase
 import com.pamela.flashcards.model.FlashCardDeckDomain
 import com.pamela.flashcards.model.IncompleteFormError
 import com.pamela.flashcards.navigation.AddDeckDestination

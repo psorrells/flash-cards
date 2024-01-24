@@ -1,4 +1,4 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.notification
 
 import android.app.AlarmManager
 import android.app.PendingIntent

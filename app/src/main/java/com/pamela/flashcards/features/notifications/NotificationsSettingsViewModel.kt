@@ -2,7 +2,7 @@ package com.pamela.flashcards.features.notifications
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pamela.flashcards.domain.CreateNextDueCardFrontNotificationUseCase
+import com.pamela.flashcards.domain.notification.CreateNextDueCardFrontNotificationUseCase
 import com.pamela.flashcards.navigation.NavDrawerDestination
 import com.pamela.flashcards.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel

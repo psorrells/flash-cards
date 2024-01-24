@@ -2,9 +2,9 @@ package com.pamela.flashcards.features.overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pamela.flashcards.domain.DeleteFlashCardDeckUseCase
-import com.pamela.flashcards.domain.GetAllFlashCardDecksUseCase
-import com.pamela.flashcards.domain.UpsertSampleDecksUseCase
+import com.pamela.flashcards.domain.deck.DeleteFlashCardDeckUseCase
+import com.pamela.flashcards.domain.deck.GetAllFlashCardDecksUseCase
+import com.pamela.flashcards.domain.util.UpsertSampleDecksUseCase
 import com.pamela.flashcards.model.FailedDeleteError
 import com.pamela.flashcards.model.FlashCardDeckDomain
 import com.pamela.flashcards.navigation.AddCardDestination

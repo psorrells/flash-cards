@@ -3,10 +3,10 @@ package com.pamela.flashcards.features.practice
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pamela.flashcards.domain.DeleteFlashCardUseCase
-import com.pamela.flashcards.domain.GetFlashCardDeckByIdUseCase
-import com.pamela.flashcards.domain.GetNextDueCardByDeckIdUseCase
-import com.pamela.flashcards.domain.UpdateFlashCardStatsUseCase
+import com.pamela.flashcards.domain.flashcard.DeleteFlashCardUseCase
+import com.pamela.flashcards.domain.deck.GetFlashCardDeckByIdUseCase
+import com.pamela.flashcards.domain.flashcard.GetNextDueCardByDeckIdUseCase
+import com.pamela.flashcards.domain.flashcard.UpdateFlashCardStatsUseCase
 import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.model.FlashCardDeckDomain

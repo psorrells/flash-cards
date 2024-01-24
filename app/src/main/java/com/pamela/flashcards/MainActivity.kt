@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.pamela.flashcards.domain.CreateFlashCardAlarmUseCase
-import com.pamela.flashcards.domain.CreateNextDueCardFrontNotificationUseCase.Companion.CHANNEL_ID
+import com.pamela.flashcards.domain.notification.CreateFlashCardAlarmUseCase
+import com.pamela.flashcards.domain.notification.CreateNextDueCardFrontNotificationUseCase.Companion.CHANNEL_ID
 import com.pamela.flashcards.navigation.FlashCardsHostController
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
 import dagger.hilt.android.AndroidEntryPoint

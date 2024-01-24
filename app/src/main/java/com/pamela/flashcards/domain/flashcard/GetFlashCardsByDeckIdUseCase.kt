@@ -1,4 +1,4 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.flashcard
 
 import com.pamela.flashcards.database.flashcards.FlashCardsRepository
 import com.pamela.flashcards.model.EmptyResultError
@@ -7,13 +7,13 @@ import com.pamela.flashcards.util.getCancellableResult
 import java.util.UUID
 import javax.inject.Inject
 
-class GetNextDueCardByDeckIdUseCase @Inject constructor(
+class GetFlashCardsByDeckIdUseCase @Inject constructor(
     private val flashCardsRepository: FlashCardsRepository
 ) {
-    suspend operator fun invoke(deckId: UUID): Result<FlashCardDomain> {
+    suspend operator fun invoke(deckId: UUID): Result<List<FlashCardDomain>> {
         return getCancellableResult {
-            val result = flashCardsRepository.getNextDueCardByDeckId(deckId)
-            if (result == null) {
+            val result = flashCardsRepository.getAllCardsByDeckId(deckId)
+            if (result.isEmpty()) {
                 throw EmptyResultError()
             } else {
                 Result.success(result)

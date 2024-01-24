@@ -1,9 +1,9 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.flashcard
 
+import com.pamela.flashcards.domain.util.GetNewIntervalByDifficultyUseCase
 import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.model.FlashCardDomain
 import java.time.Instant
-import java.util.UUID
 import javax.inject.Inject
 
 class UpdateFlashCardStatsUseCase @Inject constructor(

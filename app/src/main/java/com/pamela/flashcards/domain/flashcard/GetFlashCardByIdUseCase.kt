@@ -1,17 +1,18 @@
-package com.pamela.flashcards.domain
+package com.pamela.flashcards.domain.flashcard
 
 import com.pamela.flashcards.database.flashcards.FlashCardsRepository
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.util.getCancellableResult
+import java.util.UUID
 import javax.inject.Inject
 
-class DeleteFlashCardUseCase @Inject constructor(
+class GetFlashCardByIdUseCase @Inject constructor(
     private val flashCardsRepository: FlashCardsRepository
 ) {
-    suspend operator fun invoke(card: FlashCardDomain): Result<Unit> {
+    suspend operator fun invoke(id: UUID): Result<FlashCardDomain> {
         return getCancellableResult {
-            flashCardsRepository.deleteCard(card)
-            Result.success(Unit)
+            val result = flashCardsRepository.getCardById(id)
+            Result.success(result)
         }
     }
 }
