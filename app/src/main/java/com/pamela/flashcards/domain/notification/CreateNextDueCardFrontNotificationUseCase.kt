@@ -20,6 +20,7 @@ class CreateNextDueCardFrontNotificationUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getStringResource: GetStringResourceUseCase,
     private val getNextDueCard: GetNextDueCardUseCase,
+    private val notificationManagerCompat: NotificationManagerCompat
 ) {
     suspend operator fun invoke() {
         if (ActivityCompat.checkSelfPermission(
@@ -58,7 +59,7 @@ class CreateNextDueCardFrontNotificationUseCase @Inject constructor(
                     showBackPendingIntent
                 )
                 .build()
-            NotificationManagerCompat.from(context).notify(it.id.hashCode(), questionNotification)
+            notificationManagerCompat.notify(it.id.hashCode(), questionNotification)
         }
     }
 

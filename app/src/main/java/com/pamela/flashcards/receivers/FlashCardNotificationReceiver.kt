@@ -8,10 +8,12 @@ import com.pamela.flashcards.domain.notification.CreateNextDueCardBackNotificati
 import com.pamela.flashcards.domain.notification.CreateNextDueCardFrontNotificationUseCase
 import com.pamela.flashcards.domain.flashcard.GetFlashCardByIdUseCase
 import com.pamela.flashcards.domain.flashcard.UpdateFlashCardStatsUseCase
+import com.pamela.flashcards.domain.notification.GetNotificationsPreferencesUseCase
 import com.pamela.flashcards.model.Difficulty
 import com.pamela.flashcards.util.getUuidOrNull
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,11 +27,20 @@ class FlashCardNotificationReceiver : BroadcastReceiver() {
     lateinit var updateFlashCardStatsUseCase: UpdateFlashCardStatsUseCase
     @Inject
     lateinit var getFlashCardByIdUseCase: GetFlashCardByIdUseCase
+    @Inject
+    lateinit var getNotificationsPreferencesUseCase: GetNotificationsPreferencesUseCase
+    @Inject
+    lateinit var notificationManagerCompat: NotificationManagerCompat
 
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.getStringExtra("action")) {
             "showCard" -> {
                 runBlocking {
+                    val preferences = getNotificationsPreferencesUseCase().getOrThrow()
+                    if (preferences.shouldSendFlashCards.not()) return@runBlocking
+                    if (preferences.maxFlashCardsSentPerDay <= 0) return@runBlocking
+                    if (preferences.flashCardsEndHour <= ZonedDateTime.now().hour) return@runBlocking
+                    if (preferences.flashCardsStartHour > ZonedDateTime.now().hour) return@runBlocking
                     showCardNotificationUseCase()
                 }
             }
@@ -47,7 +58,7 @@ class FlashCardNotificationReceiver : BroadcastReceiver() {
                         getFlashCardByIdUseCase(flashCardId)
                             .onSuccess {
                                 updateFlashCardStatsUseCase(flashCard = it, difficulty = difficulty)
-                                NotificationManagerCompat.from(context).cancelAll()
+                                notificationManagerCompat.cancelAll()
                             }
                     }
                 }
