@@ -43,7 +43,7 @@ import com.pamela.flashcards.ui.theme.FlashCardsTheme
 fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showDeleteDialog by remember { mutableStateOf(false) }
-    LaunchedEffect(key1 = Unit, block = { viewModel.setCurrentCardWithNextDueCard() })
+
     val displayHeight = LocalConfiguration.current.screenHeightDp.dp
     var yValue by remember { mutableStateOf(0.dp) }
     val onFinishCardFlipAnimHideCard = { float: Float ->
@@ -115,7 +115,10 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     animationListener = onFinishCardFlipAnimHideCard
                 )
 
-                is EmptyResultError -> EmptyDeckDisplay(viewModel::navigateToAddCard)
+                is EmptyResultError -> {
+                    LaunchedEffect(Unit) { viewModel.setCurrentCardWithNextDueCard() }
+                    EmptyDeckDisplay(viewModel::navigateToAddCard)
+                }
                 else -> DefaultErrorMessage()
             }
         }
