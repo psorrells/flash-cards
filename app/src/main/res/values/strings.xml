@@ -20,6 +20,7 @@
     <string name="flip">Flip</string>
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
+    <string name="good">Good</string>
     <string name="hard">Hard</string>
     <string name="again">Again</string>
 
@@ -64,4 +65,8 @@
     <string name="notifications_settings_header">Notifications Settings</string>
     <string name="allow_notifications">Allow notifications</string>
     <string name="why_notifications">In order to send flash cards to your notifications, we need permission. Please click the button below and turn notifications on to see flash cards!</string>
+
+    <!-- Notifications Channel -->
+    <string name="channel_name">Showing due flash cards</string>
+    <string name="channel_description">make sound and pop on screen</string>
 </resources>

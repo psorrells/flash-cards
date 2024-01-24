@@ -6,6 +6,7 @@ import java.util.UUID
 
 data class FlashCardDomain(
     val id: UUID = UUID.randomUUID(),
+    val deckId: UUID = UUID.randomUUID(),
     val front: String = "",
     val back: String = "",
     val createdAt: Instant = Instant.now(),
@@ -13,7 +14,7 @@ data class FlashCardDomain(
     val lastIntervalInMillis: Long = 0L,
     val nextDueAt: Instant = Instant.now()
 ) {
-    fun toEntity(deckId: UUID): FlashCardEntity {
+    fun toEntity(): FlashCardEntity {
         return FlashCardEntity(
             id = id.toString(),
             deckId = deckId.toString(),

@@ -78,6 +78,10 @@ fun NotificationsSettingsScreen(viewModel: NotificationsSettingsViewModel = hilt
         ) {
             if (hasPermission) {
                 Text(text = "You have permissions!")
+                StyledButton(
+                    onClick = viewModel::testNotification,
+                    text = "Test notifications"
+                )
             } else {
                 Icon(
                     imageVector = Icons.Rounded.Notifications,

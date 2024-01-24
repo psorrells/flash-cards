@@ -12,9 +12,11 @@ abstract class FlashCardsRepository {
 
     abstract suspend fun getNextDueCardByDeckId(deckId: UUID): FlashCardDomain?
 
-    abstract suspend fun upsertCardToDeck(card: FlashCardDomain, deckId: UUID)
+    abstract suspend fun getNextDueCard(): FlashCardDomain?
 
-    abstract suspend fun upsertAllCardsToDeck(cards: List<FlashCardDomain>, deckId: UUID)
+    abstract suspend fun upsertCard(card: FlashCardDomain)
+
+    abstract suspend fun upsertAllCards(cards: List<FlashCardDomain>)
 
     abstract suspend fun deleteCard(card: FlashCardDomain)
 }
@@ -35,12 +37,16 @@ class FlashCardsRepositoryImpl @Inject constructor(
         return flashCardsDao.getNextDueCardByDeckIdAndDueDate(deckId.toString())?.toDomain()
     }
 
-    override suspend fun upsertCardToDeck(card: FlashCardDomain, deckId: UUID) {
-        flashCardsDao.upsert(card.toEntity(deckId))
+    override suspend fun getNextDueCard(): FlashCardDomain? {
+        return flashCardsDao.getNextDueCardByDueDate()?.toDomain()
     }
 
-    override suspend fun upsertAllCardsToDeck(cards: List<FlashCardDomain>, deckId: UUID) {
-        flashCardsDao.upsertAll(*cards.map { it.toEntity(deckId) }.toTypedArray())
+    override suspend fun upsertCard(card: FlashCardDomain) {
+        flashCardsDao.upsert(card.toEntity())
+    }
+
+    override suspend fun upsertAllCards(cards: List<FlashCardDomain>) {
+        flashCardsDao.upsertAll(*cards.map { it.toEntity() }.toTypedArray())
     }
 
     override suspend fun deleteCard(card: FlashCardDomain) {

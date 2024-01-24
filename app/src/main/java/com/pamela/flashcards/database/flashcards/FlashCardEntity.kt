@@ -26,7 +26,8 @@ data class FlashCardEntity(
             createdAt = Instant.ofEpochMilli(createdAt),
             lastStudiedAt = lastStudiedAt?.let { Instant.ofEpochMilli(it) },
             lastIntervalInMillis = lastIntervalInMillis,
-            nextDueAt = Instant.ofEpochMilli(nextDueAt)
+            nextDueAt = Instant.ofEpochMilli(nextDueAt),
+            deckId = UUID.fromString(deckId)
         )
     }
 }

@@ -17,6 +17,9 @@ interface FlashCardsDao {
     @Query("SELECT * from cards where deck_id = (:deckId) and next_due_at <= (:dueDate) order by next_due_at asc, last_studied_at asc LIMIT 1")
     suspend fun getNextDueCardByDeckIdAndDueDate(deckId: String, dueDate: Long = Instant.now().toEpochMilli()): FlashCardEntity?
 
+    @Query("SELECT * from cards where next_due_at <= (:dueDate) order by next_due_at asc, last_studied_at asc LIMIT 1")
+    suspend fun getNextDueCardByDueDate(dueDate: Long = Instant.now().toEpochMilli()): FlashCardEntity?
+
     @Upsert
     suspend fun upsert(card: FlashCardEntity)
 

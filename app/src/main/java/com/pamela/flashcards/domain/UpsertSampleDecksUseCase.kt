@@ -17,11 +17,11 @@ class UpsertSampleDecksUseCase @Inject constructor(
     suspend operator fun invoke(): Result<Unit> {
         return try {
             flashCardDecksRepository.upsertDeck(kubernetesDeck)
-            flashCardsRepository.upsertAllCardsToDeck(kubernetesFlashCards, kubernetesDeck.id)
+            flashCardsRepository.upsertAllCards(kubernetesFlashCards.map {  it.copy(deckId = kubernetesDeck.id) })
             flashCardDecksRepository.upsertDeck(awsDeck)
-            flashCardsRepository.upsertAllCardsToDeck(awsFlashCards, awsDeck.id)
+            flashCardsRepository.upsertAllCards(awsFlashCards.map {  it.copy(deckId = awsDeck.id) })
             flashCardDecksRepository.upsertDeck(dataDeck)
-            flashCardsRepository.upsertAllCardsToDeck(dataFlashCards, dataDeck.id)
+            flashCardsRepository.upsertAllCards(dataFlashCards.map {  it.copy(deckId = dataDeck.id) })
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
