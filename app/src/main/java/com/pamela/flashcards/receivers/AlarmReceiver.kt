@@ -1,4 +1,4 @@
-package com.pamela.flashcards.util
+package com.pamela.flashcards.receivers
 
 import android.app.AlarmManager
 import android.app.PendingIntent

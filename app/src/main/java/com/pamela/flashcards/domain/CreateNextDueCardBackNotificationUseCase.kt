@@ -11,7 +11,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.pamela.flashcards.MainActivity
 import com.pamela.flashcards.R
 import com.pamela.flashcards.model.Difficulty
-import com.pamela.flashcards.util.FlashCardNotificationReceiver
+import com.pamela.flashcards.receivers.FlashCardNotificationReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

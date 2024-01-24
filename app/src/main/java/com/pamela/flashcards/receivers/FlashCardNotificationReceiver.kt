@@ -1,4 +1,4 @@
-package com.pamela.flashcards.util
+package com.pamela.flashcards.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,9 +9,9 @@ import com.pamela.flashcards.domain.CreateNextDueCardFrontNotificationUseCase
 import com.pamela.flashcards.domain.GetFlashCardByIdUseCase
 import com.pamela.flashcards.domain.UpdateFlashCardStatsUseCase
 import com.pamela.flashcards.model.Difficulty
+import com.pamela.flashcards.util.getUuidOrNull
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
-import java.util.logging.Logger
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -38,7 +38,6 @@ class FlashCardNotificationReceiver : BroadcastReceiver() {
                     showBackNotificationUseCase()
                 }
             }
-
             "updateCard" -> {
                 val flashCardId = getUuidOrNull(intent.getStringExtra("flashCardId"))
                 val difficulty = intent.getStringExtra("difficulty")?.let { Difficulty.valueOf(it) }
@@ -53,11 +52,7 @@ class FlashCardNotificationReceiver : BroadcastReceiver() {
                     }
                 }
             }
-
-            else -> {
-
-
-            }
+            else -> { /* no-op */ }
         }
     }
 }

@@ -7,7 +7,7 @@ import com.pamela.flashcards.R
 import com.pamela.flashcards.domain.GetAllFlashCardDecksNameIdUseCase
 import com.pamela.flashcards.domain.GetFlashCardByIdUseCase
 import com.pamela.flashcards.domain.GetStringResourceUseCase
-import com.pamela.flashcards.domain.UpsertFlashCardToDeckUseCase
+import com.pamela.flashcards.domain.UpsertFlashCardUseCase
 import com.pamela.flashcards.model.FlashCardDomain
 import com.pamela.flashcards.model.FlashCardDeckNameIdDomain
 import com.pamela.flashcards.model.IncompleteFormError
@@ -30,7 +30,7 @@ class AddCardViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getAllFlashCardSetsNameId: GetAllFlashCardDecksNameIdUseCase,
     private val getFlashCardById: GetFlashCardByIdUseCase,
-    private val upsertFlashCardToSet: UpsertFlashCardToDeckUseCase,
+    private val upsertFlashCard: UpsertFlashCardUseCase,
     private val getStringResource: GetStringResourceUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -55,8 +55,7 @@ class AddCardViewModel @Inject constructor(
             val card = flashCardResult.await()?.getOrThrow()
             _uiState.update { state ->
                 state.copy(
-                    currentCard = card ?: FlashCardDomain(),
-                    selectedDeckId = deckId,
+                    currentCard = card ?: FlashCardDomain(deckId = deckId ?: UUID.randomUUID()),
                     allFlashCardDecks = decks,
                     errorState = null
                 )
@@ -71,23 +70,19 @@ class AddCardViewModel @Inject constructor(
 
     fun getCurrentSelectedDeckName(): String {
         return uiState.value.allFlashCardDecks.find {
-            it.id == uiState.value.selectedDeckId
+            it.id == uiState.value.currentCard.deckId
         }?.name ?: ""
-    }
-
-    fun updateSelectedDeck(deckId: UUID) {
-        _uiState.update {
-            it.copy(selectedDeckId = deckId, errorState = null)
-        }
     }
 
     fun updateFlashCard(
         front: String? = null,
-        back: String? = null
+        back: String? = null,
+        deckId: UUID? = null
     ) {
         val newFlashCard = uiState.value.currentCard.copy(
             front = front ?: uiState.value.currentCard.front,
             back = back ?: uiState.value.currentCard.back,
+            deckId = deckId ?: uiState.value.currentCard.deckId
         )
         _uiState.update {
             it.copy(currentCard = newFlashCard, errorState = null)
@@ -99,13 +94,10 @@ class AddCardViewModel @Inject constructor(
             if (
                 uiState.value.currentCard.front.isBlank() ||
                 uiState.value.currentCard.back.isBlank() ||
-                uiState.value.selectedDeckId == null
+                getCurrentSelectedDeckName().isBlank()
             ) throw IncompleteFormError()
-
-            uiState.value.selectedDeckId?.let { selectedDeckId ->
-                upsertFlashCardToSet(uiState.value.currentCard, selectedDeckId).getOrThrow()
-                navigator.popBackStack()
-            }
+            upsertFlashCard(uiState.value.currentCard).getOrThrow()
+            navigator.popBackStack()
         }
     }
 
@@ -115,7 +107,6 @@ class AddCardViewModel @Inject constructor(
 }
 
 data class AddCardUiState(
-    val selectedDeckId: UUID? = null,
     val allFlashCardDecks: List<FlashCardDeckNameIdDomain> = listOf(),
     val currentCard: FlashCardDomain = FlashCardDomain(),
     val errorState: Throwable? = null

@@ -6,7 +6,7 @@ import java.util.UUID
 
 data class FlashCardDeckDomain(
     val id: UUID = UUID.randomUUID(),
-    val name: String,
+    val name: String = "",
     val size: Int = 0,
     val totalDue: Int = 0,
     val createdAt: Instant = Instant.now(),

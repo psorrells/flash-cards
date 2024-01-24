@@ -95,11 +95,7 @@ class PracticeViewModel @Inject constructor(
 
     fun updateFlashCardWithDifficulty(difficulty: Difficulty) {
         viewModelScope.launch(exceptionHandler) {
-            updateFlashCardStats(
-                uiState.value.currentCard,
-                uiState.value.cardSet.id,
-                difficulty
-            ).getOrThrow()
+            updateFlashCardStats(uiState.value.currentCard, difficulty).getOrThrow()
             throw GetNewCardException()
         }
     }
@@ -126,7 +122,7 @@ class PracticeViewModel @Inject constructor(
 
 data class PracticeUiState(
     val currentCard: FlashCardDomain = FlashCardDomain(),
-    val cardSet: FlashCardDeckDomain = FlashCardDeckDomain(name = ""),
+    val cardSet: FlashCardDeckDomain = FlashCardDeckDomain(),
     val isFlipped: Boolean = false,
     val errorState: Throwable? = null
 )

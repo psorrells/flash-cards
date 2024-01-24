@@ -6,15 +6,14 @@ import com.pamela.flashcards.model.InvalidFlashCardDeckIdError
 import java.util.UUID
 import javax.inject.Inject
 
-class UpsertFlashCardToDeckUseCase @Inject constructor(
+class UpsertFlashCardUseCase @Inject constructor(
     private val flashCardsRepository: FlashCardsRepository,
     private val getFlashCardDeckByIdUseCase: GetFlashCardDeckByIdUseCase
 ) {
-    suspend operator fun invoke(card: FlashCardDomain, deckId: UUID?): Result<Unit> {
-        val id = deckId ?: card.deckId
+    suspend operator fun invoke(card: FlashCardDomain): Result<Unit> {
         return try {
-            if (getFlashCardDeckByIdUseCase(id).isFailure) throw InvalidFlashCardDeckIdError(id)
-            flashCardsRepository.upsertCard(card.copy(deckId = id))
+            if (getFlashCardDeckByIdUseCase(card.deckId).isFailure) throw InvalidFlashCardDeckIdError(card.deckId)
+            flashCardsRepository.upsertCard(card)
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

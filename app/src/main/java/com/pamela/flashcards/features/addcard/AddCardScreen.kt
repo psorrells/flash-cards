@@ -95,7 +95,7 @@ fun AddCardScreen(viewModel: AddCardViewModel = hiltViewModel()) {
             SelectDeckDialog(
                 options = uiState.allFlashCardDecks,
                 onSelect = {
-                    viewModel.updateSelectedDeck(it.id)
+                    viewModel.updateFlashCard(deckId = it.id)
                     showSelectDeckDialog = false
                 },
                 onDismiss = { showSelectDeckDialog = false }
