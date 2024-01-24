@@ -32,7 +32,8 @@ class CreateNextDueCardBackNotificationUseCase @Inject constructor(
         getNextDueCard().onSuccess {
             val updateCardPendingIntent = { difficulty: Difficulty ->
 
-                val updateFlashCardIntent = Intent(context, FlashCardNotificationReceiver::class.java)
+                val updateFlashCardIntent =
+                    Intent(context, FlashCardNotificationReceiver::class.java)
                 updateFlashCardIntent.putExtra("action", "updateCard")
                 updateFlashCardIntent.putExtra("flashCardId", it.id.toString())
                 updateFlashCardIntent.putExtra("difficulty", difficulty.name)

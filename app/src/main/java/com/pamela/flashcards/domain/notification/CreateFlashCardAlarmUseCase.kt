@@ -1,15 +1,7 @@
 package com.pamela.flashcards.domain.notification
 
 import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.Build
-import androidx.annotation.RequiresApi
-import com.pamela.flashcards.receivers.FlashCardNotificationReceiver
 import com.pamela.flashcards.util.getHoursInMillis
-import dagger.hilt.android.qualifiers.ApplicationContext
-import java.time.Instant
 import java.time.ZonedDateTime
 import javax.inject.Inject
 

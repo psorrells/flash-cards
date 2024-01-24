@@ -3,13 +3,10 @@ package com.pamela.flashcards.features.notifications
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.work.ListenableWorker.Result.Failure
+import com.pamela.flashcards.domain.notification.CancelFlashCardAlarmUseCase
+import com.pamela.flashcards.domain.notification.CreateFlashCardAlarmUseCase
 import com.pamela.flashcards.domain.notification.CreateNextDueCardFrontNotificationUseCase
-import com.pamela.flashcards.domain.notification.GetNotificationsPreferencesUseCase
 import com.pamela.flashcards.domain.notification.NotificationsPreferencesOperations
-import com.pamela.flashcards.domain.notification.SetMaxFlashCardNotificationsPerDayUseCase
-import com.pamela.flashcards.features.addcard.AddCardUiState
 import com.pamela.flashcards.model.NotificationsPreferencesDomain
 import com.pamela.flashcards.navigation.NavDrawerDestination
 import com.pamela.flashcards.navigation.Navigator
@@ -22,11 +19,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.max
 
 @HiltViewModel
 class NotificationsSettingsViewModel @Inject constructor(
     private val createNextDueCardNotification: CreateNextDueCardFrontNotificationUseCase,
-    private val notificationsPreferences: NotificationsPreferencesOperations,
+    private val preferencesOperations: NotificationsPreferencesOperations,
+    private val createFlashCardAlarm: CreateFlashCardAlarmUseCase,
+    private val cancelFlashCardAlarm: CancelFlashCardAlarmUseCase,
+    private val notificationManagerCompat: NotificationManagerCompat,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -41,7 +42,7 @@ class NotificationsSettingsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(exceptionHandler) {
-            notificationsPreferences.getNotificationsPreferences().getOrThrow().let { preferences ->
+            preferencesOperations.getNotificationsPreferences().getOrThrow().let { preferences ->
                 _uiState.update {
                     it.copy(notificationsPreferences = preferences)
                 }
@@ -59,33 +60,59 @@ class NotificationsSettingsViewModel @Inject constructor(
         }
     }
 
+    fun updateNotificationsPreferences(
+        shouldSendFlashCards: Boolean? = null,
+        flashCardsStartHour: Int? = null,
+        flashCardsEndHour: Int? = null,
+        maxFlashCardsSentPerDay: Int? = null
+    ) {
+        val shouldSend = shouldSendFlashCards
+            ?: uiState.value.notificationsPreferences.shouldSendFlashCards
+        val startHour = validateAndReturnStartHour(flashCardsStartHour)
+        val endHour = validateAndReturnEndHour(flashCardsEndHour)
+        val maxFlashCards = validateAndReturnMaxFlashCards(maxFlashCardsSentPerDay)
+
+
+        val newPrefs = NotificationsPreferencesDomain(
+            shouldSendFlashCards = shouldSend,
+            flashCardsStartHour = startHour,
+            flashCardsEndHour = endHour,
+            maxFlashCardsSentPerDay = maxFlashCards
+        )
+
+        _uiState.update {
+            it.copy(notificationsPreferences = newPrefs)
+        }
+    }
+
+    private fun validateAndReturnStartHour(hour: Int?): Int {
+        val endHour = uiState.value.notificationsPreferences.flashCardsEndHour
+        return if (hour != null && hour < endHour) hour
+        else uiState.value.notificationsPreferences.flashCardsStartHour
+    }
+
+    private fun validateAndReturnEndHour(hour: Int?): Int {
+        val startHour = uiState.value.notificationsPreferences.flashCardsStartHour
+        return if (hour != null && hour > startHour) hour
+        else uiState.value.notificationsPreferences.flashCardsEndHour
+    }
+
+    private fun validateAndReturnMaxFlashCards(count: Int?): Int {
+        return count?.coerceAtMost(50)?.coerceAtLeast(0)
+            ?: uiState.value.notificationsPreferences.maxFlashCardsSentPerDay
+    }
+
     fun saveSettings() {
         viewModelScope.launch(exceptionHandler) {
             val newPrefs = uiState.value.notificationsPreferences
-            val result = awaitAll(
-                async {
-                    notificationsPreferences.setShouldShowFlashCardNotifications(
-                        newPrefs.shouldSendFlashCards
-                    )
-                },
-                async {
-                    notificationsPreferences.setMaxFlashCardNotifications(
-                        newPrefs.maxFlashCardsSentPerDay
-                    )
-                },
-                async {
-                    notificationsPreferences.setNotificationsStartHour(
-                        newPrefs.flashCardsStartHour
-                    )
-                },
-                async {
-                    notificationsPreferences.setNotificationsEndHour(
-                        newPrefs.flashCardsEndHour
-                    )
-                }
-            )
-            result.forEach { it.getOrThrow() }
-
+            preferencesOperations.setNotificationsPreferences(newPrefs).getOrThrow()
+            if (newPrefs.shouldSendFlashCards) {
+                createFlashCardAlarm()
+            } else {
+                cancelFlashCardAlarm()
+                notificationManagerCompat.cancelAll()
+            }
+            navigator.popBackStack()
         }
     }
 }

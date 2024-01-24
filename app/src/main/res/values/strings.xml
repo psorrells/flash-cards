@@ -68,6 +68,10 @@
     <string name="allow_notifications">Allow notifications</string>
     <string name="why_notifications">In order to send flash cards to your notifications, we need permission. Please click the button below and turn notifications on to see flash cards!</string>
     <string name="select_hour">Select hour</string>
+    <string name="send_notifications">Send me notifications with my flash cards</string>
+    <string name="set_start_time">Time of day to start notifications:</string>
+    <string name="set_end_time">Time of day to end notifications:</string>
+    <string name="max_notifications">Maximum number of flash cards per day:</string>
 
     <!-- Notifications Channel -->
     <string name="channel_name">Showing due flash cards</string>

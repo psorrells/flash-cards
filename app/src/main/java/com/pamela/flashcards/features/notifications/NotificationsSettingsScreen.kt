@@ -8,11 +8,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,17 +33,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pamela.flashcards.R
 import com.pamela.flashcards.ui.component.AlertText
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
+import com.pamela.flashcards.ui.component.HourPickerWithLabel
+import com.pamela.flashcards.ui.component.IncrementerWithTextLabel
 import com.pamela.flashcards.ui.component.StyledButton
 import com.pamela.flashcards.ui.component.StyledTopBar
+import com.pamela.flashcards.ui.component.SwitchWithTextLabel
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.colorTextNeutral
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun NotificationsSettingsScreen(viewModel: NotificationsSettingsViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val getNotificationsPermissions =
         { ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) }
@@ -73,14 +82,39 @@ fun NotificationsSettingsScreen(viewModel: NotificationsSettingsViewModel = hilt
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(
+                space = if (hasPermission) 32.dp else 16.dp,
+                alignment = if (hasPermission) Alignment.Top else Alignment.CenterVertically
+            ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (hasPermission) {
-                Text(text = "You have permissions!")
+                SwitchWithTextLabel(
+                    label = stringResource(id = R.string.send_notifications),
+                    value = uiState.notificationsPreferences.shouldSendFlashCards,
+                    onClick = { viewModel.updateNotificationsPreferences(shouldSendFlashCards = it) },
+                )
+                IncrementerWithTextLabel(
+                    label = stringResource(id = R.string.max_notifications),
+                    value = uiState.notificationsPreferences.maxFlashCardsSentPerDay,
+                    onChange = { viewModel.updateNotificationsPreferences(maxFlashCardsSentPerDay = it) },
+                )
+                HourPickerWithLabel(
+                    label = stringResource(id = R.string.set_start_time),
+                    value = uiState.notificationsPreferences.flashCardsStartHour,
+                    onChange = { viewModel.updateNotificationsPreferences(flashCardsStartHour = it) },
+                )
+                HourPickerWithLabel(
+                    label = stringResource(id = R.string.set_end_time),
+                    value = uiState.notificationsPreferences.flashCardsEndHour,
+                    onChange = { viewModel.updateNotificationsPreferences(flashCardsEndHour = it) },
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 StyledButton(
                     onClick = viewModel::testNotification,
-                    text = "Test notifications"
+                    text = "Test notifications",
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    contentColor = MaterialTheme.colorScheme.onTertiary
                 )
             } else {
                 Icon(
