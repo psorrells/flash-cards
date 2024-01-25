@@ -13,18 +13,18 @@ import javax.inject.Inject
 class AlarmReceiver : BroadcastReceiver() {
 
     @Inject
-    lateinit var createFlashCardAlarmUseCase: CreateFlashCardAlarmUseCase
+    lateinit var createFlashCardAlarm: CreateFlashCardAlarmUseCase
     @Inject
-    lateinit var getNotificationsPreferencesUseCase: GetNotificationsPreferencesUseCase
+    lateinit var getNotificationsPreferences: GetNotificationsPreferencesUseCase
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "android.intent.action.BOOT_COMPLETED") {
             runBlocking {
-                val preferences = getNotificationsPreferencesUseCase().getOrThrow()
+                val preferences = getNotificationsPreferences().getOrThrow()
 
                 if (preferences.shouldSendFlashCards.not()) return@runBlocking
                 if (preferences.maxFlashCardsSentPerDay <= 0 ) return@runBlocking
 
-                createFlashCardAlarmUseCase()
+                createFlashCardAlarm()
             }
         }
     }

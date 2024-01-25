@@ -6,12 +6,12 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class CreateFlashCardAlarmUseCase @Inject constructor(
-    private val getNotificationsPreferencesUseCase: GetNotificationsPreferencesUseCase,
-    private val getFlashCardAlarmPendingIntentUseCase: GetFlashCardAlarmPendingIntentUseCase,
+    private val getNotificationsPreferences: GetNotificationsPreferencesUseCase,
+    private val getPendingIntentForFlashCardAlarm: GetPendingIntentForFlashCardAlarmUseCase,
     private val alarmManager: AlarmManager
 ) {
     suspend operator fun invoke() {
-        val preferences = getNotificationsPreferencesUseCase().getOrThrow()
+        val preferences = getNotificationsPreferences().getOrThrow()
 
         val startTime = ZonedDateTime
             .now()
@@ -28,7 +28,7 @@ class CreateFlashCardAlarmUseCase @Inject constructor(
             AlarmManager.RTC,
             startTime,
             expectedInterval,
-            getFlashCardAlarmPendingIntentUseCase()
+            getPendingIntentForFlashCardAlarm()
         )
     }
 }

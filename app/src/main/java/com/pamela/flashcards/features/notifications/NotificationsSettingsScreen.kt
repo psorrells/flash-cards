@@ -45,13 +45,17 @@ import com.pamela.flashcards.ui.component.SwitchWithTextLabel
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.colorTextNeutral
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun NotificationsSettingsScreen(viewModel: NotificationsSettingsViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val getNotificationsPermissions =
-        { ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) }
+        {
+            if (Build.VERSION.SDK_INT > 32) ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) else PackageManager.PERMISSION_GRANTED
+        }
     var hasPermission by remember {
         mutableStateOf(getNotificationsPermissions() == PackageManager.PERMISSION_GRANTED)
     }

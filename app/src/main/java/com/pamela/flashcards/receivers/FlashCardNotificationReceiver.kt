@@ -20,15 +20,15 @@ import javax.inject.Inject
 class FlashCardNotificationReceiver : BroadcastReceiver() {
 
     @Inject
-    lateinit var showCardNotificationUseCase: CreateNextDueCardFrontNotificationUseCase
+    lateinit var showCardNotification: CreateNextDueCardFrontNotificationUseCase
     @Inject
-    lateinit var showBackNotificationUseCase: CreateNextDueCardBackNotificationUseCase
+    lateinit var showBackNotification: CreateNextDueCardBackNotificationUseCase
     @Inject
-    lateinit var updateFlashCardStatsUseCase: UpdateFlashCardStatsUseCase
+    lateinit var updateFlashCardStats: UpdateFlashCardStatsUseCase
     @Inject
-    lateinit var getFlashCardByIdUseCase: GetFlashCardByIdUseCase
+    lateinit var getFlashCardById: GetFlashCardByIdUseCase
     @Inject
-    lateinit var getNotificationsPreferencesUseCase: GetNotificationsPreferencesUseCase
+    lateinit var getNotificationsPreferences: GetNotificationsPreferencesUseCase
     @Inject
     lateinit var notificationManagerCompat: NotificationManagerCompat
 
@@ -36,17 +36,17 @@ class FlashCardNotificationReceiver : BroadcastReceiver() {
         when (intent.getStringExtra("action")) {
             "showCard" -> {
                 runBlocking {
-                    val preferences = getNotificationsPreferencesUseCase().getOrThrow()
+                    val preferences = getNotificationsPreferences().getOrThrow()
                     if (preferences.shouldSendFlashCards.not()) return@runBlocking
                     if (preferences.maxFlashCardsSentPerDay <= 0) return@runBlocking
                     if (preferences.flashCardsEndHour <= ZonedDateTime.now().hour) return@runBlocking
                     if (preferences.flashCardsStartHour > ZonedDateTime.now().hour) return@runBlocking
-                    showCardNotificationUseCase()
+                    showCardNotification()
                 }
             }
             "showBack" -> {
                 runBlocking {
-                    showBackNotificationUseCase()
+                    showBackNotification()
                 }
             }
             "updateCard" -> {
@@ -55,9 +55,9 @@ class FlashCardNotificationReceiver : BroadcastReceiver() {
 
                 if (flashCardId != null && difficulty != null) {
                     runBlocking {
-                        getFlashCardByIdUseCase(flashCardId)
+                        getFlashCardById(flashCardId)
                             .onSuccess {
-                                updateFlashCardStatsUseCase(flashCard = it, difficulty = difficulty)
+                                updateFlashCardStats(flashCard = it, difficulty = difficulty)
                                 notificationManagerCompat.cancelAll()
                             }
                     }

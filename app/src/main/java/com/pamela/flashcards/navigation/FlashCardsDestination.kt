@@ -1,5 +1,8 @@
 package com.pamela.flashcards.navigation
 
+import androidx.navigation.NavDeepLink
+import androidx.navigation.navDeepLink
+
 interface FlashCardsDestination {
     val route: String
     val routeWithArgs: String
@@ -20,8 +23,16 @@ object PracticeDestination : FlashCardsDestination {
     override val routeWithArgs: String
         get() = "$route/{$cardDeckId}"
 
+    private val deepLinkRoute = "FlashCards://$routeWithArgs"
+
+    val deepLinks = listOf(navDeepLink { uriPattern = deepLinkRoute })
+
     fun populateRouteWithArgs(cardDeckId: String): String {
         return "$route/$cardDeckId"
+    }
+
+    fun populateDeepLinkRouteWithArgs(cardDeckId: String): String {
+        return "FlashCards://$route/$cardDeckId"
     }
 }
 

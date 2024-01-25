@@ -31,12 +31,15 @@ fun FlashCardsHostController(
     val openDrawer = { coroutineScope.launch { drawerState.open() } }
 
     LaunchedEffect(navAction) {
-        navAction?.let {
-            when (it.route) {
+        navAction?.route?.let { route ->
+            when (route) {
                 PreviousDestination.route -> navController.popBackStack()
                 NavDrawerDestination.route -> openDrawer()
-                else -> navController.navigate(it.route, it.navOptions)
+                else -> navController.navigate(route, navAction?.navOptions)
             }
+        }
+        navAction?.deepLink?.let { route ->
+            navController.navigate(route, navAction?.navOptions)
         }
     }
 
@@ -44,7 +47,10 @@ fun FlashCardsHostController(
     DefaultNavigationDrawer(drawerState = drawerState) {
         NavHost(navController = navController, startDestination = viewModel.getStartDestination()) {
             composable(route = OverviewDestination.route) { OverviewScreen() }
-            composable(route = PracticeDestination.routeWithArgs) { PracticeScreen() }
+            composable(
+                route = PracticeDestination.routeWithArgs,
+                deepLinks = PracticeDestination.deepLinks
+            ) { PracticeScreen() }
             composable(route = AddDeckDestination.routeWithArgs) { AddDeckScreen() }
             composable(route = AddCardDestination.routeWithArgs) { AddCardScreen() }
             composable(route = NotificationsSettingsDestination.route) { NotificationsSettingsScreen() }
