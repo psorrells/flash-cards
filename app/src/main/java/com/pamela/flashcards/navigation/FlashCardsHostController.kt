@@ -17,7 +17,6 @@ import com.pamela.flashcards.features.adddeck.AddDeckScreen
 import com.pamela.flashcards.features.notifications.NotificationsSettingsScreen
 import com.pamela.flashcards.features.overview.OverviewScreen
 import com.pamela.flashcards.features.practice.PracticeScreen
-import com.pamela.flashcards.ui.component.DefaultNavigationDrawer
 import kotlinx.coroutines.launch
 
 @Composable

@@ -17,7 +17,7 @@ class GetFlashCardAlarmPendingIntentUseCase @Inject constructor(
             context,
             0,
             showCardIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 }

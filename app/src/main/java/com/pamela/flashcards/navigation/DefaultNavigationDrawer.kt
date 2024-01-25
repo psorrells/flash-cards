@@ -1,4 +1,4 @@
-package com.pamela.flashcards.ui.component
+package com.pamela.flashcards.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

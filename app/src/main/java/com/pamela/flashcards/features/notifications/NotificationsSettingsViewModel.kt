@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.logging.Logger
 import javax.inject.Inject
 import kotlin.math.max
 
@@ -33,8 +34,10 @@ class NotificationsSettingsViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NotificationsSettingsUiState())
     val uiState = _uiState.asStateFlow()
+    private val logger: Logger = Logger.getLogger("NotificationsSettings")
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        logger.info("error in notifications settings: ${throwable.message}")
         _uiState.update {
             it.copy(errorState = throwable)
         }

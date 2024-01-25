@@ -42,14 +42,14 @@ class CreateNextDueCardBackNotificationUseCase @Inject constructor(
                     context,
                     it.id.hashCode(),
                     updateFlashCardIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
             }
             val launchActivityPendingIntent = PendingIntent.getActivity(
                 context,
                 0,
                 Intent(context, MainActivity::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             val answerNotification = NotificationCompat.Builder(
                 context,

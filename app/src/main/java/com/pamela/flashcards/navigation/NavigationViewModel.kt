@@ -1,4 +1,4 @@
-package com.pamela.flashcards.ui.component
+package com.pamela.flashcards.navigation
 
 import androidx.lifecycle.ViewModel
 import com.pamela.flashcards.navigation.AddCardDestination
@@ -15,18 +15,18 @@ class NavigationViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun navigateToOverview() {
-        navigator.navigateTo(OverviewDestination.route)
+        navigator.navigateToOverview()
     }
 
     fun navigateToAddNewDeck() {
-        navigator.navigateTo(AddDeckDestination.populateRouteWithArgs())
+        navigator.navigateAndPopUpToOverview(AddDeckDestination.populateRouteWithArgs())
     }
 
     fun navigateToAddNewCard() {
-        navigator.navigateTo(AddCardDestination.populateRouteWithArgs())
+        navigator.navigateAndPopUpToOverview(AddCardDestination.populateRouteWithArgs())
     }
 
     fun navigateToNotificationsSettings() {
-        navigator.navigateTo(NotificationsSettingsDestination.route)
+        navigator.navigateAndPopUpToOverview(NotificationsSettingsDestination.route)
     }
 }

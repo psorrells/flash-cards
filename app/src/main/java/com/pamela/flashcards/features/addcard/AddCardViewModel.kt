@@ -97,7 +97,7 @@ class AddCardViewModel @Inject constructor(
                 getCurrentSelectedDeckName().isBlank()
             ) throw IncompleteFormError()
             upsertFlashCard(uiState.value.currentCard).getOrThrow()
-            navigator.popBackStack()
+            navigator.navigateToOverview()
         }
     }
 

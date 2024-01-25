@@ -15,9 +15,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +40,7 @@ import com.pamela.flashcards.ui.component.DeleteDialog
 import com.pamela.flashcards.ui.component.StyledTopBar
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
@@ -115,10 +118,7 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
                     animationListener = onFinishCardFlipAnimHideCard
                 )
 
-                is EmptyResultError -> {
-                    LaunchedEffect(Unit) { viewModel.setCurrentCardWithNextDueCard() }
-                    EmptyDeckDisplay(viewModel::navigateToAddCard)
-                }
+                is EmptyResultError -> EmptyDeckDisplay(viewModel::navigateToAddCard)
                 else -> DefaultErrorMessage()
             }
         }

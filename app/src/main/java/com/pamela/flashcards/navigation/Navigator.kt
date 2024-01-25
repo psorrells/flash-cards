@@ -14,6 +14,10 @@ interface Navigator {
 
     fun popBackStack()
 
+    fun navigateToOverview()
+
+    fun navigateAndPopUpToOverview(route: String)
+
 }
 
 class NavigatorImpl @Inject constructor() : Navigator {
@@ -35,11 +39,38 @@ class NavigatorImpl @Inject constructor() : Navigator {
         }
     }
 
+    override fun navigateToOverview() {
+        _navAction.update {
+            createPopUpToOverviewNavigationAction(OverviewDestination.route)
+        }
+    }
+
+    override fun navigateAndPopUpToOverview(route: String) {
+        _navAction.update {
+            createPopUpToOverviewNavigationAction(route)
+        }
+    }
+
 
     private fun createDefaultNavigationAction(route: String): NavigationAction {
         return object : NavigationAction {
             override val route = route
             override val navOptions = NavOptions.Builder().setLaunchSingleTop(true).build()
+        }
+    }
+
+    private fun createPopUpToOverviewNavigationAction(route: String): NavigationAction {
+        return object : NavigationAction {
+            override val route = route
+            override val navOptions = NavOptions
+                .Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(
+                    route = OverviewDestination.route,
+                    inclusive = false,
+                    saveState = false
+                )
+                .build()
         }
     }
 }
