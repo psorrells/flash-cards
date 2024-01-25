@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import com.pamela.flashcards.MainActivity
+import com.pamela.flashcards.domain.notification.CreateNextDueCardFrontNotificationUseCase.Companion.DEFAULT_FLAGS
 import com.pamela.flashcards.navigation.PracticeDestination
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class GetPendingIntentForStudyDeckLaunchUseCase @Inject constructor(
 
         return TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(studyDeckIntent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(0, DEFAULT_FLAGS)
         }
     }
 }
