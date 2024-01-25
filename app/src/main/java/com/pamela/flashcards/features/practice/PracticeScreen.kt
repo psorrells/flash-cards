@@ -1,7 +1,8 @@
 package com.pamela.flashcards.features.practice
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.EaseOutBounce
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.absoluteOffset
@@ -15,11 +16,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,37 +33,37 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pamela.flashcards.R
 import com.pamela.flashcards.model.EmptyResultError
 import com.pamela.flashcards.model.GetNewCardException
+import com.pamela.flashcards.ui.animateDpOnChange
+import com.pamela.flashcards.ui.animateFloatOnChange
 import com.pamela.flashcards.ui.component.BottomBarButtonFullWidth
 import com.pamela.flashcards.ui.component.DefaultErrorMessage
 import com.pamela.flashcards.ui.component.DeleteDialog
 import com.pamela.flashcards.ui.component.StyledTopBar
 import com.pamela.flashcards.ui.scaffoldDefaults
 import com.pamela.flashcards.ui.theme.FlashCardsTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    val screenEntryAnimation = animateFloatOnChange(startValue = 0.0F, animationSpec = tween(300))
+    LaunchedEffect(key1 = Unit, block = { screenEntryAnimation.setValue(1.0F) })
+
     val displayHeight = LocalConfiguration.current.screenHeightDp.dp
-    var yValue by remember { mutableStateOf(0.dp) }
-    val onFinishCardFlipAnimHideCard = { float: Float ->
-        if (float <= 10.0F && uiState.errorState is GetNewCardException) {
-            yValue = displayHeight
+    val cardSlideAnimation = animateDpOnChange(startValue = 0.dp, animationSpec = tween(500, easing = EaseOut))
+    LaunchedEffect(key1 = cardSlideAnimation.value == displayHeight) {
+        if (cardSlideAnimation.value == displayHeight && uiState.errorState is GetNewCardException) {
+            viewModel.setCurrentCardWithNextDueCard()
+            cardSlideAnimation.setValue(0.dp)
         }
     }
-    val slideDown by animateDpAsState(
-        targetValue = yValue,
-        animationSpec = tween(700, easing = EaseOutBounce),
-        label = "flashCardRotate",
-        finishedListener = {
-            if (it == displayHeight && uiState.errorState is GetNewCardException) {
-                viewModel.setCurrentCardWithNextDueCard()
-                yValue = 0.dp
-            }
+    val onFinishCardFlipSlideDown = { float: Float ->
+        if (float <= 10.0F && uiState.errorState is GetNewCardException) {
+            cardSlideAnimation.setValue(displayHeight)
         }
-    )
+    }
+
 
     Scaffold(
         modifier = Modifier
@@ -106,20 +105,27 @@ fun PracticeScreen(viewModel: PracticeViewModel = hiltViewModel()) {
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(16.dp)
-                .fillMaxSize()
-                .absoluteOffset(y = slideDown),
+                .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            when (uiState.errorState) {
-                null, is GetNewCardException -> FlashCard(
-                    card = uiState.currentCard,
-                    isFlipped = uiState.isFlipped,
-                    setIsFlipped = viewModel::setIsFlipped,
-                    animationListener = onFinishCardFlipAnimHideCard
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(screenEntryAnimation.value)
+                    .animateContentSize()
+                    .absoluteOffset(y = cardSlideAnimation.value),
+                contentAlignment = Alignment.Center
+            ) {
+                when (uiState.errorState) {
+                    null, is GetNewCardException -> FlashCard(
+                        card = uiState.currentCard,
+                        isFlipped = uiState.isFlipped,
+                        setIsFlipped = viewModel::setIsFlipped,
+                        animationListener = onFinishCardFlipSlideDown
+                    )
 
-                is EmptyResultError -> EmptyDeckDisplay(viewModel::navigateToAddCard)
-                else -> DefaultErrorMessage()
+                    is EmptyResultError -> EmptyDeckDisplay(viewModel::navigateToAddCard)
+                    else -> DefaultErrorMessage()
+                }
             }
         }
         if (showDeleteDialog) {

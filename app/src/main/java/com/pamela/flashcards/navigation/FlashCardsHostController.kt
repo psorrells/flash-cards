@@ -1,5 +1,15 @@
 package com.pamela.flashcards.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -46,14 +56,32 @@ fun FlashCardsHostController(
 
     DefaultNavigationDrawer(drawerState = drawerState) {
         NavHost(navController = navController, startDestination = viewModel.getStartDestination()) {
-            composable(route = OverviewDestination.route) { OverviewScreen() }
+            composable(
+                route = OverviewDestination.route,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { fadeOut() }
+            ) { OverviewScreen() }
             composable(
                 route = PracticeDestination.routeWithArgs,
-                deepLinks = PracticeDestination.deepLinks
+                deepLinks = PracticeDestination.deepLinks,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { fadeOut() }
             ) { PracticeScreen() }
-            composable(route = AddDeckDestination.routeWithArgs) { AddDeckScreen() }
-            composable(route = AddCardDestination.routeWithArgs) { AddCardScreen() }
-            composable(route = NotificationsSettingsDestination.route) { NotificationsSettingsScreen() }
+            composable(
+                route = AddDeckDestination.routeWithArgs,
+                enterTransition = { slideInVertically(animationSpec = tween(500), initialOffsetY = { it }) },
+                exitTransition = { slideOutVertically(animationSpec = tween(500), targetOffsetY = { it }) }
+            ) { AddDeckScreen() }
+            composable(
+                route = AddCardDestination.routeWithArgs,
+                enterTransition = { slideInVertically(animationSpec = tween(500), initialOffsetY = { it }) },
+                exitTransition = { slideOutVertically(animationSpec = tween(500), targetOffsetY = { it }) }
+            ) { AddCardScreen() }
+            composable(
+                route = NotificationsSettingsDestination.route,
+                enterTransition = { slideInHorizontally(animationSpec = tween(500), initialOffsetX = { -it }) },
+                exitTransition = { slideOutHorizontally(animationSpec = tween(500), targetOffsetX = { -it }) }
+            ) { NotificationsSettingsScreen() }
         }
     }
 }

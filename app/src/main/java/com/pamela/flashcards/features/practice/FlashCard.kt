@@ -33,7 +33,7 @@ fun FlashCard(
     card: FlashCardDomain,
     isFlipped: Boolean,
     setIsFlipped: (Boolean) -> Unit,
-    animationListener: (Float) -> Unit
+    animationListener: (Float) -> Unit,
 ) {
     val rotation = getFloatAnimationByBoolean(
         isTrue = isFlipped,

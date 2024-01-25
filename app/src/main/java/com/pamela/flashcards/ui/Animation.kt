@@ -2,14 +2,17 @@ package com.pamela.flashcards.ui
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun getFloatAnimationByBoolean(
@@ -33,21 +36,40 @@ fun getFloatAnimationByBoolean(
     return animatedValue
 }
 
-// doesn't work for some reason
+
 @Composable
-fun animateFloatOnComposition(
+fun animateFloatOnChange(
     startValue: Float,
-    endValue: Float,
     animationListener: ((Float) -> Unit)? = null,
     animationSpec: AnimationSpec<Float> = tween(1000, easing = EaseOut)
-): Float {
+): AnimationWithSetter<Float> {
     var targetValue by remember { mutableFloatStateOf(startValue) }
     val animatedValue by animateFloatAsState(
         targetValue = targetValue,
         animationSpec = animationSpec,
-        label = "widthAnimation",
+        label = "floatAnimationOnChange",
         finishedListener = animationListener
     )
-    LaunchedEffect(key1 = Unit) { targetValue = endValue }
-    return animatedValue
+    return AnimationWithSetter(animatedValue) { targetValue = it }
 }
+
+@Composable
+fun animateDpOnChange(
+    startValue: Dp,
+    animationListener: ((Dp) -> Unit)? = null,
+    animationSpec: AnimationSpec<Dp> = tween(1000, easing = EaseOut)
+): AnimationWithSetter<Dp> {
+    var targetValue by remember { mutableStateOf(startValue) }
+    val animatedValue by animateDpAsState(
+        targetValue = targetValue,
+        animationSpec = animationSpec,
+        label = "dpAnimationOnChange",
+        finishedListener = animationListener
+    )
+    return AnimationWithSetter(animatedValue) { targetValue = it }
+}
+
+data class AnimationWithSetter<T>(
+    val value: T,
+    val setValue: (T) -> Unit
+)
